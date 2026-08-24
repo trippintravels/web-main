@@ -1,0 +1,154 @@
+/* ===================================================================
+   Trippin Travels — Eastern Himalaya
+   Palette:  oat #f1ebe0 · deep bark #29211c · #211a15 · clay #a9674c
+             warm clay-light #c98e6f · sand #e7dccb · #efe6d6
+   Type:     Pinyon Script (display cursive) · Hanken Grotesk (body/ui)
+             ui-monospace (captions / data)
+=================================================================== */
+
+:root {
+  --oat: #f1ebe0;
+  --oat-bg: #e5ddcf;
+  --sand: #e7dccb;
+  --sand2: #efe6d6;
+  --bark: #29211c;
+  --bark-deep: #211a15;
+  --ink: #4a3f38;
+  --clay: #a9674c;
+  --clay-light: #c98e6f;
+  --cream: #f6f1e7;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--oat);
+  color: var(--bark);
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button { font-family: inherit; }
+
+/* ---- animations ---- */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---- photo tile (moody gradient overlay + subtle texture) ---- */
+.ph {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #241d18 0%, #3a2e25 55%, #4c3a2b 100%);
+  background-size: cover;
+  background-position: center;
+}
+.ph::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 15%, transparent 40%, rgba(0,0,0,.45) 100%);
+  pointer-events: none;
+}
+.phcap {
+  position: absolute; left: 12px; bottom: 10px; z-index: 2;
+  font: 400 9.5px ui-monospace, Menlo, monospace;
+  letter-spacing: .04em;
+  color: rgba(241,235,224,.72);
+  text-transform: lowercase;
+}
+
+/* ---- shared type helpers ---- */
+.script { font-family: 'Pinyon Script', cursive; }
+.eyebrow {
+  font: 400 11px 'Hanken Grotesk', sans-serif;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: rgba(41,33,28,.5);
+}
+.mono { font-family: ui-monospace, Menlo, monospace; }
+.lower { text-transform: lowercase; }
+
+/* ---- primary cta pill ---- */
+.pill {
+  border: 0;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: 'Hanken Grotesk', sans-serif;
+  letter-spacing: .06em;
+  text-transform: lowercase;
+  transition: transform .18s ease, background .2s ease, opacity .2s ease;
+}
+.pill:hover { transform: translateY(-1px); }
+.pill:active { transform: translateY(0); }
+.pill:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; }
+
+/* ---- underlined form input ---- */
+.uline {
+  border: 0;
+  border-bottom: 1px solid rgba(41,33,28,.28);
+  background: transparent;
+  padding: 9px 2px;
+  font: 400 14px 'Hanken Grotesk', sans-serif;
+  color: var(--bark);
+  width: 100%;
+  outline: none;
+  text-transform: lowercase;
+}
+.uline:focus { border-bottom-color: var(--clay); }
+.uline::placeholder { color: rgba(41,33,28,.4); }
+
+/* ---- slide-out drawer (enquiry) ---- */
+.drawer { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+.drawer .scrim {
+  position: absolute; inset: 0;
+  background: rgba(20,16,12,.34);
+  opacity: 0; transition: opacity .4s ease;
+}
+.drawer .panel {
+  position: absolute; top: 0; right: 0; height: 100%;
+  width: 440px; max-width: 86vw;
+  background: var(--oat);
+  box-shadow: -24px 0 60px -28px rgba(20,16,12,.7);
+  transform: translateX(102%);
+  transition: transform .46s cubic-bezier(.22,.61,.36,1);
+  display: flex; flex-direction: column;
+}
+.drawer.on { pointer-events: auto; }
+.drawer.on .scrim { opacity: 1; }
+.drawer.on .panel { transform: none; }
+
+/* ---- full-screen mobile nav overlay ---- */
+.navov {
+  position: fixed; inset: 0; z-index: 95;
+  background: var(--bark-deep);
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s ease;
+  overflow: auto;
+}
+.navov.on { opacity: 1; pointer-events: auto; }
+
+/* hide scrollbars inside overlays where relevant */
+.no-sb { scrollbar-width: none; }
+.no-sb::-webkit-scrollbar { display: none; }
+
+/* =========================================================
+   Responsive layout switch — mobile vs desktop rendering
+   ========================================================= */
+.only-desktop { display: none; }
+.only-mobile  { display: block; }
+
+@media (min-width: 900px) {
+  .only-desktop { display: block; }
+  .only-mobile  { display: none; }
+}
