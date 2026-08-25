@@ -179,7 +179,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
 
       {/* 02 GALLERY */}
       <div {...section('gallery', { background: 'var(--sand)', padding: `${isDesktop ? 72 : 44}px ${px}px` })}>
-        <Head num="02" title="gallery" fs={isDesktop ? 64 : 44} />
+        <Head num="02" title="gallery" fs={isDesktop ? 64 : 44} align="right" />
         <div style={{ marginTop: 30, display: 'grid', gridTemplateColumns: `repeat(${isDesktop ? 4 : 2}, 1fr)`, gridAutoRows: isDesktop ? 150 : 116, gap: 14 }}>
           {STORY.gallery.map((g, i) => (
             <PhotoFrame
@@ -217,13 +217,15 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
 
       {/* 04 OUR PROCESS */}
       <div {...section('our-process', { background: 'var(--sand2)', padding: `${isDesktop ? 72 : 44}px ${px}px` })}>
-        <Head num="04" title="our process" fs={isDesktop ? 60 : 42} />
-        <div style={{ marginTop: 34, display: 'grid', gridTemplateColumns: isDesktop ? 'repeat(3,1fr)' : '1fr', gap: 40 }}>
+        <Head num="04" title="our process" fs={isDesktop ? 60 : 42} align="right" />
+        <div style={{ marginTop: 34 }}>
           {STORY.process.map((p) => (
-            <div key={p.step}>
-              <div className="mono" style={{ font: '400 12px ui-monospace, Menlo, monospace', color: 'var(--clay)', letterSpacing: '.1em' }}>{p.step}</div>
-              <div style={{ font: "500 20px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'var(--bark)', margin: '8px 0 10px' }}>{p.title}</div>
-              <p style={{ margin: 0, font: "300 14.5px/1.65 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textWrap: 'pretty' }}>{p.body}</p>
+            <div key={p.step} style={{ display: isDesktop ? 'grid' : 'block', gridTemplateColumns: isDesktop ? '1fr 280px' : undefined, gap: isDesktop ? 56 : 0, alignItems: 'start', padding: isDesktop ? '26px 0' : '20px 0', textAlign: 'right' }}>
+              <div style={{ gridColumn: isDesktop ? 2 : undefined, gridRow: isDesktop ? 1 : undefined }}>
+                <div className="mono" style={{ font: '400 12px ui-monospace, Menlo, monospace', color: 'var(--clay)', letterSpacing: '.1em' }}>{p.step}</div>
+                <div style={{ font: "500 20px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'var(--bark)', marginTop: 8 }}>{p.title}</div>
+              </div>
+              <p style={{ gridColumn: isDesktop ? 1 : undefined, gridRow: isDesktop ? 1 : undefined, margin: isDesktop ? 0 : '10px 0 0', font: "300 15px/1.7 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textWrap: 'pretty' }}>{p.body}</p>
             </div>
           ))}
         </div>
@@ -279,9 +281,9 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
       {/* 06 CONTACT */}
       <div {...section('contact', { background: 'var(--oat)', padding: `${isDesktop ? 72 : 48}px ${px}px` })}>
         <div style={{ display: isDesktop ? 'grid' : 'block', gridTemplateColumns: isDesktop ? '1fr 1fr' : undefined, gap: 56, alignItems: 'start' }}>
-          <div>
-            <Head num="06" title="let's plan yours" fs={isDesktop ? 60 : 44} />
-            <p style={{ margin: '16px 0 0', font: "300 16px/1.6 'Hanken Grotesk', sans-serif", color: 'rgba(41,33,28,.6)', textTransform: 'lowercase', maxWidth: 420 }}>
+          <div style={{ gridColumn: isDesktop ? 2 : undefined, textAlign: 'right' }}>
+            <Head num="06" title="let's plan yours" fs={isDesktop ? 60 : 44} align="right" />
+            <p style={{ margin: '16px 0 0 auto', font: "300 16px/1.6 'Hanken Grotesk', sans-serif", color: 'rgba(41,33,28,.6)', textTransform: 'lowercase', maxWidth: 420 }}>
               tell us where your mind wanders — we'll shape the rest, and stay with you the whole way.
             </p>
             <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--bark)' }} aria-label="instagram">
@@ -292,7 +294,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
               </svg>
             </a>
           </div>
-          <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: 28, marginTop: isDesktop ? 8 : 32 }}>
+          <form onSubmit={(e) => e.preventDefault()} style={{ gridColumn: isDesktop ? 1 : undefined, gridRow: isDesktop ? 1 : undefined, display: 'flex', flexDirection: 'column', gap: 28, marginTop: isDesktop ? 8 : 32 }}>
             <input className="uline" placeholder="your name" />
             <input className="uline" placeholder="email" />
             <IntentField />
