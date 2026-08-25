@@ -197,22 +197,34 @@ button { font-family: inherit; }
 /* ---- full-screen mobile nav overlay ---- */
 .navov {
   position: fixed; inset: 0; z-index: 95;
-  opacity: 0; pointer-events: none;
-  transition: opacity .4s ease;
+  visibility: hidden; pointer-events: none;
   overflow: auto;
+  transition: visibility 0s linear .4s; /* stay rendered through the fade-out, then hide */
 }
-/* Frosted backdrop on a separate layer: keeping backdrop-filter off the
-   opacity-animated element lets the whole overlay (incl. the close button)
-   fade in together, instead of the contents popping in (Safari quirk). */
+.navov.on { visibility: visible; pointer-events: auto; transition: visibility 0s; }
+
+/* Frosted backdrop on its own layer. Animate the blur radius + tint directly
+   (not via opacity) so the blur ramps in lockstep with the content instead of
+   popping in or lagging behind. Identity filter + transparent tint at rest;
+   visibility:hidden keeps it from compositing the page while closed. */
 .navov::before {
   content: '';
   position: fixed; inset: 0; z-index: -1;
+  background: rgba(33,26,21,0);
+  backdrop-filter: blur(0px) saturate(100%);
+  -webkit-backdrop-filter: blur(0px) saturate(100%);
+  transition: background .4s ease, backdrop-filter .4s ease, -webkit-backdrop-filter .4s ease;
+  pointer-events: none;
+}
+.navov.on::before {
   background: rgba(33,26,21,.85);
   backdrop-filter: blur(22px) saturate(115%);
   -webkit-backdrop-filter: blur(22px) saturate(115%);
-  pointer-events: none;
 }
-.navov.on { opacity: 1; pointer-events: auto; }
+
+/* content fades in together with the backdrop */
+.navov > * { opacity: 0; transition: opacity .4s ease; }
+.navov.on > * { opacity: 1; }
 
 /* hide scrollbars inside overlays where relevant */
 .no-sb { scrollbar-width: none; }
