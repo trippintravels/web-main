@@ -293,6 +293,15 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
                 <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
               </svg>
             </a>
+            <div style={{ marginTop: 18, font: "300 13px 'Hanken Grotesk', sans-serif", color: 'rgba(41,33,28,.5)', textTransform: 'lowercase' }}>or write to us at</div>
+            <a
+              href="mailto:hey@trippintravels.in"
+              style={{ display: 'inline-block', marginTop: 4, font: "400 16px 'Hanken Grotesk', sans-serif", color: 'var(--clay)', textDecoration: 'none' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--bark)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--clay)')}
+            >
+              hey@trippintravels.in
+            </a>
           </div>
           <form onSubmit={(e) => e.preventDefault()} style={{ gridColumn: isDesktop ? 1 : undefined, gridRow: isDesktop ? 1 : undefined, display: 'flex', flexDirection: 'column', gap: 28, marginTop: isDesktop ? 8 : 32 }}>
             <input className="uline" placeholder="your name" />

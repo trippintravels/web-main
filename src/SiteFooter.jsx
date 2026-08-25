@@ -11,7 +11,7 @@ export default function SiteFooter({ isDesktop, onStory, onHome }) {
         trippin' travels
       </div>
       <div style={{ marginTop: isDesktop ? 20 : 14, font: "300 13px/1.6 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.6)', maxWidth: 260 }}>
-        bespoke journeys through the eastern himalaya. made for you, only.
+        go beyond the trails
       </div>
       <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--sand)' }} aria-label="instagram">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -19,6 +19,14 @@ export default function SiteFooter({ isDesktop, onStory, onHome }) {
           <circle cx="12" cy="12" r="4.2" />
           <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
         </svg>
+      </a>
+      <a
+        href="mailto:hey@trippintravels.in"
+        style={{ display: 'block', width: 'fit-content', marginTop: 16, font: "300 13px 'Hanken Grotesk', sans-serif", color: 'rgba(231,220,203,.72)', textDecoration: 'none' }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--oat)')}
+        onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(231,220,203,.72)')}
+      >
+        hey@trippintravels.in
       </a>
     </div>
   );
@@ -47,7 +55,7 @@ export default function SiteFooter({ isDesktop, onStory, onHome }) {
         </>
       )}
       <div className="mono" style={{ marginTop: isDesktop ? 44 : 30, font: '400 10px ui-monospace, Menlo, monospace', color: 'rgba(231,220,203,.4)', textTransform: 'lowercase' }}>
-        © 2026 trippin' travels · eastern himalaya
+        © 2026 trippin' travels
       </div>
     </footer>
   );

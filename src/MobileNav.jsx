@@ -33,7 +33,7 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome }) {
 
   return (
     <div className={`navov${open ? ' on' : ''}`} aria-hidden={!open}>
-      <div style={{ padding: '46px 26px 40px', minHeight: '100%', boxSizing: 'border-box', color: 'var(--sand)' }}>
+      <div style={{ padding: '46px 26px 40px', minHeight: '100%', boxSizing: 'border-box', color: 'var(--sand)', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
           <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
             trippin' travels
@@ -73,10 +73,29 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome }) {
         <button
           className="pill"
           onClick={onPlan}
-          style={{ marginTop: 40, font: "500 12px 'Hanken Grotesk', sans-serif", color: 'var(--bark-deep)', background: 'var(--clay-light)', padding: '14px 28px' }}
+          style={{ alignSelf: 'flex-start', marginTop: 40, font: "500 12px 'Hanken Grotesk', sans-serif", color: 'var(--bark-deep)', background: 'var(--clay-light)', padding: '14px 28px' }}
         >
           plan your journey
         </button>
+
+        {/* instagram + email pinned to the bottom-right corner */}
+        <div style={{ marginTop: 'auto', paddingTop: 44, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 12 }}>
+          <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', width: 28, height: 28, color: 'var(--sand)' }} aria-label="instagram">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4.2" />
+              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+          <a
+            href="mailto:hey@trippintravels.in"
+            style={{ font: "300 13px 'Hanken Grotesk', sans-serif", color: 'rgba(231,220,203,.72)', textDecoration: 'none' }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--oat)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(231,220,203,.72)')}
+          >
+            hey@trippintravels.in
+          </a>
+        </div>
       </div>
     </div>
   );
