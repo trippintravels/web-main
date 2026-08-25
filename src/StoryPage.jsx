@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import PhotoFrame from './PhotoFrame.jsx';
 import DesktopNav from './DesktopNav.jsx';
-import { STORY, TEAM, FOOTER, INTENT_OPTIONS } from './data.js';
+import SiteFooter from './SiteFooter.jsx';
+import { STORY, TEAM, INTENT_OPTIONS } from './data.js';
 import { slugify } from './route.js';
 
 const LIGHT_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28))';
@@ -127,14 +128,16 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
         {isDesktop ? (
           <DesktopNav onStory={onStory} onWordmark={onHome} active="story" />
         ) : (
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: `46px ${px}px 20px` }}>
-            <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
-              trippin' travels
-            </span>
-            <button onClick={onMenu} aria-label="Open menu" style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}>
-              <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
-              <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
-            </button>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30, padding: `46px ${px}px 20px` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
+              <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
+                trippin' travels
+              </span>
+              <button onClick={onMenu} aria-label="Open menu" style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}>
+                <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
+                <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -301,31 +304,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
         </div>
       </div>
 
-      {/* FOOTER */}
-      <div style={{ background: 'var(--bark-deep)', color: 'var(--sand)', padding: `${isDesktop ? 60 : 44}px ${px}px ${isDesktop ? 56 : 40}px` }}>
-        <div className="script" style={{ fontSize: isDesktop ? 52 : 38, color: 'var(--oat)', cursor: 'pointer' }} onClick={onHome}>trippin' travels</div>
-        <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? '1fr 1fr 1fr' : '1fr 1fr', gap: '26px 20px', marginTop: 26 }}>
-          <FooterCol title="expeditions" items={FOOTER.expeditions} />
-          <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
-          <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
-        </div>
-        <div className="mono" style={{ marginTop: 30, font: '400 10px ui-monospace, Menlo, monospace', color: 'rgba(231,220,203,.4)', textTransform: 'lowercase' }}>
-          © 2026 trippin' travels · eastern himalaya
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FooterCol({ title, items, onItem }) {
-  return (
-    <div>
-      <div style={{ font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--clay-light)' }}>{title}</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12, font: "300 12.5px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.72)' }}>
-        {items.map((x) => (
-          <span key={x} onClick={onItem ? () => onItem(x) : undefined} style={{ cursor: onItem ? 'pointer' : 'default' }}>{x}</span>
-        ))}
-      </div>
+      <SiteFooter isDesktop={isDesktop} onStory={onStory} onHome={onHome} />
     </div>
   );
 }

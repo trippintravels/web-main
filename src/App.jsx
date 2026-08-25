@@ -72,9 +72,9 @@ export default function App() {
       {route.page === 'story' ? (
         <StoryPage isDesktop={isDesktop} onHome={goHome} onMenu={() => setNavOpen(true)} onStory={goStory} />
       ) : isDesktop ? (
-        <DesktopHome onPlan={openPlan} onStory={goStory} />
+        <DesktopHome onPlan={openPlan} onStory={goStory} onHome={goHome} />
       ) : (
-        <MobileHome onMenu={() => setNavOpen(true)} onPlan={openPlan} onStory={goStory} />
+        <MobileHome onMenu={() => setNavOpen(true)} onPlan={openPlan} onStory={goStory} onHome={goHome} />
       )}
 
       {/* Mobile-only full-screen menu (5c) */}

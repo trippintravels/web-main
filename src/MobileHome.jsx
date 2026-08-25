@@ -1,7 +1,7 @@
 import PhotoFrame from './PhotoFrame.jsx';
-import { slugify } from './route.js';
+import SiteFooter from './SiteFooter.jsx';
 import {
-  DESTINATIONS, SERVICES, PROCESS, FOOTER,
+  DESTINATIONS, SERVICES, PROCESS,
   HERO_IMG, STORY_IMG, QUOTE_IMG,
 } from './data.js';
 
@@ -49,7 +49,7 @@ function BleedRow({ dest, side, h, tw }) {
   );
 }
 
-export default function MobileHome({ onMenu, onPlan, onStory }) {
+export default function MobileHome({ onMenu, onPlan, onStory, onHome }) {
   return (
     <div style={{ background: 'var(--oat)' }}>
       {/* HERO */}
@@ -185,31 +185,7 @@ export default function MobileHome({ onMenu, onPlan, onStory }) {
         </button>
       </div>
 
-      {/* FOOTER */}
-      <div style={{ background: 'var(--bark-deep)', padding: '44px 26px 40px', color: 'var(--sand)', textAlign: 'left' }}>
-        <div className="script" style={{ fontSize: 38, color: 'var(--oat)' }}>trippin' travels</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '26px 20px', marginTop: 26 }}>
-          <FooterCol title="expeditions" items={FOOTER.expeditions} />
-          <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
-          <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
-        </div>
-        <div className="mono" style={{ marginTop: 30, font: '400 10px ui-monospace, Menlo, monospace', color: 'rgba(231,220,203,.4)', textTransform: 'lowercase' }}>
-          © 2026 trippin' travels · eastern himalaya
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FooterCol({ title, items, onItem }) {
-  return (
-    <div>
-      <div style={{ font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--clay-light)' }}>{title}</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 12, font: "300 12.5px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.72)' }}>
-        {items.map((x) => (
-          <span key={x} onClick={onItem ? () => onItem(x) : undefined} style={{ cursor: onItem ? 'pointer' : 'default' }}>{x}</span>
-        ))}
-      </div>
+      <SiteFooter isDesktop={false} onStory={onStory} onHome={onHome} />
     </div>
   );
 }

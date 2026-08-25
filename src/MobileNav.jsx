@@ -41,8 +41,13 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome }) {
           <button
             onClick={onClose}
             aria-label="Close menu"
-            style={{ font: "400 24px 'Hanken Grotesk', sans-serif", color: 'var(--clay-light)', background: 'none', border: 0, cursor: 'pointer', lineHeight: 1 }}
-          >×</button>
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4, background: 'none', border: 0, cursor: 'pointer', color: 'var(--clay-light)' }}
+          >
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+              <line x1="2" y1="2" x2="20" y2="20" />
+              <line x1="20" y1="2" x2="2" y2="20" />
+            </svg>
+          </button>
         </div>
 
         <div style={{ marginTop: 38, display: 'flex', flexDirection: 'column', gap: 32 }}>

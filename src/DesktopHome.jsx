@@ -1,8 +1,8 @@
 import PhotoFrame from './PhotoFrame.jsx';
 import DesktopNav from './DesktopNav.jsx';
-import { slugify } from './route.js';
+import SiteFooter from './SiteFooter.jsx';
 import {
-  DESTINATIONS, SERVICES, PROCESS, FOOTER,
+  DESTINATIONS, SERVICES, PROCESS,
   HERO_IMG, STORY_IMG, QUOTE_IMG,
 } from './data.js';
 
@@ -51,7 +51,7 @@ function DeskRow({ dest, side, w, h, fs }) {
   );
 }
 
-export default function DesktopHome({ onPlan, onStory }) {
+export default function DesktopHome({ onPlan, onStory, onHome }) {
   return (
     <div style={{ width: '100%', position: 'relative', background: 'var(--oat)', overflow: 'hidden' }}>
       {/* HERO + NAV */}
@@ -192,38 +192,7 @@ export default function DesktopHome({ onPlan, onStory }) {
         </button>
       </div>
 
-      {/* FOOTER */}
-      <div style={{ background: 'var(--bark-deep)', padding: '60px 72px 56px', color: 'var(--sand)', display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', gap: 40 }}>
-        <div>
-          <div className="script" style={{ fontSize: 52, color: 'var(--oat)' }}>trippin' travels</div>
-          <div style={{ marginTop: 20, font: "300 13px/1.6 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.6)', maxWidth: 260 }}>
-            bespoke journeys through the eastern himalaya. made for you, only.
-          </div>
-          <a href="#" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--sand)' }} aria-label="instagram">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4.2" />
-              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
-            </svg>
-          </a>
-        </div>
-        <FooterCol title="expeditions" items={FOOTER.expeditions} />
-        <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
-        <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
-      </div>
-    </div>
-  );
-}
-
-function FooterCol({ title, items, onItem }) {
-  return (
-    <div>
-      <div style={{ font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--clay-light)' }}>{title}</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 14, font: "300 13px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.72)' }}>
-        {items.map((x) => (
-          <span key={x} onClick={onItem ? () => onItem(x) : undefined} style={{ cursor: onItem ? 'pointer' : 'default' }}>{x}</span>
-        ))}
-      </div>
+      <SiteFooter isDesktop onStory={onStory} onHome={onHome} />
     </div>
   );
 }
