@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PhotoFrame from './PhotoFrame.jsx';
+import DesktopNav from './DesktopNav.jsx';
 import { STORY, TEAM, FOOTER, INTENT_OPTIONS } from './data.js';
 import { slugify } from './route.js';
 
@@ -122,24 +123,20 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory }) {
           </div>
         </PhotoFrame>
 
-        {/* top bar */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: `${isDesktop ? 38 : 46}px ${px}px 20px` }}>
-          <span className="wordmark" onClick={onHome} style={{ fontSize: isDesktop ? 24 : 17, color: 'var(--oat)', cursor: 'pointer' }}>
-            trippin' travels
-          </span>
-          {isDesktop ? (
-            <div style={{ display: 'flex', gap: 38, font: "400 14px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
-              <span style={{ cursor: 'pointer' }} onClick={onHome}>expeditions</span>
-              <span style={{ cursor: 'pointer' }} onClick={onHome}>tours &amp; rentals</span>
-              <span style={{ cursor: 'pointer', color: 'var(--cream)', borderBottom: '1px solid var(--cream)', paddingBottom: 2 }} onClick={() => onStory('')}>our story</span>
-            </div>
-          ) : (
+        {/* top bar — shared desktop nav (with mega-menu), hamburger on mobile */}
+        {isDesktop ? (
+          <DesktopNav onStory={onStory} onWordmark={onHome} active="story" />
+        ) : (
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: `46px ${px}px 20px` }}>
+            <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
+              trippin' travels
+            </span>
             <button onClick={onMenu} aria-label="Open menu" style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}>
               <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
               <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* INTRO band */}

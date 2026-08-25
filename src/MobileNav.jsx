@@ -23,7 +23,7 @@ function Group({ items, onItem }) {
   );
 }
 
-export default function MobileNav({ open, onClose, onPlan, onStory }) {
+export default function MobileNav({ open, onClose, onPlan, onStory, onHome }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === 'Escape' && onClose();
@@ -35,7 +35,7 @@ export default function MobileNav({ open, onClose, onPlan, onStory }) {
     <div className={`navov${open ? ' on' : ''}`} aria-hidden={!open}>
       <div style={{ padding: '46px 26px 40px', minHeight: '100%', boxSizing: 'border-box', color: 'var(--sand)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-          <span className="wordmark" style={{ fontSize: 17, color: 'var(--oat)' }}>
+          <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
             trippin' travels
           </span>
           <button

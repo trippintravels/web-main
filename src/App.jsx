@@ -78,7 +78,7 @@ export default function App() {
       )}
 
       {/* Mobile-only full-screen menu (5c) */}
-      <MobileNav open={navOpen} onClose={() => setNavOpen(false)} onPlan={openPlan} onStory={goStory} />
+      <MobileNav open={navOpen} onClose={() => setNavOpen(false)} onPlan={openPlan} onStory={goStory} onHome={() => { setNavOpen(false); goHome(); }} />
 
       {/* Shared enquiry drawer with working intent dropdown */}
       <EnquiryDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />

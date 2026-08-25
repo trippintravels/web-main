@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import PhotoFrame from './PhotoFrame.jsx';
+import DesktopNav from './DesktopNav.jsx';
 import { slugify } from './route.js';
 import {
-  DESTINATIONS, SERVICES, PROCESS, FOOTER, NAV,
+  DESTINATIONS, SERVICES, PROCESS, FOOTER,
   HERO_IMG, STORY_IMG, QUOTE_IMG,
 } from './data.js';
 
@@ -51,23 +51,7 @@ function DeskRow({ dest, side, w, h, fs }) {
   );
 }
 
-// Mega panel sits flush under the 82px nav bar so the bar + panel read as one
-// solid-brown header when open.
-const megaPanel = {
-  position: 'absolute', top: 82, left: 0, right: 0, zIndex: 20,
-  background: 'var(--bark-deep)', padding: '36px 72px 40px',
-  boxShadow: '0 24px 50px -20px rgba(20,16,12,.6)',
-};
-const megaLabel = { font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.24em', textTransform: 'uppercase', color: 'var(--clay-light)' };
-const megaItem = { cursor: 'pointer' };
-const megaGrid = (cols) => ({ display: 'grid', gridTemplateColumns: `repeat(${cols},1fr)`, gap: '16px 30px', marginTop: 20, font: "300 17px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(241,235,224,.85)' });
-
 export default function DesktopHome({ onPlan, onStory }) {
-  const [panel, setPanel] = useState(null); // 'exp' | 'tours' | 'story' | null
-  const toggle = (p) => setPanel((cur) => (cur === p ? null : p));
-
-  const navItem = { cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 };
-
   return (
     <div style={{ width: '100%', position: 'relative', background: 'var(--oat)', overflow: 'hidden' }}>
       {/* HERO + NAV */}
@@ -95,55 +79,8 @@ export default function DesktopHome({ onPlan, onStory }) {
           </div>
         </PhotoFrame>
 
-        {/* TOP NAV BAR — over the hero; turns solid brown, flush with the panel,
-            when a mega menu is open (mirrors the mobile full-brown menu). */}
-        <div
-          style={{
-            position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30,
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '38px 72px 20px',
-            background: panel ? 'var(--bark-deep)' : 'transparent',
-          }}
-        >
-          <span className="wordmark" style={{ fontSize: 24, color: 'var(--oat)' }}>
-            trippin' travels
-          </span>
-          <div style={{ display: 'flex', gap: 38, font: "400 14px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
-            <span style={navItem} onClick={() => toggle('exp')}>expeditions <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
-            <span style={navItem} onClick={() => toggle('tours')}>tours &amp; rentals <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
-            <span style={navItem} onClick={() => toggle('story')}>our story <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
-          </div>
-        </div>
-
-        {/* MEGA MENU PANELS */}
-        {panel === 'exp' && (
-          <div style={megaPanel}>
-            <div style={megaLabel}>expeditions</div>
-            <div style={megaGrid(4)}>
-              {NAV.expeditions.map((x) => <span key={x} style={megaItem}>{x}</span>)}
-            </div>
-          </div>
-        )}
-        {panel === 'tours' && (
-          <div style={{ ...megaPanel, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
-            <div>
-              <div style={megaLabel}>tours</div>
-              <div style={megaGrid(2)}>{NAV.tours.map((x) => <span key={x} style={megaItem}>{x}</span>)}</div>
-            </div>
-            <div>
-              <div style={megaLabel}>rentals</div>
-              <div style={megaGrid(2)}>{NAV.rentals.map((x) => <span key={x} style={megaItem}>{x}</span>)}</div>
-            </div>
-          </div>
-        )}
-        {panel === 'story' && (
-          <div style={megaPanel}>
-            <div style={megaLabel}>our story</div>
-            <div style={megaGrid(3)}>{NAV.story.map((x) => (
-              <span key={x} style={megaItem} onClick={() => { setPanel(null); onStory(slugify(x)); }}>{x}</span>
-            ))}</div>
-          </div>
-        )}
+        {/* shared top nav + frosted mega-menu */}
+        <DesktopNav onStory={onStory} />
       </div>
 
       {/* 00 EXPLORE */}
