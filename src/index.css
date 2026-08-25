@@ -209,7 +209,7 @@ button { font-family: inherit; }
    visibility:hidden keeps it from compositing the page while closed. */
 .navov::before {
   content: '';
-  position: fixed; inset: 0; z-index: -1;
+  position: fixed; inset: 0; z-index: 0;
   background: rgba(33,26,21,0);
   backdrop-filter: blur(0px) saturate(100%);
   -webkit-backdrop-filter: blur(0px) saturate(100%);
@@ -222,8 +222,14 @@ button { font-family: inherit; }
   -webkit-backdrop-filter: blur(22px) saturate(115%);
 }
 
-/* content fades in together with the backdrop */
-.navov > * { opacity: 0; transition: opacity .4s ease; }
+/* content sits above the frosted layer via a positive stacking context.
+   (A negative z-index backdrop pseudo makes iOS Safari drop the content once
+   the backdrop-filter layer composites — so keep the backdrop at z-index:0 and
+   the content explicitly above it.) */
+.navov > * {
+  position: relative; z-index: 1;
+  opacity: 0; transition: opacity .4s ease;
+}
 .navov.on > * { opacity: 1; }
 
 /* hide scrollbars inside overlays where relevant */
