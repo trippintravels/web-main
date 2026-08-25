@@ -1,7 +1,11 @@
+import PhotoFrame from './PhotoFrame.jsx';
+import { slugify } from './route.js';
 import {
   DESTINATIONS, SERVICES, PROCESS, FOOTER,
   HERO_IMG, STORY_IMG, QUOTE_IMG,
 } from './data.js';
+
+const LIGHT_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28))';
 
 /* alternating edge-bleed rows for the "where to wander" magazine grid.
    `side` = which edge the photo bleeds to. heights mirror the mockup. */
@@ -16,16 +20,18 @@ const MOBILE_ROWS = [
 
 function BleedRow({ dest, side, h, tw }) {
   const photo = (
-    <div
-      className="ph"
+    <PhotoFrame
+      img={dest.img}
+      overlay={LIGHT_OVERLAY}
+      drift={50}
+      float={22}
       style={{
         flex: 1, height: h,
         borderRadius: side === 'right' ? '3px 0 0 3px' : '0 3px 3px 0',
-        backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28)),url('${dest.img}')`,
       }}
     >
       <div className="phcap">{dest.name}</div>
-    </div>
+    </PhotoFrame>
   );
   const text = (
     <div style={{ flex: 'none', width: tw, textAlign: side === 'right' ? 'left' : 'right',
@@ -43,22 +49,16 @@ function BleedRow({ dest, side, h, tw }) {
   );
 }
 
-export default function MobileHome({ onMenu, onPlan }) {
+export default function MobileHome({ onMenu, onPlan, onStory }) {
   return (
     <div style={{ background: 'var(--oat)' }}>
       {/* HERO */}
-      <div
-        className="ph"
-        style={{
-          height: 600,
-          backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.22),rgba(20,16,12,.55)),url('${HERO_IMG}')`,
-        }}
-      >
+      <PhotoFrame img={HERO_IMG} drift={80} float={0} style={{ height: 600 }}>
         <div className="phcap">eastern himalaya · morning mist</div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', padding: '46px 26px 34px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-            <span style={{ font: "600 12px 'Hanken Grotesk', sans-serif", letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--oat)' }}>
-              trippin travels
+            <span className="wordmark" style={{ fontSize: 17, color: 'var(--oat)' }}>
+              trippin' travels
             </span>
             <button
               onClick={onMenu}
@@ -70,22 +70,24 @@ export default function MobileHome({ onMenu, onPlan }) {
             </button>
           </div>
           <div style={{ marginTop: 'auto', textAlign: 'left' }}>
-            <div style={{ font: "400 11px 'Hanken Grotesk', sans-serif", letterSpacing: '.24em', textTransform: 'uppercase', color: 'rgba(241,235,224,.75)' }}>
-              bespoke travel · eastern himalaya
+            <div className="script" style={{ fontSize: 90, lineHeight: .82, color: 'var(--cream)' }}>go<br />beyond</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <span className="script" style={{ fontSize: 90, lineHeight: .82, color: 'var(--cream)', whiteSpace: 'nowrap', flexShrink: 0 }}>the trails</span>
+              <button
+                className="hero-cta"
+                onClick={onPlan}
+                aria-label="plan your journey"
+                style={{ width: 58, height: 58, flex: 'none' }}
+              >
+                <svg className="hero-cta-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="4" y1="12" x2="19" y2="12" />
+                  <polyline points="13 6 19 12 13 18" />
+                </svg>
+              </button>
             </div>
-            <div className="script" style={{ fontSize: 90, lineHeight: .82, color: 'var(--cream)', marginTop: 10 }}>
-              go<br />beyond<br />the trails
-            </div>
-            <button
-              className="pill"
-              onClick={onPlan}
-              style={{ marginTop: 26, font: "500 12px 'Hanken Grotesk', sans-serif", color: 'var(--oat)', background: 'var(--clay)', padding: '13px 26px' }}
-            >
-              plan your journey
-            </button>
           </div>
         </div>
-      </div>
+      </PhotoFrame>
 
       {/* 00 EXPLORE */}
       <div style={{ background: 'var(--oat)', padding: '44px 0 22px' }}>
@@ -109,17 +111,14 @@ export default function MobileHome({ onMenu, onPlan }) {
       </div>
 
       {/* 02 STORY */}
-      <div
-        className="ph"
-        style={{ height: 300, backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.22),rgba(20,16,12,.55)),url('${STORY_IMG}')` }}
-      >
+      <PhotoFrame img={STORY_IMG} drift={56} float={0} style={{ height: 300 }}>
         <div className="phcap">three friends · beyond the usual trails</div>
-      </div>
+      </PhotoFrame>
       <div style={{ background: 'var(--sand)', padding: '44px 26px 42px', textAlign: 'left' }}>
         <div className="eyebrow">02 — our story</div>
         <div className="script" style={{ fontSize: 42, color: 'var(--bark)', lineHeight: .9, margin: '6px 0 16px' }}>where it began</div>
         <p style={{ margin: 0, font: "300 16px/1.6 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textTransform: 'lowercase', textWrap: 'pretty' }}>
-          trippin travels started with three friends and one simple passion — exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected — the stays, the people, the food, and the stories worth coming back with.
+          trippin' travels started with three friends and one simple passion — exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected — the stays, the people, the food, and the stories worth coming back with.
         </p>
       </div>
 
@@ -164,17 +163,14 @@ export default function MobileHome({ onMenu, onPlan }) {
       </div>
 
       {/* QUOTE */}
-      <div
-        className="ph"
-        style={{ height: 290, backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.22),rgba(20,16,12,.55)),url('${QUOTE_IMG}')` }}
-      >
+      <PhotoFrame img={QUOTE_IMG} drift={56} float={0} style={{ height: 290 }}>
         <div className="phcap">lachen valley · first light</div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', textAlign: 'right', padding: '34px 30px' }}>
           <div className="script" style={{ fontSize: 38, lineHeight: 1.05, color: 'var(--cream)' }}>
             the mountains<br />don't rush —<br />and neither do we
           </div>
         </div>
-      </div>
+      </PhotoFrame>
 
       {/* ENQUIRY */}
       <div style={{ background: 'var(--oat)', padding: '48px 26px 46px', textAlign: 'left' }}>
@@ -191,26 +187,28 @@ export default function MobileHome({ onMenu, onPlan }) {
 
       {/* FOOTER */}
       <div style={{ background: 'var(--bark-deep)', padding: '44px 26px 40px', color: 'var(--sand)', textAlign: 'left' }}>
-        <div className="script" style={{ fontSize: 38, color: 'var(--oat)' }}>trippin travels</div>
+        <div className="script" style={{ fontSize: 38, color: 'var(--oat)' }}>trippin' travels</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '26px 20px', marginTop: 26 }}>
           <FooterCol title="expeditions" items={FOOTER.expeditions} />
           <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
-          <FooterCol title="our story" items={FOOTER.story} />
+          <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
         </div>
         <div className="mono" style={{ marginTop: 30, font: '400 10px ui-monospace, Menlo, monospace', color: 'rgba(231,220,203,.4)', textTransform: 'lowercase' }}>
-          © 2026 trippin travels · eastern himalaya
+          © 2026 trippin' travels · eastern himalaya
         </div>
       </div>
     </div>
   );
 }
 
-function FooterCol({ title, items }) {
+function FooterCol({ title, items, onItem }) {
   return (
     <div>
       <div style={{ font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--clay-light)' }}>{title}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 12, font: "300 12.5px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.72)' }}>
-        {items.map((x) => <span key={x}>{x}</span>)}
+        {items.map((x) => (
+          <span key={x} onClick={onItem ? () => onItem(x) : undefined} style={{ cursor: onItem ? 'pointer' : 'default' }}>{x}</span>
+        ))}
       </div>
     </div>
   );

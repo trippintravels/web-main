@@ -1,5 +1,5 @@
 /* ===================================================================
-   Trippin Travels — Eastern Himalaya
+   Trippin' Travels — Eastern Himalaya
    Palette:  oat #f1ebe0 · deep bark #29211c · #211a15 · clay #a9674c
              warm clay-light #c98e6f · sand #e7dccb · #efe6d6
    Type:     Pinyon Script (display cursive) · Hanken Grotesk (body/ui)
@@ -57,7 +57,26 @@ button { font-family: inherit; }
 .ph::after {
   content: '';
   position: absolute; inset: 0;
+  z-index: 1;
   background: radial-gradient(120% 90% at 50% 15%, transparent 40%, rgba(0,0,0,.45) 100%);
+  pointer-events: none;
+}
+/* drifting image layer — taller than the frame by 2×drift on each axis so it
+   can translate within the overflow:hidden clip without exposing an edge */
+.ph-img {
+  position: absolute;
+  left: 0; right: 0;
+  top: calc(-1 * var(--ph-drift, 56px));
+  height: calc(100% + 2 * var(--ph-drift, 56px));
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+/* gradient overlay that used to be baked into the .ph background shorthand */
+.ph-grad {
+  position: absolute; inset: 0;
+  z-index: 1;
   pointer-events: none;
 }
 .phcap {
@@ -70,6 +89,16 @@ button { font-family: inherit; }
 
 /* ---- shared type helpers ---- */
 .script { font-family: 'Pinyon Script', cursive; }
+/* top wordmark — one definition, used on every page for consistency.
+   Size is set per breakpoint at the call site (desktop larger than mobile). */
+.wordmark {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  line-height: 1;
+  white-space: nowrap;
+}
 .eyebrow {
   font: 400 11px 'Hanken Grotesk', sans-serif;
   letter-spacing: .24em;
@@ -92,6 +121,43 @@ button { font-family: inherit; }
 .pill:hover { transform: translateY(-1px); }
 .pill:active { transform: translateY(0); }
 .pill:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; }
+
+/* ---- hero circular arrow cta (hero only) ----
+   outline circle with a right-pointing arrow that loops a rightward nudge,
+   echoing the animated scroll indicator in the Eloura hero. */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 1px solid rgba(241,235,224,.7);
+  background: transparent;
+  color: var(--cream);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform .3s ease, background .3s ease, border-color .3s ease, color .3s ease;
+}
+.hero-cta:hover {
+  background: var(--cream);
+  border-color: var(--cream);
+  color: var(--bark-deep);
+  transform: scale(1.06);
+}
+.hero-cta:active { transform: scale(1); }
+.hero-cta:focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; }
+.hero-cta svg { display: block; }
+.hero-cta-arrow { animation: heroArrow 1.8s ease-in-out infinite; }
+.hero-cta:hover .hero-cta-arrow { animation: none; }
+@keyframes heroArrow {
+  0%   { transform: translateX(-7px); opacity: 0; }
+  35%  { transform: translateX(0);    opacity: 1; }
+  70%  { transform: translateX(7px);  opacity: 0; }
+  100% { transform: translateX(7px);  opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta-arrow { animation: none; }
+}
 
 /* ---- underlined form input ---- */
 .uline {

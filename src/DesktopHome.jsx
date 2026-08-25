@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import PhotoFrame from './PhotoFrame.jsx';
+import { slugify } from './route.js';
 import {
   DESTINATIONS, SERVICES, PROCESS, FOOTER, NAV,
   HERO_IMG, STORY_IMG, QUOTE_IMG,
 } from './data.js';
+
+const LIGHT_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28))';
 
 /* Explore rows for desktop — alternating photo side, widths & heights per mockup */
 const DESK_ROWS = [
@@ -16,16 +20,18 @@ const DESK_ROWS = [
 
 function DeskRow({ dest, side, w, h, fs }) {
   const photo = (
-    <div
-      className="ph"
+    <PhotoFrame
+      img={dest.img}
+      overlay={LIGHT_OVERLAY}
+      drift={60}
+      float={26}
       style={{
         flex: 'none', width: w, height: h,
         borderRadius: side === 'left' ? '0 4px 4px 0' : '4px 0 0 4px',
-        backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28)),url('${dest.img}')`,
       }}
     >
       <div className="phcap">{dest.name}</div>
-    </div>
+    </PhotoFrame>
   );
   const text = (
     <div style={{ flex: 1, textAlign: side === 'left' ? 'left' : 'right',
@@ -45,17 +51,18 @@ function DeskRow({ dest, side, w, h, fs }) {
   );
 }
 
+// Mega panel sits flush under the 82px nav bar so the bar + panel read as one
+// solid-brown header when open.
 const megaPanel = {
-  position: 'absolute', top: 72, left: 0, right: 0, zIndex: 20,
+  position: 'absolute', top: 82, left: 0, right: 0, zIndex: 20,
   background: 'var(--bark-deep)', padding: '36px 72px 40px',
   boxShadow: '0 24px 50px -20px rgba(20,16,12,.6)',
-  animation: 'fadeIn .22s ease',
 };
 const megaLabel = { font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.24em', textTransform: 'uppercase', color: 'var(--clay-light)' };
 const megaItem = { cursor: 'pointer' };
 const megaGrid = (cols) => ({ display: 'grid', gridTemplateColumns: `repeat(${cols},1fr)`, gap: '16px 30px', marginTop: 20, font: "300 17px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(241,235,224,.85)' });
 
-export default function DesktopHome({ onPlan }) {
+export default function DesktopHome({ onPlan, onStory }) {
   const [panel, setPanel] = useState(null); // 'exp' | 'tours' | 'story' | null
   const toggle = (p) => setPanel((cur) => (cur === p ? null : p));
 
@@ -65,37 +72,46 @@ export default function DesktopHome({ onPlan }) {
     <div style={{ width: '100%', position: 'relative', background: 'var(--oat)', overflow: 'hidden' }}>
       {/* HERO + NAV */}
       <div style={{ position: 'relative' }}>
-        <div
-          className="ph"
-          style={{ height: 664, backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.22),rgba(20,16,12,.55)),url('${HERO_IMG}')` }}
-        >
+        <PhotoFrame img={HERO_IMG} drift={80} float={0} style={{ height: 664 }}>
           <div className="phcap">eastern himalaya · atmospheric morning light</div>
-          <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', padding: '38px 72px 60px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ font: "500 14px 'Hanken Grotesk', sans-serif", letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--oat)' }}>
-                trippin travels
-              </span>
-              <div style={{ display: 'flex', gap: 38, font: "400 14px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
-                <span style={navItem} onClick={() => toggle('exp')}>expeditions <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
-                <span style={navItem} onClick={() => toggle('tours')}>tours &amp; rentals <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
-                <span style={navItem} onClick={() => toggle('story')}>our story <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
+          <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '38px 72px 60px' }}>
+            <div style={{ maxWidth: 700 }}>
+              <div className="script" style={{ fontSize: 132, lineHeight: .8, color: 'var(--cream)' }}>go beyond</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 30 }}>
+                <span className="script" style={{ fontSize: 132, lineHeight: .8, color: 'var(--cream)', whiteSpace: 'nowrap', flexShrink: 0 }}>the trails</span>
+                <button
+                  className="hero-cta"
+                  onClick={onPlan}
+                  aria-label="plan your journey"
+                  style={{ width: 68, height: 68, flex: 'none' }}
+                >
+                  <svg className="hero-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="4" y1="12" x2="19" y2="12" />
+                    <polyline points="13 6 19 12 13 18" />
+                  </svg>
+                </button>
               </div>
             </div>
-            <div style={{ marginTop: 'auto', maxWidth: 700 }}>
-              <div style={{ font: "400 12px 'Hanken Grotesk', sans-serif", letterSpacing: '.28em', textTransform: 'uppercase', color: 'rgba(241,235,224,.8)' }}>
-                bespoke travel · eastern himalaya
-              </div>
-              <div className="script" style={{ fontSize: 132, lineHeight: .8, color: 'var(--cream)', marginTop: 14 }}>
-                go beyond<br />the trails
-              </div>
-              <button
-                className="pill"
-                onClick={onPlan}
-                style={{ marginTop: 34, font: "500 13px 'Hanken Grotesk', sans-serif", color: 'var(--bark-deep)', background: 'var(--oat)', padding: '16px 34px' }}
-              >
-                plan your journey
-              </button>
-            </div>
+          </div>
+        </PhotoFrame>
+
+        {/* TOP NAV BAR — over the hero; turns solid brown, flush with the panel,
+            when a mega menu is open (mirrors the mobile full-brown menu). */}
+        <div
+          style={{
+            position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '38px 72px 20px',
+            background: panel ? 'var(--bark-deep)' : 'transparent',
+          }}
+        >
+          <span className="wordmark" style={{ fontSize: 24, color: 'var(--oat)' }}>
+            trippin' travels
+          </span>
+          <div style={{ display: 'flex', gap: 38, font: "400 14px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
+            <span style={navItem} onClick={() => toggle('exp')}>expeditions <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
+            <span style={navItem} onClick={() => toggle('tours')}>tours &amp; rentals <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
+            <span style={navItem} onClick={() => toggle('story')}>our story <span style={{ fontSize: 9, color: 'var(--oat)' }}>▾</span></span>
           </div>
         </div>
 
@@ -123,7 +139,9 @@ export default function DesktopHome({ onPlan }) {
         {panel === 'story' && (
           <div style={megaPanel}>
             <div style={megaLabel}>our story</div>
-            <div style={megaGrid(3)}>{NAV.story.map((x) => <span key={x} style={megaItem}>{x}</span>)}</div>
+            <div style={megaGrid(3)}>{NAV.story.map((x) => (
+              <span key={x} style={megaItem} onClick={() => { setPanel(null); onStory(slugify(x)); }}>{x}</span>
+            ))}</div>
           </div>
         )}
       </div>
@@ -160,15 +178,12 @@ export default function DesktopHome({ onPlan }) {
           <div className="eyebrow" style={{ letterSpacing: '.26em' }}>02 — our story</div>
           <div className="script" style={{ fontSize: 64, color: 'var(--bark)', lineHeight: .9, margin: '8px 0 18px' }}>where it began</div>
           <p style={{ margin: 0, font: "300 17px/1.65 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textTransform: 'lowercase', textWrap: 'pretty' }}>
-            trippin travels started with three friends and one simple passion — exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected — the stays, the people, the food, and the stories worth coming back with.
+            trippin' travels started with three friends and one simple passion — exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected — the stays, the people, the food, and the stories worth coming back with.
           </p>
         </div>
-        <div
-          className="ph"
-          style={{ height: 420, borderRadius: 16, backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.22),rgba(20,16,12,.55)),url('${STORY_IMG}')` }}
-        >
+        <PhotoFrame img={STORY_IMG} drift={60} float={26} style={{ height: 420, borderRadius: 16 }}>
           <div className="phcap">three friends · beyond the usual trails</div>
-        </div>
+        </PhotoFrame>
       </div>
 
       {/* 03 SERVICES */}
@@ -216,17 +231,14 @@ export default function DesktopHome({ onPlan }) {
       </div>
 
       {/* QUOTE */}
-      <div
-        className="ph"
-        style={{ height: 420, backgroundImage: `linear-gradient(180deg,rgba(20,16,12,.22),rgba(20,16,12,.55)),url('${QUOTE_IMG}')` }}
-      >
+      <PhotoFrame img={QUOTE_IMG} drift={60} float={0} style={{ height: 420 }}>
         <div className="phcap">lachen valley · first light</div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', textAlign: 'right', padding: '0 72px' }}>
           <div className="script" style={{ fontSize: 76, lineHeight: 1, color: 'var(--cream)', maxWidth: 760 }}>
             the mountains don't rush — and neither do we
           </div>
         </div>
-      </div>
+      </PhotoFrame>
 
       {/* ENQUIRY */}
       <div style={{ background: 'var(--oat)', padding: '80px 72px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -246,7 +258,7 @@ export default function DesktopHome({ onPlan }) {
       {/* FOOTER */}
       <div style={{ background: 'var(--bark-deep)', padding: '60px 72px 56px', color: 'var(--sand)', display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', gap: 40 }}>
         <div>
-          <div className="script" style={{ fontSize: 52, color: 'var(--oat)' }}>trippin travels</div>
+          <div className="script" style={{ fontSize: 52, color: 'var(--oat)' }}>trippin' travels</div>
           <div style={{ marginTop: 20, font: "300 13px/1.6 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.6)', maxWidth: 260 }}>
             bespoke journeys through the eastern himalaya. made for you, only.
           </div>
@@ -260,18 +272,20 @@ export default function DesktopHome({ onPlan }) {
         </div>
         <FooterCol title="expeditions" items={FOOTER.expeditions} />
         <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
-        <FooterCol title="our story" items={FOOTER.story} />
+        <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
       </div>
     </div>
   );
 }
 
-function FooterCol({ title, items }) {
+function FooterCol({ title, items, onItem }) {
   return (
     <div>
       <div style={{ font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--clay-light)' }}>{title}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 14, font: "300 13px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.72)' }}>
-        {items.map((x) => <span key={x}>{x}</span>)}
+        {items.map((x) => (
+          <span key={x} onClick={onItem ? () => onItem(x) : undefined} style={{ cursor: onItem ? 'pointer' : 'default' }}>{x}</span>
+        ))}
       </div>
     </div>
   );

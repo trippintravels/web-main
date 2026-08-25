@@ -1,18 +1,20 @@
 import { useEffect } from 'react';
 import { NAV } from './data.js';
+import { slugify } from './route.js';
 
 const link = {
   cursor: 'pointer',
   transition: 'color .2s ease',
 };
 
-function Group({ items }) {
+function Group({ items, onItem }) {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 18px', marginTop: 14, font: "300 14px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.75)' }}>
       {items.map((x) => (
         <span
           key={x}
           style={link}
+          onClick={onItem ? () => onItem(x) : undefined}
           onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--cream)')}
           onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(231,220,203,.75)')}
         >{x}</span>
@@ -21,7 +23,7 @@ function Group({ items }) {
   );
 }
 
-export default function MobileNav({ open, onClose, onPlan }) {
+export default function MobileNav({ open, onClose, onPlan, onStory }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === 'Escape' && onClose();
@@ -33,8 +35,8 @@ export default function MobileNav({ open, onClose, onPlan }) {
     <div className={`navov${open ? ' on' : ''}`} aria-hidden={!open}>
       <div style={{ padding: '46px 26px 40px', minHeight: '100%', boxSizing: 'border-box', color: 'var(--sand)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-          <span style={{ font: "600 12px 'Hanken Grotesk', sans-serif", letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--oat)' }}>
-            trippin travels
+          <span className="wordmark" style={{ fontSize: 17, color: 'var(--oat)' }}>
+            trippin' travels
           </span>
           <button
             onClick={onClose}
@@ -58,8 +60,8 @@ export default function MobileNav({ open, onClose, onPlan }) {
           </div>
 
           <div>
-            <div className="script" style={{ fontSize: 38, color: 'var(--oat)', lineHeight: .9 }}>our story</div>
-            <Group items={NAV.story} />
+            <div className="script" style={{ fontSize: 38, color: 'var(--oat)', lineHeight: .9, cursor: 'pointer' }} onClick={() => onStory('')}>our story</div>
+            <Group items={NAV.story} onItem={(x) => onStory(slugify(x))} />
           </div>
         </div>
 
