@@ -76,6 +76,10 @@ export default function EnquiryForm({
   collapse = false,
   // optional: called with the enquiry payload after a successful send
   onSent,
+  // optional: { where, message } — seeds the form when it's opened from a
+  // context that already knows what the enquiry is about (a zone page's
+  // "plan <zone>" CTA). A fresh object each time so re-opening re-applies it.
+  prefill,
   style,
 }) {
   const [name, setName] = useState('');
@@ -111,6 +115,18 @@ export default function EnquiryForm({
     }
   };
   const edit = (setter) => (e) => { setter(e.target.value); clearResult(); };
+
+  // Seed from the opening context. Intent is always "a specific destination"
+  // here — that's what makes the "where?" field appear for the region.
+  useEffect(() => {
+    if (!prefill) return;
+    setIntent(INTENT_OPTIONS.find((o) => o.key === INTENT_LOC) || null);
+    const region = WHERE_OPTIONS.find((o) => o.key === prefill.where);
+    if (region) setWhere(region);
+    if (prefill.message) setMessage(prefill.message);
+    setStatus((s) => (s === 'sending' ? s : 'idle'));
+    setFeedback(null);
+  }, [prefill]);
 
   const pickIntent = (opt) => {
     setIntent(opt);

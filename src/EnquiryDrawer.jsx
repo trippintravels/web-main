@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import EnquiryForm from './EnquiryForm.jsx';
 
-export default function EnquiryDrawer({ open, onClose }) {
+export default function EnquiryDrawer({ open, onClose, prefill }) {
   // close on Escape
   useEffect(() => {
     if (!open) return;
@@ -38,7 +38,7 @@ export default function EnquiryDrawer({ open, onClose }) {
           tell us where your mind wanders — we'll shape the rest.
         </p>
 
-        <EnquiryForm fill collapse={!open} style={{ marginTop: 40 }} />
+        <EnquiryForm fill collapse={!open} prefill={prefill} style={{ marginTop: 40 }} />
 
       </aside>
     </div>

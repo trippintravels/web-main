@@ -38,6 +38,7 @@ export default function App() {
   const route = useRoute();
   const [navOpen, setNavOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerPrefill, setDrawerPrefill] = useState(null);
 
   // Scroll behaviour on route change: jump to a section anchor, or top of page.
   // rAF + a short fallback let the target page render before we scroll to it.
@@ -86,7 +87,14 @@ export default function App() {
     };
   }, [navOpen, drawerOpen]);
 
-  const openPlan = () => { setNavOpen(false); setDrawerOpen(true); };
+  // Some call sites pass onPlan straight to onClick, so the first argument may
+  // be a DOM event rather than a prefill — only accept the real shape.
+  const isPrefill = (v) => Boolean(v && typeof v === 'object' && ('where' in v || 'message' in v));
+  const openPlan = (prefill) => {
+    setNavOpen(false);
+    setDrawerPrefill(isPrefill(prefill) ? prefill : null);
+    setDrawerOpen(true);
+  };
 
   return (
     <>
@@ -124,7 +132,7 @@ export default function App() {
       <MobileNav open={navOpen} onClose={() => setNavOpen(false)} onPlan={openPlan} onStory={goStory} onHome={() => { setNavOpen(false); goHome(); }} onRegion={goRegion} />
 
       {/* Shared enquiry drawer with working intent dropdown */}
-      <EnquiryDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <EnquiryDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} prefill={drawerPrefill} />
     </>
   );
 }

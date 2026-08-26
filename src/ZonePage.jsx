@@ -146,7 +146,7 @@ export default function ZonePage({ region, zone, isDesktop, onHome, onMenu, onSt
         <Reveal delay={300} style={{ marginTop: 28 }}>
           <button
             className="pill"
-            onClick={onPlan}
+            onClick={() => onPlan({ where: region.slug, message: `tell me about ${zone.name.toLowerCase()}` })}
             style={{ font: "500 13px 'Hanken Grotesk', sans-serif", color: 'var(--oat)', background: 'var(--clay)', padding: '16px 34px' }}
           >
             send an enquiry
