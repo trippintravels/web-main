@@ -176,3 +176,12 @@ export const INTENT_OPTIONS = [
   { key: 'rental', label: 'bike or car rental' },
   { key: 'group',  label: 'corporate & group trips' },
 ];
+
+// Follow-up "where?" field, shown only when the intent is INTENT_LOC.
+// Built from DESTINATIONS so it can't drift from the regions we actually run.
+export const INTENT_LOC = 'loc';
+
+export const WHERE_OPTIONS = [
+  ...DESTINATIONS.map((d) => ({ key: d.slug, label: d.name })),
+  { key: 'undecided', label: 'undecided' },
+];

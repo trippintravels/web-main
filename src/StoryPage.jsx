@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import PhotoFrame from './PhotoFrame.jsx';
 import DesktopNav from './DesktopNav.jsx';
 import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
-import { STORY, TEAM, INTENT_OPTIONS, INSTAGRAM_URL } from './data.js';
+import EnquiryForm from './EnquiryForm.jsx';
+import { STORY, TEAM, INSTAGRAM_URL } from './data.js';
 import { slugify } from './route.js';
 
 const LIGHT_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28))';
@@ -38,53 +38,6 @@ function Head({ num, title, dark, fs, align }) {
         {title}
       </div>
     </Reveal>
-  );
-}
-
-/* inline intent dropdown for the contact form (mirrors the enquiry drawer) */
-function IntentField() {
-  const [open, setOpen] = useState(false);
-  const [intent, setIntent] = useState(null);
-  return (
-    <div style={{ position: 'relative' }}>
-      <div
-        className="uline"
-        role="button"
-        tabIndex={0}
-        onClick={() => setOpen((v) => !v)}
-        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), setOpen((v) => !v))}
-        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', color: intent ? 'var(--bark)' : 'rgba(41,33,28,.4)' }}
-      >
-        {intent ? intent.label : "i'm interested in…"}
-        <span style={{ fontSize: 12, color: 'var(--clay)' }}>{open ? '▲' : '▾'}</span>
-      </div>
-      {open && (
-        <div
-          style={{
-            position: 'absolute', left: 0, right: 0, top: 'calc(100% + 6px)',
-            background: 'var(--cream)', border: '1px solid rgba(41,33,28,.12)',
-            borderRadius: 10, boxShadow: '0 18px 36px -18px rgba(41,33,28,.5)',
-            zIndex: 6, overflow: 'hidden', animation: 'fadeIn .18s ease',
-          }}
-        >
-          {INTENT_OPTIONS.map((opt, i) => (
-            <div
-              key={opt.key}
-              onClick={() => { setIntent(opt); setOpen(false); }}
-              style={{
-                padding: '15px 18px', font: "400 15px 'Hanken Grotesk', sans-serif",
-                textTransform: 'lowercase', color: 'var(--bark)', cursor: 'pointer',
-                borderTop: i === 0 ? 'none' : '1px solid rgba(41,33,28,.08)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = '#ece3d3')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-            >
-              {opt.label}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }
 
@@ -284,15 +237,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
               hey@trippintravels.in
             </a>
           </div>
-          <form onSubmit={(e) => e.preventDefault()} style={{ gridColumn: isDesktop ? 1 : undefined, gridRow: isDesktop ? 1 : undefined, display: 'flex', flexDirection: 'column', gap: 28, marginTop: isDesktop ? 8 : 32 }}>
-            <input className="uline" placeholder="your name" />
-            <input className="uline" placeholder="email" />
-            <IntentField />
-            <input className="uline" placeholder="tell us your dream trip" />
-            <button className="pill" style={{ alignSelf: 'flex-start', font: "500 13px 'Hanken Grotesk', sans-serif", color: 'var(--oat)', background: 'var(--clay)', padding: '15px 30px' }}>
-              send enquiry
-            </button>
-          </form>
+          <EnquiryForm style={{ gridColumn: isDesktop ? 1 : undefined, gridRow: isDesktop ? 1 : undefined, marginTop: isDesktop ? 8 : 32 }} />
         </div>
       </div>
 

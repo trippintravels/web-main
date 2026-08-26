@@ -25,6 +25,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # Vite inlines these at build time. Unset is fine: the enquiry form
+          # then invites people to email instead of submitting.
+          VITE_NOTIFIER_URL: ${{ secrets.VITE_NOTIFIER_URL }}
+          VITE_NOTIFIER_KEY: ${{ secrets.VITE_NOTIFIER_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
