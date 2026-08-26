@@ -4,7 +4,19 @@ import DesktopHome from './DesktopHome.jsx';
 import MobileNav from './MobileNav.jsx';
 import EnquiryDrawer from './EnquiryDrawer.jsx';
 import StoryPage from './StoryPage.jsx';
-import { useRoute, navigate, toStory } from './route.js';
+import RegionPage from './RegionPage.jsx';
+import ZonePage from './ZonePage.jsx';
+import { NORTH_BENGAL, SIKKIM } from './destinations.js';
+import { NB_MAP } from './maps/northBengal.js';
+import { SK_MAP } from './maps/sikkim.js';
+import { useRoute, navigate, toStory, toDestination } from './route.js';
+
+// Regions that have pages. Add an entry here (and its slug to LIVE_REGIONS in
+// data.js) when a new region ships; routing and every menu pick it up.
+const REGIONS = {
+  [NORTH_BENGAL.slug]: { region: NORTH_BENGAL, map: NB_MAP },
+  [SIKKIM.slug]: { region: SIKKIM, map: SK_MAP },
+};
 
 // Track viewport against the 900px breakpoint (matches index.css switch)
 function useIsDesktop() {
@@ -46,6 +58,15 @@ export default function App() {
   // Navigate to an "our story" section (closing the mobile menu first).
   const goStory = (slug) => { setNavOpen(false); navigate(toStory(slug)); };
   const goHome = () => navigate('#/');
+  const goRegion = (slug) => { setNavOpen(false); navigate(toDestination(slug)); };
+  const goZone = (regionSlug, zoneSlug) => { setNavOpen(false); navigate(toDestination(regionSlug, zoneSlug)); };
+
+  // Resolve the destination route against what's actually built. An unknown
+  // region or zone falls back rather than rendering a blank page.
+  const entry = route.region ? REGIONS[route.region] : null;
+  const zone = entry && route.zone
+    ? entry.region.zones.find((z) => z.slug === route.zone)
+    : null;
 
   // Lock body scroll while an overlay is open. Compensate for the scrollbar
   // width so full-width / centered content doesn't shift when it disappears.
@@ -70,15 +91,37 @@ export default function App() {
   return (
     <>
       {route.page === 'story' ? (
-        <StoryPage isDesktop={isDesktop} onHome={goHome} onMenu={() => setNavOpen(true)} onStory={goStory} />
+        <StoryPage isDesktop={isDesktop} onHome={goHome} onMenu={() => setNavOpen(true)} onStory={goStory} onRegion={goRegion} />
+      ) : zone ? (
+        <ZonePage
+          region={entry.region}
+          zone={zone}
+          isDesktop={isDesktop}
+          onHome={goHome}
+          onMenu={() => setNavOpen(true)}
+          onStory={goStory}
+          onRegion={goRegion}
+          onPlan={openPlan}
+        />
+      ) : entry ? (
+        <RegionPage
+          region={entry.region}
+          map={entry.map}
+          isDesktop={isDesktop}
+          onHome={goHome}
+          onMenu={() => setNavOpen(true)}
+          onStory={goStory}
+          onRegion={goRegion}
+          onZone={(z) => goZone(entry.region.slug, z)}
+        />
       ) : isDesktop ? (
-        <DesktopHome onPlan={openPlan} onStory={goStory} onHome={goHome} />
+        <DesktopHome onPlan={openPlan} onStory={goStory} onHome={goHome} onRegion={goRegion} />
       ) : (
-        <MobileHome onMenu={() => setNavOpen(true)} onPlan={openPlan} onStory={goStory} onHome={goHome} />
+        <MobileHome onMenu={() => setNavOpen(true)} onPlan={openPlan} onStory={goStory} onHome={goHome} onRegion={goRegion} />
       )}
 
       {/* Mobile-only full-screen menu (5c) */}
-      <MobileNav open={navOpen} onClose={() => setNavOpen(false)} onPlan={openPlan} onStory={goStory} onHome={() => { setNavOpen(false); goHome(); }} />
+      <MobileNav open={navOpen} onClose={() => setNavOpen(false)} onPlan={openPlan} onStory={goStory} onHome={() => { setNavOpen(false); goHome(); }} onRegion={goRegion} />
 
       {/* Shared enquiry drawer with working intent dropdown */}
       <EnquiryDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />

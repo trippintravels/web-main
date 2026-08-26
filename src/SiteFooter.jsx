@@ -1,10 +1,10 @@
-import { FOOTER } from './data.js';
+import { FOOTER, LIVE_REGIONS, INSTAGRAM_URL } from './data.js';
 import { slugify } from './route.js';
 
 // Shared site footer used by every page. The brand block (tagline + Instagram)
 // mirrors the original desktop footer; layout collapses to a stacked / 2-col
 // grid on mobile. "our story" links scroll to the story-page sections.
-export default function SiteFooter({ isDesktop, onStory, onHome }) {
+export default function SiteFooter({ isDesktop, onStory, onHome, onRegion }) {
   const brand = (
     <div>
       <div className="script" onClick={onHome} style={{ fontSize: isDesktop ? 52 : 38, color: 'var(--oat)', lineHeight: 1, cursor: onHome ? 'pointer' : 'default' }}>
@@ -13,7 +13,7 @@ export default function SiteFooter({ isDesktop, onStory, onHome }) {
       <div style={{ marginTop: isDesktop ? 20 : 14, font: "300 13px/1.6 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.6)', maxWidth: 260 }}>
         go beyond the trails
       </div>
-      <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--sand)' }} aria-label="instagram">
+      <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--sand)' }} aria-label="instagram">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
           <rect x="3" y="3" width="18" height="18" rx="5" />
           <circle cx="12" cy="12" r="4.2" />
@@ -33,7 +33,12 @@ export default function SiteFooter({ isDesktop, onStory, onHome }) {
 
   const cols = (
     <>
-      <FooterCol title="expeditions" items={FOOTER.expeditions} />
+      <FooterCol
+        title="expeditions"
+        items={FOOTER.expeditions}
+        onItem={onRegion && ((x) => LIVE_REGIONS.has(slugify(x)) && onRegion(slugify(x)))}
+        isLive={(x) => LIVE_REGIONS.has(slugify(x))}
+      />
       <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
       <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
     </>
@@ -61,14 +66,19 @@ export default function SiteFooter({ isDesktop, onStory, onHome }) {
   );
 }
 
-function FooterCol({ title, items, onItem }) {
+// `isLive` lets a column mark only some of its items as navigable — expedition
+// regions become clickable one at a time as their pages ship.
+function FooterCol({ title, items, onItem, isLive }) {
   return (
     <div>
       <div style={{ font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--clay-light)' }}>{title}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12, font: "300 12.5px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.72)' }}>
-        {items.map((x) => (
-          <span key={x} onClick={onItem ? () => onItem(x) : undefined} style={{ cursor: onItem ? 'pointer' : 'default' }}>{x}</span>
-        ))}
+        {items.map((x) => {
+          const live = onItem && (!isLive || isLive(x));
+          return (
+            <span key={x} onClick={live ? () => onItem(x) : undefined} style={{ cursor: live ? 'pointer' : 'default' }}>{x}</span>
+          );
+        })}
       </div>
     </div>
   );

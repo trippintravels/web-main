@@ -2,18 +2,31 @@
 // imagery reads identically to the design doc.
 const img = (id) => `https://picsum.photos/id/${id}/1200/900`;
 
+// Social + contact, in one place — these appear in the footer, the mobile menu
+// and the story page's contact block, so they can't be allowed to drift.
+export const INSTAGRAM_URL = 'https://www.instagram.com/trippintravels.in';
+
 export const HERO_IMG = img(1018);
 export const STORY_IMG = img(1061);
 export const QUOTE_IMG = img(1036);
 
+// Homepage "where to wander" rows — the same four regions as EXPEDITIONS,
+// in the same order, with the imagery and captions for the landing page.
 export const DESTINATIONS = [
-  { name: 'darjeeling',            meta: 'west bengal · heritage rail & tea', img: img(1043) },
-  { name: 'north sikkim',          meta: 'high passes & glacial valleys',     img: img(1015) },
-  { name: 'east sikkim',           meta: 'alpine lakes & silk route',         img: img(1016) },
-  { name: 'west sikkim',           meta: 'monastery ridges · pelling',        img: img(1039) },
-  { name: 'dooars',                meta: 'forests, rivers & tea gardens',     img: img(28)   },
-  { name: 'offbeat & unexplored',  meta: 'the roads few ever take',           img: img(29)   },
+  { name: 'north bengal',          slug: 'north-bengal',         meta: 'darjeeling, kalimpong & heritage rail',        img: img(1043) },
+  { name: 'sikkim',                slug: 'sikkim',               meta: 'high passes, alpine lakes & monastery ridges', img: img(1015) },
+  { name: 'dooars',                slug: 'dooars',               meta: 'forests, rivers & tea gardens',                img: img(28)   },
+  { name: 'offbeat & unexplored',  slug: 'offbeat-unexplored',   meta: 'the roads few ever take',                      img: img(29)   },
 ];
+
+// ---- where a destination links to ----
+// Regions whose pages are actually built. Everything else stays inert — an
+// explore link, nav item or footer item for an unbuilt region renders as plain
+// text rather than a dead hyperlink. Add a slug here when its page ships.
+export const LIVE_REGIONS = new Set(['north-bengal', 'sikkim']);
+
+export const destinationHref = (slug) =>
+  LIVE_REGIONS.has(slug) ? `#/destinations/${slug}` : null;
 
 export const SERVICES = [
   {
@@ -56,19 +69,19 @@ export const PROCESS = [
   },
 ];
 
+// The four regions we run. Single source of truth — nav, hamburger and footer
+// all read this, so the lists can't drift apart.
+export const EXPEDITIONS = ['north bengal', 'sikkim', 'dooars', 'offbeat & unexplored'];
+
 export const NAV = {
-  expeditions: [
-    'darjeeling', 'north sikkim', 'east sikkim',
-    'west sikkim', 'dooars', 'offbeat', 'unexplored',
-  ],
+  expeditions: EXPEDITIONS,
   tours: ['group trips', 'corporate trips', 'school excursions', 'solo trips'],
   rentals: ['cars', 'bikes'],
   story: ['about us', 'gallery', 'our services', 'our process', 'our team', 'contact'],
 };
 
-// Footer columns (labels differ slightly from nav in the mockup)
 export const FOOTER = {
-  expeditions: ['darjeeling', 'north sikkim', 'east sikkim', 'west sikkim', 'dooars', 'offbeat & unexplored'],
+  expeditions: EXPEDITIONS,
   toursRentals: ['group trips', 'corporate trips', 'school excursions', 'solo trips', 'car rentals', 'bike rentals'],
   story: ['about us', 'gallery', 'our services', 'our process', 'our team', 'contact'],
 };
@@ -140,22 +153,19 @@ export const TEAM = [
   {
     name: 'Amlan Dey',
     role: 'the curator',
-    line: 'call me when you need help making your vision board a reality',
-    phone: '+916294036820',
+    line: 'your go-to for making that vision board a reality',
     img: null,
   },
   {
     name: 'Adeya Bhattacherjee',
     role: 'the hotline',
-    line: 'call me for live support, 2 am detours, and immaculate local recommendations',
-    phone: '+917872159873',
+    line: 'your lifeline for live support, 2 am detours, and immaculate local recommendations',
     img: null,
   },
   {
     name: 'Raj Paswan',
     role: 'the fixer',
-    line: 'call me when the plot twists and you need a way out, no questions asked',
-    phone: '+919547303338',
+    line: 'your escape plan when the plot twists and you need a way out, no questions asked',
     img: null,
   },
 ];

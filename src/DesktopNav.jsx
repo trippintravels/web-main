@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NAV } from './data.js';
+import { NAV, LIVE_REGIONS } from './data.js';
 import { slugify } from './route.js';
 
 // Shared desktop top nav + mega-menu, used by both the home and story pages so
@@ -20,9 +20,16 @@ const megaLabel = { font: "600 10px 'Hanken Grotesk', sans-serif", letterSpacing
 const megaItem = { cursor: 'pointer' };
 const megaGrid = (cols) => ({ display: 'grid', gridTemplateColumns: `repeat(${cols},1fr)`, gap: '16px 30px', marginTop: 20, font: "300 17px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(241,235,224,.85)' });
 
-export default function DesktopNav({ onStory, onWordmark, active }) {
+export default function DesktopNav({ onStory, onWordmark, onRegion, active }) {
   const [panel, setPanel] = useState(null); // 'exp' | 'tours' | 'story' | null
   const toggle = (p) => setPanel((cur) => (cur === p ? null : p));
+
+  // Expedition items only become clickable once their region page exists.
+  const regionProps = (x) => {
+    const slug = slugify(x);
+    if (!onRegion || !LIVE_REGIONS.has(slug)) return { style: { ...megaItem, cursor: 'default' } };
+    return { style: megaItem, onClick: () => { setPanel(null); onRegion(slug); } };
+  };
 
   const navItem = { cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 };
   const caret = { fontSize: 9, color: 'var(--oat)' };
@@ -53,7 +60,7 @@ export default function DesktopNav({ onStory, onWordmark, active }) {
         <div style={megaPanel}>
           <div style={megaLabel}>expeditions</div>
           <div style={megaGrid(4)}>
-            {NAV.expeditions.map((x) => <span key={x} style={megaItem}>{x}</span>)}
+            {NAV.expeditions.map((x) => <span key={x} {...regionProps(x)}>{x}</span>)}
           </div>
         </div>
       )}

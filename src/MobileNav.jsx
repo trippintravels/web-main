@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { NAV } from './data.js';
+import { NAV, LIVE_REGIONS, INSTAGRAM_URL } from './data.js';
 import { slugify } from './route.js';
 
 const link = {
@@ -23,7 +23,7 @@ function Group({ items, onItem }) {
   );
 }
 
-export default function MobileNav({ open, onClose, onPlan, onStory, onHome }) {
+export default function MobileNav({ open, onClose, onPlan, onStory, onHome, onRegion }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === 'Escape' && onClose();
@@ -53,7 +53,11 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome }) {
         <div style={{ marginTop: 38, display: 'flex', flexDirection: 'column', gap: 32 }}>
           <div>
             <div className="script" style={{ fontSize: 38, color: 'var(--oat)', lineHeight: .9 }}>expeditions</div>
-            <Group items={NAV.expeditions} />
+            {/* only regions with a page built are tappable */}
+            <Group
+              items={NAV.expeditions}
+              onItem={onRegion && ((x) => LIVE_REGIONS.has(slugify(x)) && onRegion(slugify(x)))}
+            />
           </div>
 
           <div>
@@ -80,7 +84,7 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome }) {
 
         {/* instagram + email pinned to the bottom-right corner */}
         <div style={{ marginTop: 'auto', paddingTop: 44, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 12 }}>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', width: 28, height: 28, color: 'var(--sand)' }} aria-label="instagram">
+          <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', width: 28, height: 28, color: 'var(--sand)' }} aria-label="instagram">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <rect x="3" y="3" width="18" height="18" rx="5" />
               <circle cx="12" cy="12" r="4.2" />

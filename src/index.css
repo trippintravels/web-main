@@ -46,6 +46,20 @@ button { font-family: inherit; }
   to   { opacity: 1; }
 }
 
+/* ---- scroll reveal (entrance fade) ----
+   Text rests at opacity 0 and fades in once, over 1.25s, the first time it
+   enters the viewport — then stays. Matches the entrance animation on the
+   Eloura reference (pure opacity, no translate; the vertical drift there is
+   the separate scroll parallax in parallax.js). reveal.js adds `.in`. */
+.reveal { opacity: 0; }
+.reveal.in { animation: fadeIn 1.25s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* never leave content stranded at opacity 0 when motion is off */
+  .reveal { opacity: 1; }
+  .reveal.in { animation: none; }
+}
+
 /* ---- photo tile (moody gradient overlay + subtle texture) ---- */
 .ph {
   position: relative;
@@ -158,6 +172,70 @@ button { font-family: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .hero-cta-arrow { animation: none; }
 }
+
+/* ---- destination "explore" link ----
+   Underlined clay affordance under each destination on the landing page, so a
+   region reads unmistakably as somewhere you can go rather than a caption. The
+   arrow nudges right on hover, echoing the hero CTA. */
+.explore-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 13px 'Hanken Grotesk', sans-serif;
+  letter-spacing: .08em;
+  text-transform: lowercase;
+  color: var(--clay);
+  cursor: pointer;
+  border-bottom: 1px solid var(--clay);
+  padding-bottom: 3px;
+  transition: color .2s ease, border-color .2s ease;
+}
+.explore-link:hover { color: var(--bark); border-bottom-color: var(--bark); }
+.explore-link:focus-visible { outline: 2px solid var(--clay); outline-offset: 4px; }
+.explore-link svg { display: block; transition: transform .2s ease; }
+.explore-link:hover svg { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .explore-link:hover svg { transform: none; }
+}
+
+/* ---- interactive zone map (region pages) ----
+   One CSS state machine: each zone group drives its own fill through --zf, so
+   hover and the active zone share a single rule. Fill/label colours come from
+   the palette (clay for the live zone, cream type on top of it). */
+.mapsvg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.mz-g {
+  cursor: pointer;
+  --zf: rgba(41,33,28,.085);
+}
+.mz-g path {
+  fill: var(--zf);
+  stroke: var(--sand2);
+  stroke-width: 5;
+  stroke-linejoin: round;
+  transition: fill .3s ease;
+}
+.mz-g:hover, .mz-g.active { --zf: var(--clay); }
+
+.mz-lbl, .mz-num { pointer-events: none; transition: fill .3s ease; }
+.mz-lbl {
+  fill: rgba(41,33,28,.62);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.mz-num {
+  fill: rgba(41,33,28,.4);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 500;
+  letter-spacing: .04em;
+}
+.mz-g:hover .mz-lbl, .mz-g.active .mz-lbl { fill: var(--cream); }
+.mz-g:hover .mz-num, .mz-g.active .mz-num { fill: rgba(246,241,231,.85); }
+.mz-g:focus { outline: none; }
+.mz-g:focus-visible path { stroke: var(--clay); stroke-width: 7; }
 
 /* ---- underlined form input ---- */
 .uline {
