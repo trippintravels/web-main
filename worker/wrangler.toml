@@ -1,0 +1,18 @@
+name = "enquiry-notifier"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+# Plain config — safe to commit. Secrets never live here; see README.
+[vars]
+# The Worker rejects any Origin not listed here. The localhost entries let you
+# test against the deployed Worker with `npm run dev` / `npm run preview`;
+# drop them once you're done if you'd rather keep it to the live site only.
+ALLOWED_ORIGINS = "https://trippintravels.in,https://www.trippintravels.in,http://localhost:5173,http://localhost:4173"
+MAIL_TO = "hey@trippintravels.in"
+MAIL_FROM = "Trippin' Travels <hey@trippintravels.in>"
+
+# Per-IP rate limiting. Paste the namespace id from
+# Cloudflare → Storage & Databases → KV.
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "04ff276c9128439895afb04aaeec44d3"

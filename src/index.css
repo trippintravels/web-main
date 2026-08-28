@@ -252,6 +252,21 @@ button { font-family: inherit; }
 .uline:focus { border-bottom-color: var(--clay); }
 .uline::placeholder { color: rgba(41,33,28,.4); }
 
+/* ---- turnstile widget ----
+   Cloudflare renders a fixed 300px-wide iframe. The mobile drawer's content
+   box is narrower than that, so scale it down from its left edge rather than
+   let it push the panel sideways. Height is pinned to match so the button
+   below doesn't jump when the widget finishes loading. */
+.ts-wrap { min-height: 66px; }
+@media (max-width: 430px) {
+  .ts-wrap {
+    transform: scale(.78);
+    transform-origin: left top;
+    height: 52px;
+    min-height: 52px;
+  }
+}
+
 /* ---- slide-out drawer (enquiry) ---- */
 .drawer { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
 .drawer .scrim {

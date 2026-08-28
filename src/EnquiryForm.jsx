@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { INTENT_OPTIONS, WHERE_OPTIONS, INTENT_LOC } from './data.js';
 import { sendEnquiry, isNotifierConfigured } from './lib/sendEnquiry.js';
+import Turnstile, { isTurnstileConfigured } from './Turnstile.jsx';
 
 const CONTACT_EMAIL = 'hey@trippintravels.in';
 const looksLikeEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
@@ -94,6 +95,9 @@ export default function EnquiryForm({
   const [status, setStatus] = useState('idle');
   // { text, offerEmail } — what to show under the fields, if anything
   const [feedback, setFeedback] = useState(null);
+  // Turnstile's proof-of-human, and a counter that forces a fresh one
+  const [tsToken, setTsToken] = useState(null);
+  const [tsNonce, setTsNonce] = useState(0);
 
   const askWhere = intent?.key === INTENT_LOC;
   const sending = status === 'sending';
@@ -156,6 +160,11 @@ export default function EnquiryForm({
     if (!isNotifierConfigured()) {
       return fail("our enquiry line isn't live just yet — please write to us at", true);
     }
+    // Turnstile usually resolves before anyone finishes typing, so this is a
+    // rare path — but never submit something the Worker will only reject.
+    if (isTurnstileConfigured() && !tsToken) {
+      return fail('just a moment — finishing a quick security check, then try again.');
+    }
 
     setStatus('sending');
     setFeedback(null);
@@ -167,6 +176,7 @@ export default function EnquiryForm({
       intent: intent?.label || '',
       where: askWhere ? where?.label || '' : '',
       message: message.trim(),
+      turnstileToken: tsToken || '',
     };
 
     try {
@@ -176,6 +186,7 @@ export default function EnquiryForm({
       onSent?.(payload);
       setName(''); setPhone(''); setEmail('');
       setIntent(null); setWhere(null); setMessage('');
+      setTsNonce((n) => n + 1); // tokens are single-use — get a fresh one
     } catch (err) {
       console.error('Enquiry failed:', err);
       fail('something went wrong on our end. please try again, or write to us at', true);
@@ -217,6 +228,8 @@ export default function EnquiryForm({
       )}
 
       <input className="uline" placeholder="tell us your dream trip" value={message} onChange={edit(setMessage)} />
+
+      <Turnstile onToken={setTsToken} resetKey={tsNonce} />
 
       {/* Status sits above the button: in the drawer the button is pinned to the
           panel floor, so anything after it would be squeezed against the edge. */}
