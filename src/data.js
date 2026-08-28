@@ -23,7 +23,7 @@ export const DESTINATIONS = [
 // Regions whose pages are actually built. Everything else stays inert — an
 // explore link, nav item or footer item for an unbuilt region renders as plain
 // text rather than a dead hyperlink. Add a slug here when its page ships.
-export const LIVE_REGIONS = new Set(['north-bengal', 'sikkim']);
+export const LIVE_REGIONS = new Set(['north-bengal', 'sikkim', 'dooars']);
 
 export const destinationHref = (slug) =>
   LIVE_REGIONS.has(slug) ? `#/destinations/${slug}` : null;

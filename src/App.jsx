@@ -6,9 +6,10 @@ import EnquiryDrawer from './EnquiryDrawer.jsx';
 import StoryPage from './StoryPage.jsx';
 import RegionPage from './RegionPage.jsx';
 import ZonePage from './ZonePage.jsx';
-import { NORTH_BENGAL, SIKKIM } from './destinations.js';
+import { NORTH_BENGAL, SIKKIM, DOOARS } from './destinations.js';
 import { NB_MAP } from './maps/northBengal.js';
 import { SK_MAP } from './maps/sikkim.js';
+import { DK_MAP } from './maps/dooars.js';
 import { useRoute, navigate, toStory, toDestination } from './route.js';
 
 // Regions that have pages. Add an entry here (and its slug to LIVE_REGIONS in
@@ -16,6 +17,7 @@ import { useRoute, navigate, toStory, toDestination } from './route.js';
 const REGIONS = {
   [NORTH_BENGAL.slug]: { region: NORTH_BENGAL, map: NB_MAP },
   [SIKKIM.slug]: { region: SIKKIM, map: SK_MAP },
+  [DOOARS.slug]: { region: DOOARS, map: DK_MAP },
 };
 
 // Track viewport against the 900px breakpoint (matches index.css switch)

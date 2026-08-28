@@ -468,3 +468,165 @@ export const SIKKIM = {
     },
   ],
 };
+
+// ---- Dooars ----
+// Sight names and bodies are verbatim from destinations.docx. Unlike the other
+// regions the doc lists Dooars as a flat run of twelve places with no region or
+// zone intros, so those four pieces of copy are ours — written from facts in the
+// doc and grouped by the geography (see DESIGN.md). Replace freely.
+export const DOOARS = {
+  slug: 'dooars',
+  num: '03',
+  name: 'dooars',
+  heroImg: img(29),
+  intro:
+    'forest country at the foot of the hills — rhino grassland, river valleys and tea gardens, gathered into three great reserves. tap one on the map, or pick from the list.',
+  zones: [
+    {
+      slug: "western-dooars",
+      name: "Western Dooars",
+      count: 4,
+      blurb: "Gorumara \u00b7 Lataguri \u00b7 Chalsa \u00b7 Murti",
+      heroImg: img(29),
+      intro: [
+        "The western stretch of the Dooars, where the Murti and Jaldhaka rivers spill out of the hills. Gorumara's grasslands are the draw \u2014 rhino, elephant and bison \u2014 with Lataguri, Chalsa and Murti strung around it as quiet bases among the tea gardens.",
+      ],
+      sights: [
+        {
+          n: "01",
+          name: "Gorumara National Park",
+          cap: "the grassland",
+          img: img(28),
+          body: [
+            "Gorumara National Park is one of North Bengal\u2019s most beautiful wildlife destinations, set amidst lush forests, grasslands and the Dooars landscape. It is best known for its Indian one-horned rhinoceros, along with elephants, Indian bison (gaur), deer and a rich variety of birds. A jungle safari here is less about ticking off animals and more about enjoying the raw, peaceful atmosphere of the forest\u2014where every turn can bring a glimpse of wildlife or a stunning view.",
+          ],
+        },
+        {
+          n: "02",
+          name: "Lataguri",
+          cap: "the gateway",
+          img: img(146),
+          body: [
+            "Lataguri is a charming little gateway to the forests of the Dooars and one of the most popular bases for exploring Gorumara National Park. Surrounded by lush greenery, tea gardens and quiet forest roads, Lataguri has a relaxed, unhurried feel that makes it ideal for a nature getaway. It is also a convenient starting point for jungle safaris, with plenty of opportunities to experience the wildlife, landscapes and local culture of North Bengal.",
+          ],
+        },
+        {
+          n: "03",
+          name: "Chalsa",
+          cap: "tea and foothills",
+          img: img(164),
+          body: [
+            "Chalsa is a peaceful little town nestled in the heart of the Dooars, surrounded by dense forests, rolling tea gardens and the Himalayan foothills. Known for its scenic beauty and laid-back charm, Chalsa is a wonderful stop for travellers looking to slow down and enjoy the greener side of North Bengal. Its location also makes it a convenient base for exploring nearby forests, rivers, tea estates and wildlife destinations.",
+          ],
+        },
+        {
+          n: "04",
+          name: "Murti",
+          cap: "the river",
+          img: img(177),
+          body: [
+            "Murti is a beautiful riverside destination in the Dooars, where the Murti River winds through dense forests and green foothills. The area is known for its peaceful surroundings, clear river stretches and the gentle sounds of the forest. It is a perfect place to unwind, enjoy nature and experience the quieter side of North Bengal, while also serving as a convenient base for exploring nearby wildlife sanctuaries and forests.",
+          ],
+        },
+      ],
+    },
+    {
+      slug: "central-dooars",
+      name: "Central Dooars",
+      count: 4,
+      blurb: "Jaldapara \u00b7 Chilapata \u00b7 Hollong",
+      heroImg: img(1043),
+      intro: [
+        "The Torsa river runs through the middle of the Dooars, with Jaldapara's open grassland on one bank and the dense Chilapata forest on the other. Hollong's sal woodland sits inside the park itself \u2014 this is the stretch people come to for the safari.",
+      ],
+      sights: [
+        {
+          n: "01",
+          name: "Jaldapara National Park",
+          cap: "open grassland",
+          img: img(110),
+          body: [
+            "Jaldapara National Park is one of the most exciting wildlife destinations in the Dooars, famous for its one-horned rhinoceros and vast stretches of grassland and forest. A jungle safari here offers the chance to spot rhinos, elephants, Indian bison, deer and a variety of birds in their natural surroundings. Beyond the wildlife, Jaldapara has a wonderfully wild and open character, making a visit feel like a true escape into the heart of North Bengal\u2019s forests.",
+          ],
+        },
+        {
+          n: "02",
+          name: "Chilapata Forest",
+          cap: "the dark forest",
+          img: img(217),
+          body: [
+            "Chilapata Forest is a dense, mysterious forest in the Dooars, lying between Jaldapara and the Buxa landscape. Known for its thick greenery, winding forest trails and rich wildlife, Chilapata is home to elephants, leopards, bison, deer and many species of birds. A safari through these forests feels wonderfully raw and immersive, with long stretches of untouched woodland making it a favourite for travellers who enjoy the quieter, wilder side of North Bengal.",
+          ],
+        },
+        {
+          n: "03",
+          name: "Hollong Forest",
+          cap: "sal woodland",
+          img: img(219),
+          body: [
+            "Hollong Forest is one of the most beautiful forested areas of the Dooars, surrounded by dense sal and mixed woodland and closely associated with Jaldapara\u2019s rich wildlife. The forest is particularly known for its elephant and rhinoceros sightings, along with bison, deer and a variety of birds. With its quiet trails, towering trees and unmistakable sense of wilderness, Hollong offers a wonderful glimpse into the untouched beauty of North Bengal.",
+          ],
+        },
+      ],
+      // an activity at jaldapara rather than a place of its own —
+      // presented apart from the grid, like darjeeling tea
+      feature: {
+        label: 'the experience',
+        name: "Jungle Safari",
+        cap: 'jaldapara · jeep or elephant',
+        img: img(249),
+        body: [
+          "Jaldapara National Park offers one of the most exciting jungle safari experiences in North Bengal. Riding through its open grasslands and dense forest, you may come across one-horned rhinos, elephants, Indian bison, deer and a variety of birds in their natural habitat. The thrill lies in never quite knowing what awaits around the next bend. Whether by jeep or elephant, a Jaldapara safari is a wonderful way to experience the wild, untamed character of the Dooars.",
+        ],
+      },
+    },
+    {
+      slug: "eastern-dooars",
+      name: "Eastern Dooars",
+      count: 4,
+      blurb: "Buxa \u00b7 Buxa Fort \u00b7 Jayanti \u00b7 Rajabhatkhawa",
+      heroImg: img(1016),
+      intro: [
+        "The far east of the Dooars, running up against the Bhutan hills. Buxa is wilder and less polished than the parks to the west, with a hill fort reached on foot, the Jayanti river below it, and Rajabhatkhawa at the forest gate.",
+      ],
+      sights: [
+        {
+          n: "01",
+          name: "Buxa Tiger Reserve",
+          cap: "the reserve",
+          img: img(225),
+          body: [
+            "Buxa Tiger Reserve is a vast and beautifully wild forest in the eastern Dooars, set against the Bhutan hills. Known for its dense forests, rich biodiversity and rugged landscapes, Buxa is home to elephants, leopards, gaurs, deer and countless species of birds. The historic Buxa Fort and the many forest trails add to its charm. Less polished and more adventurous than some of the region\u2019s popular wildlife destinations, Buxa is perfect for travellers who want to experience the raw, untouched side of North Bengal.",
+          ],
+        },
+        {
+          n: "02",
+          name: "Buxa Fort",
+          cap: "the fort",
+          img: img(237),
+          body: [
+            "Buxa Fort is a small but historically significant fort tucked away in the hills of the Buxa Tiger Reserve. Originally built as a strategic outpost along an important route between Bhutan and Bengal, the fort later came under British control and became a detention camp for political prisoners during India\u2019s freedom struggle. Many freedom fighters and revolutionaries were imprisoned here, far from the mainland. Today, reaching Buxa Fort involves a forest trek, making the journey itself part of the experience. Surrounded by dense woodland and misty hills, the ruins stand as a quiet reminder of a significant chapter in India\u2019s history.",
+          ],
+        },
+        {
+          n: "03",
+          name: "Jayanti",
+          cap: "the riverbed",
+          img: img(238),
+          body: [
+            "Jayanti is a serene forest village on the edge of Buxa Tiger Reserve, known for the beautiful Jayanti River and the hills that form a natural backdrop. With its rocky riverbed, dense forests and peaceful surroundings, Jayanti has a raw, untouched charm that feels far removed from busy tourist towns. It is an ideal place to enjoy nature, explore forest trails and simply spend time surrounded by the quiet beauty of the Dooars.",
+          ],
+        },
+        {
+          n: "04",
+          name: "Rajabhatkhawa",
+          cap: "the forest gate",
+          img: img(244),
+          body: [
+            "Rajabhatkhawa is a quiet forest town and one of the main gateways to Buxa Tiger Reserve. Surrounded by dense forests and the foothills of the Bhutan Himalayas, it is known for its peaceful atmosphere and rich wildlife. The town is also home to the Buxa Tiger Reserve Nature Interpretation Centre, making it a good starting point for understanding the region\u2019s forests and biodiversity. For travellers, Rajabhatkhawa offers a slower, more immersive introduction to the wild landscapes of the Dooars.",
+          ],
+        },
+      ],
+    },
+  ],
+};

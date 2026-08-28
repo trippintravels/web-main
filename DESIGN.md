@@ -163,3 +163,31 @@ Moody, atmospheric, mountain-first. Every photo tile carries a gradient overlay
 caption (`.phcap`) bottom-left. Photography is currently picsum placeholders via
 `img(id)` in `data.js` — the ids match the original mockup, so swapping in real
 photography is a one-line change per image.
+
+### One exception: the Dooars sketch map
+
+Every other map is traced geometry. The Dooars isn't, and the reason is worth
+recording so nobody "corrects" it later.
+
+The Dooars is a floodplain strip spanning Jalpaiguri and Alipurduar districts.
+Its three clusters are protected areas — Gorumara, Jaldapara, Buxa — not
+administrative units, and they're separated by tea estates, towns and farmland
+with nothing on them. Unlike districts or compass quarters they don't
+tessellate, and there is no real boundary enclosing them.
+
+So the map shows them as **three disjoint sketch shapes arranged as a
+triangle**: western left, eastern right, central below. That keeps the map
+roughly square, which matters for two reasons — the labels fit inside the
+shapes, and it sits beside the zone list exactly like the other two regions
+rather than needing a layout of its own.
+
+- **Only the west-to-east ordering is real.** Positions and outlines are a
+  design device. The file header says so; keep it there.
+- **Edges come from layered periodic noise** — a couple of large lobes with
+  progressively finer ripples on top — so they crinkle like a traced forest
+  boundary instead of reading as smooth blobs. Integer frequencies keep the
+  outline seamless where it closes.
+- An earlier version drew this as a single west-to-east belt. It was abandoned
+  because a 10:1 band can't hold labels, forced a bespoke full-width layout, and
+  collapsed to ~9px type at phone width. If a region ever tempts you toward a
+  very wide map, that's the failure mode to expect.
