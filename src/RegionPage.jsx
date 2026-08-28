@@ -4,6 +4,7 @@ import DesktopNav from './DesktopNav.jsx';
 import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
 import ZoneMap from './ZoneMap.jsx';
+import BackLink from './BackLink.jsx';
 
 // Heroes carry type at the bottom edge, so weight the gradient there — keeps the
 // eyebrow and title legible whatever photograph ends up behind them.
@@ -23,11 +24,13 @@ export default function RegionPage({ region, map, isDesktop, onHome, onMenu, onS
 
   const title = (dark) => (
     <>
-      <Reveal
-        className="eyebrow"
-        style={{ letterSpacing: '.26em', color: dark ? 'var(--clay-light)' : 'rgba(41,33,28,.5)' }}
-      >
-        destinations — {region.num}
+      {/* lifted above the script title below — see ZonePage for why */}
+      <Reveal style={{ position: 'relative', zIndex: 2 }}>
+        <BackLink
+          onClick={onHome}
+          tone={dark ? 'dark' : 'light'}
+          label={`destinations — ${region.num}`}
+        />
       </Reveal>
       <Reveal
         className="script"

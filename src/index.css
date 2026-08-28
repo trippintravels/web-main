@@ -173,6 +173,39 @@ button { font-family: inherit; }
   .hero-cta-arrow { animation: none; }
 }
 
+/* ---- "up a level" eyebrow link (region + zone pages) ----
+   Inherits the eyebrow's type so it reads as part of the label rather than a
+   button bolted on. Colours come from --bl-* set at the call site, because it
+   sits on photography on some pages and on oat on others. */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: 600 11px 'Hanken Grotesk', sans-serif;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--bl-color);
+  transition: color .2s ease;
+}
+.back-link .bl-label {
+  border-bottom: 1px solid var(--bl-rule);
+  padding-bottom: 2px;
+  transition: border-color .2s ease;
+}
+.back-link svg { display: block; transition: transform .2s ease; }
+.back-link:hover { color: var(--bl-hover); }
+.back-link:hover .bl-label { border-bottom-color: currentColor; }
+.back-link:hover svg { transform: translateX(-3px); }
+.back-link:focus-visible { outline: 2px solid var(--bl-hover); outline-offset: 4px; border-radius: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .back-link:hover svg { transform: none; }
+}
+
 /* ---- destination "explore" link ----
    Underlined clay affordance under each destination on the landing page, so a
    region reads unmistakably as somewhere you can go rather than a caption. The

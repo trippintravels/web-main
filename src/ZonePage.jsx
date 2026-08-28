@@ -2,6 +2,7 @@ import PhotoFrame from './PhotoFrame.jsx';
 import DesktopNav from './DesktopNav.jsx';
 import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
+import BackLink from './BackLink.jsx';
 
 const HERO_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.14) 30%,rgba(20,16,12,.74))';
 
@@ -37,18 +38,19 @@ export default function ZonePage({ region, zone, isDesktop, onHome, onMenu, onSt
             mobile a caption crowds the script title's descenders */}
         <PhotoFrame img={zone.heroImg} overlay={HERO_OVERLAY} drift={isDesktop ? 80 : 40} float={0} focus="center 42%" style={{ height: isDesktop ? 560 : 460 }}>
           <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: `${isDesktop ? 38 : 46}px ${px}px ${isDesktop ? 54 : 44}px` }}>
-            {/* desktop has no back arrow (the mobile bar carries it), so the region
-                half of the breadcrumb is the way back up a level */}
-            <Reveal className="eyebrow" style={{ letterSpacing: '.26em', color: 'rgba(241,235,224,.75)' }}>
+            {/* breadcrumb: only the parent is a link — the page you're on isn't */}
+            {/* Lifted above the title: the script face below uses line-height < 1,
+                so its glyphs overflow upward and would otherwise eat the click.
+                The z-index has to sit here — each Reveal is its own stacking
+                context, so one on the button itself never escapes. */}
+            <Reveal style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', position: 'relative', zIndex: 2 }}>
+              <BackLink onClick={() => onRegion(region.slug)} tone="dark" label={region.name} />
               <span
-                onClick={() => onRegion(region.slug)}
-                style={{ cursor: 'pointer', borderBottom: '1px solid rgba(241,235,224,.35)', paddingBottom: 1 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--cream)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'inherit')}
+                className="eyebrow"
+                style={{ letterSpacing: '.26em', color: 'rgba(241,235,224,.55)' }}
               >
-                {region.name}
+                / {zone.name.toLowerCase()}
               </span>
-              {' / '}{zone.name.toLowerCase()}
             </Reveal>
             <Reveal className="script" delay={150} style={{ fontSize: isDesktop ? 116 : 60, lineHeight: .86, color: 'var(--cream)', marginTop: 4 }}>
               {zone.name.toLowerCase()}
