@@ -1,10 +1,28 @@
 import { useState, useEffect } from 'react';
-import { INTENT_OPTIONS, WHERE_OPTIONS, INTENT_LOC } from './data.js';
+import {
+  INTENT_OPTIONS, WHERE_OPTIONS, INTENT_LOC,
+  DIAL_CODES, DEFAULT_DIAL, DIAL_LENGTHS,
+} from './data.js';
 import { sendEnquiry, isNotifierConfigured } from './lib/sendEnquiry.js';
 import Turnstile, { isTurnstileConfigured } from './Turnstile.jsx';
 
 const CONTACT_EMAIL = 'hey@trippintravels.in';
 const looksLikeEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+
+const digitsOf = (s) => s.replace(/\D/g, '');
+
+// A fixed length where we know it, otherwise the E.164 range — better to accept
+// an odd-looking number than to turn away a real traveller on a guess.
+function phoneProblem(dial, raw) {
+  const n = digitsOf(raw);
+  const expected = DIAL_LENGTHS[dial];
+  if (expected) {
+    if (n.length === expected) return null;
+    return `that number should be ${expected} digits after ${dial} — you've entered ${n.length}.`;
+  }
+  if (n.length < 6 || n.length > 14) return "that phone number doesn't look right — mind checking it?";
+  return null;
+}
 
 // The enquiry form's fields and submit button — everything below the heading.
 //
@@ -63,6 +81,63 @@ function SelectField({ placeholder, options, value, onChange, open, onToggle }) 
   );
 }
 
+/* compact dial-code picker that shares the phone field's underline */
+function DialSelect({ value, onChange, open, onToggle }) {
+  return (
+    <div style={{ position: 'relative', flex: 'none' }}>
+      <div
+        role="button"
+        tabIndex={0}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label="country dialling code"
+        onClick={onToggle}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onToggle())}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer',
+          font: "400 14px 'Hanken Grotesk', sans-serif", color: 'var(--bark)',
+          padding: '9px 2px', whiteSpace: 'nowrap',
+        }}
+      >
+        {value}
+        <span style={{ fontSize: 11, color: 'var(--clay)' }}>{open ? '▲' : '▾'}</span>
+      </div>
+      {open && (
+        <div
+          role="listbox"
+          style={{
+            position: 'absolute', left: 0, top: 'calc(100% + 6px)',
+            width: 208, maxHeight: 232, overflowY: 'auto',
+            background: 'var(--cream)', border: '1px solid rgba(41,33,28,.12)',
+            borderRadius: 10, boxShadow: '0 18px 36px -18px rgba(41,33,28,.5)',
+            zIndex: 7, animation: 'fadeIn .18s ease',
+          }}
+        >
+          {DIAL_CODES.map((d, i) => (
+            <div
+              key={d.code}
+              role="option"
+              aria-selected={value === d.code}
+              onClick={() => onChange(d.code)}
+              style={{
+                display: 'flex', justifyContent: 'space-between', gap: 12,
+                padding: '11px 14px', font: "400 14px 'Hanken Grotesk', sans-serif",
+                color: 'var(--bark)', cursor: 'pointer',
+                borderTop: i === 0 ? 'none' : '1px solid rgba(41,33,28,.08)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#ece3d3')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+            >
+              <span>{d.country}</span>
+              <span style={{ color: 'rgba(41,33,28,.5)' }}>{d.code}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // The form asks the same questions in the same words everywhere it appears —
 // wording, field order and the submit label are fixed here on purpose, not
 // exposed as props. The only things a host may vary are the ones its container
@@ -85,6 +160,7 @@ export default function EnquiryForm({
 }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [dial, setDial] = useState(DEFAULT_DIAL);
   const [email, setEmail] = useState('');
   const [intent, setIntent] = useState(null);
   const [where, setWhere] = useState(null);
@@ -155,22 +231,28 @@ export default function EnquiryForm({
     if (!name.trim()) return fail('add your name so we know who to reply to.');
     if (!phone.trim() && !email.trim()) return fail('add a phone number or an email so we can reach you.');
     if (email.trim() && !looksLikeEmail(email.trim())) return fail('that email address looks incomplete — mind checking it?');
+    if (phone.trim()) {
+      const problem = phoneProblem(dial, phone);
+      if (problem) return fail(problem);
+    }
 
     // The Worker isn't live yet; say so plainly rather than failing obscurely.
     if (!isNotifierConfigured()) {
       return fail("our enquiry line isn't live just yet — please write to us at", true);
     }
-    // Turnstile usually resolves before anyone finishes typing, so this is a
-    // rare path — but never submit something the Worker will only reject.
+    // Turnstile usually resolves before anyone finishes typing. If it hasn't —
+    // most often because the previous token aged out while the form sat open —
+    // ask for a fresh challenge rather than leaving the form unable to submit.
     if (isTurnstileConfigured() && !tsToken) {
-      return fail('just a moment — finishing a quick security check, then try again.');
+      setTsNonce((n) => n + 1);
+      return fail('just a moment — finishing a quick security check. try again in a second.');
     }
 
     setStatus('sending');
     setFeedback(null);
     const payload = {
       name: name.trim(),
-      phone: phone.trim(),
+      phone: phone.trim() ? `${dial} ${digitsOf(phone)}` : '',
       email: email.trim(),
       // send the human-readable labels, not the internal keys
       intent: intent?.label || '',
@@ -184,7 +266,7 @@ export default function EnquiryForm({
       setStatus('sent');
       setFeedback({ text: "thank you — we'll be in touch shortly." });
       onSent?.(payload);
-      setName(''); setPhone(''); setEmail('');
+      setName(''); setPhone(''); setEmail(''); setDial(DEFAULT_DIAL);
       setIntent(null); setWhere(null); setMessage('');
       setTsNonce((n) => n + 1); // tokens are single-use — get a fresh one
     } catch (err) {
@@ -200,8 +282,23 @@ export default function EnquiryForm({
       style={{ display: 'flex', flexDirection: 'column', gap: GAP, flex: fill ? 1 : undefined, ...style }}
     >
       <input className="uline" placeholder="your name" value={name} onChange={edit(setName)} />
-      {/* type=tel / type=email for the right mobile keyboards; validation is ours */}
-      <input className="uline" type="tel" placeholder="phone number" value={phone} onChange={edit(setPhone)} />
+      {/* dial code + number share one underline, so they read as one field */}
+      <div className="uline-row">
+        <DialSelect
+          value={dial}
+          onChange={(code) => { setDial(code); setOpenField(null); clearResult(); }}
+          open={openField === 'dial'}
+          onToggle={() => toggle('dial')}
+        />
+        <input
+          className="uline"
+          type="tel"
+          inputMode="numeric"
+          placeholder="phone number"
+          value={phone}
+          onChange={edit(setPhone)}
+        />
+      </div>
       <input className="uline" type="email" placeholder="email" value={email} onChange={edit(setEmail)} />
 
       <SelectField

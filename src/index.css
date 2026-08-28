@@ -252,6 +252,22 @@ button { font-family: inherit; }
 .uline:focus { border-bottom-color: var(--clay); }
 .uline::placeholder { color: rgba(41,33,28,.4); }
 
+/* two controls sharing one underline — the dial code and the phone number read
+   as a single field, so the rule belongs to the row, not to each child. */
+.uline-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(41,33,28,.28);
+  transition: border-color .2s ease;
+}
+.uline-row:focus-within { border-bottom-color: var(--clay); }
+.uline-row > .uline { border-bottom: 0; flex: 1; min-width: 0; }
+.uline-row > .uline:focus { border-bottom: 0; }
+.uline-row [role="button"]:focus-visible {
+  outline: 2px solid var(--clay); outline-offset: 2px; border-radius: 3px;
+}
+
 /* ---- turnstile widget ----
    Cloudflare renders a fixed 300px-wide iframe. The mobile drawer's content
    box is narrower than that, so scale it down from its left edge rather than

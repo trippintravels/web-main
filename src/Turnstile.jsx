@@ -57,13 +57,23 @@ export default function Turnstile({ onToken, resetKey = 0 }) {
         // render a second widget into a container that already holds one.
         if (holder.current.firstChild) holder.current.innerHTML = '';
 
+        const refresh = () => {
+          // A token is single-use and lives about five minutes. Whenever one
+          // stops being valid we must ask for another, or the form is left
+          // permanently unable to submit with nothing on screen to explain it.
+          try {
+            if (widgetId.current) turnstile.reset(widgetId.current);
+          } catch { /* widget not mounted */ }
+        };
+
         widgetId.current = turnstile.render(holder.current, {
           sitekey: SITEKEY,
           theme: 'light',
           action: 'enquiry',
+          'refresh-expired': 'auto',
           callback: (token) => cb.current?.(token),
-          'expired-callback': () => cb.current?.(null),
-          'timeout-callback': () => cb.current?.(null),
+          'expired-callback': () => { cb.current?.(null); refresh(); },
+          'timeout-callback': () => { cb.current?.(null); refresh(); },
           'error-callback': (code) => {
             // Codes are documented at
             // developers.cloudflare.com/turnstile/troubleshooting/client-side-errors
@@ -74,7 +84,9 @@ export default function Turnstile({ onToken, resetKey = 0 }) {
               `hostname "${window.location.hostname}"`,
             );
             cb.current?.(null);
-            return true; // we've handled it; don't let the widget retry silently
+            // Returning nothing (not true) leaves Cloudflare's own retry and
+            // error UI in place — claiming to have handled it stops the widget
+            // recovering on its own.
           },
         });
       })

@@ -170,6 +170,43 @@ export const TEAM = [
   },
 ];
 
+// Dial codes for the enquiry form. India first — it's where most enquiries
+// come from and the default — then the neighbours and the long-haul markets
+// that actually reach the eastern himalaya. Adding one is a single line.
+export const DIAL_CODES = [
+  { code: '+91',  country: 'India' },
+  { code: '+977', country: 'Nepal' },
+  { code: '+975', country: 'Bhutan' },
+  { code: '+880', country: 'Bangladesh' },
+  { code: '+94',  country: 'Sri Lanka' },
+  { code: '+1',   country: 'USA / Canada' },
+  { code: '+44',  country: 'United Kingdom' },
+  { code: '+61',  country: 'Australia' },
+  { code: '+64',  country: 'New Zealand' },
+  { code: '+65',  country: 'Singapore' },
+  { code: '+60',  country: 'Malaysia' },
+  { code: '+66',  country: 'Thailand' },
+  { code: '+971', country: 'UAE' },
+  { code: '+972', country: 'Israel' },
+  { code: '+49',  country: 'Germany' },
+  { code: '+33',  country: 'France' },
+  { code: '+31',  country: 'Netherlands' },
+  { code: '+41',  country: 'Switzerland' },
+  { code: '+39',  country: 'Italy' },
+  { code: '+34',  country: 'Spain' },
+  { code: '+81',  country: 'Japan' },
+  { code: '+82',  country: 'South Korea' },
+  { code: '+27',  country: 'South Africa' },
+];
+
+export const DEFAULT_DIAL = '+91';
+
+// Expected national-number length, where it's fixed. Anything not listed falls
+// back to the E.164 range, so an unlisted country is never wrongly rejected.
+export const DIAL_LENGTHS = {
+  '+91': 10, '+977': 10, '+880': 10, '+1': 10, '+61': 9, '+94': 9, '+975': 8, '+65': 8,
+};
+
 // Enquiry intent dropdown options
 export const INTENT_OPTIONS = [
   { key: 'loc',    label: 'a specific destination' },
