@@ -44,7 +44,7 @@ function update() {
 function onScroll() {
   if (!ticking) {
     ticking = true;
-    requestAnimationFrame(update);
+    requestAnimationFrame(() => { update(); updateScales(); });
   }
 }
 
@@ -65,4 +65,34 @@ export function registerParallax(frame, img, { drift = 56, float = 22 } = {}) {
   return () => {
     items.delete(it);
   };
+}
+
+// ---- scroll-driven scale ----------------------------------------------
+// Same rAF loop, different effect: an element grows as it travels up the
+// viewport. Used for the story hero's logo watermark, where the slow swell is
+// what gives the header depth. Under reduced motion the element simply sits at
+// `from` — a deliberate static size, not a frozen mid-animation frame.
+const scalers = new Set();
+
+function updateScales() {
+  const vh = window.innerHeight || document.documentElement.clientHeight;
+  for (const s of scalers) {
+    const rect = s.el.getBoundingClientRect();
+    let q = (vh - rect.top) / (vh + rect.height);
+    q = q < 0 ? 0 : q > 1 ? 1 : q;
+    s.el.style.transform = `scale(${(s.from + (s.to - s.from) * q).toFixed(4)})`;
+  }
+}
+
+export function registerScale(el, { from = 1, to = 1.3 } = {}) {
+  if (!el) return () => {};
+  if (reduce) {
+    el.style.transform = `scale(${from})`;
+    return () => {};
+  }
+  const s = { el, from, to };
+  scalers.add(s);
+  ensureRunning();
+  requestAnimationFrame(updateScales);
+  return () => { scalers.delete(s); };
 }
