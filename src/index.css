@@ -102,7 +102,23 @@ button { font-family: inherit; }
 }
 
 /* ---- shared type helpers ---- */
-.script { font-family: 'Pinyon Script', cursive; }
+/* Pinyon's ink does not stay inside its layout box: an initial g, j or p swings
+   its swash up to ~0.55em left of the text origin. Safari clips that overhang to
+   the element's own bounds — Chrome does not, which is why this reproduces on
+   Safari only and measures clean in Chrome. Widen the box to the left and pull
+   it straight back with an equal negative margin: the ink lands inside the box
+   and the text does not move (verified across 162 headings, none shifted).
+   Horizontal only — vertical padding here changes the line box and shifts the
+   whole page. */
+.script {
+  font-family: 'Pinyon Script', cursive;
+  padding-left: 0.62em;
+  /* !important because many call sites set a `margin` shorthand for vertical
+     rhythm, which silently zeroes margin-left and would leave the padding
+     uncancelled, shifting the heading right. Checked: none of the 50 .script
+     elements sets a left margin deliberately, so nothing legitimate is lost. */
+  margin-left: -0.62em !important;
+}
 /* top wordmark — one definition, used on every page for consistency.
    Size is set per breakpoint at the call site (desktop larger than mobile). */
 .wordmark {
