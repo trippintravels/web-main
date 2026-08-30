@@ -13,13 +13,13 @@ export const NORTH_BENGAL = {
   heroImg: img(1043),
   // the doc has no region-level intro for north bengal; this is the canvas's copy
   intro:
-    'the hill towns of the darjeeling himalaya — tea gardens, toy trains and misty ridges. tap a zone on the map, or pick from the list.',
+    'the hill towns of the darjeeling himalaya – tea gardens, toy trains and misty ridges. tap a zone on the map, or pick from the list.',
   zones: [
     {
       slug: "darjeeling",
       name: "Darjeeling",
       count: 7,
-      blurb: "the queen of the hills \u2014 tea gardens, toy trains and kanchenjunga views.",
+      blurb: "the queen of the hills \u2013 tea gardens, toy trains and kanchenjunga views.",
       heroImg: img(1043),
       intro: [
         "Darjeeling, fondly known as the \u201cQueen of the Hills,\u201d is one of those places that feels special the moment you arrive. With the mighty Kanchenjunga in the distance, winding mountain roads, endless tea gardens and the cool Himalayan air, every corner has a story to tell.",
@@ -43,7 +43,7 @@ export const NORTH_BENGAL = {
           img: img(1015),
           body: [
             "Tiger Hill is one of those places that makes waking up before sunrise completely worth it. As the sky slowly changes colour, the first rays of sunlight touch the snow-covered peaks of Kanchenjunga, painting the mountains in shades of gold and orange.",
-            "Standing there in the chilly morning air, watching the mountains come alive, feels almost unreal. It\u2019s more than just a viewpoint\u2014it\u2019s one of those quiet, beautiful moments in Darjeeling that you\u2019ll carry with you long after the trip is over.",
+            "Standing there in the chilly morning air, watching the mountains come alive, feels almost unreal. It\u2019s more than just a viewpoint\u2013it\u2019s one of those quiet, beautiful moments in Darjeeling that you\u2019ll carry with you long after the trip is over.",
           ],
         },
         {
@@ -73,7 +73,7 @@ export const NORTH_BENGAL = {
           img: img(1036),
           body: [
             "Perched high in the hills of Darjeeling, Ghoom Monastery is a quiet little escape from the bustle of the town. The moment you step inside, the peaceful atmosphere, colourful prayer flags and the gentle sound of prayers make you feel a world away.",
-            "The monastery is home to a beautiful statue of Maitreya Buddha, and its simple, spiritual surroundings invite you to slow down and take it all in. It\u2019s not just about seeing another landmark\u2014it\u2019s about experiencing a quieter, more peaceful side of Darjeeling.",
+            "The monastery is home to a beautiful statue of Maitreya Buddha, and its simple, spiritual surroundings invite you to slow down and take it all in. It\u2019s not just about seeing another landmark\u2013it\u2019s about experiencing a quieter, more peaceful side of Darjeeling.",
           ],
         },
         {
@@ -83,7 +83,7 @@ export const NORTH_BENGAL = {
           img: img(28),
           body: [
             "If you\u2019re curious about what it takes to conquer the Himalayas, the Himalayan Mountaineering Institute is a fascinating place to explore. Located in Darjeeling, it celebrates the spirit of mountaineering and the incredible people who have taken on some of the world\u2019s highest peaks.",
-            "From old climbing equipment and expedition stories to photographs and achievements, there\u2019s plenty to discover here. It gives you a glimpse into the courage, determination and adventure that lie behind every Himalayan expedition\u2014and makes you appreciate the mountains in a whole new way.",
+            "From old climbing equipment and expedition stories to photographs and achievements, there\u2019s plenty to discover here. It gives you a glimpse into the courage, determination and adventure that lie behind every Himalayan expedition\u2013and makes you appreciate the mountains in a whole new way.",
           ],
         },
       ],
@@ -97,7 +97,7 @@ export const NORTH_BENGAL = {
         body: [
           "Darjeeling and tea have been connected for nearly two centuries. Tea cultivation began here in the mid-1800s, when the British introduced tea plants to the hills, discovering that Darjeeling\u2019s cool climate, high altitude and misty slopes were perfect for producing exceptional tea.",
           "Over the years, Darjeeling Tea travelled far beyond the hills, becoming highly sought-after in Britain, Europe and markets around the world. Its distinctive flavour, floral aroma and limited production gave it a reputation as one of the finest teas on the planet, earning it the famous title \u201cChampagne of Teas.\u201d",
-          "Today, Darjeeling\u2019s tea gardens continue this legacy, with their teas enjoyed and exported across the globe. And there\u2019s something special about having a cup right here\u2014surrounded by rolling tea estates, cool mountain air and the very hills that made this tea famous.",
+          "Today, Darjeeling\u2019s tea gardens continue this legacy, with their teas enjoyed and exported across the globe. And there\u2019s something special about having a cup right here\u2013surrounded by rolling tea estates, cool mountain air and the very hills that made this tea famous.",
         ],
       },
     },
@@ -105,11 +105,11 @@ export const NORTH_BENGAL = {
       slug: "kurseong",
       name: "Kurseong",
       count: 5,
-      blurb: "the land of white orchids \u2014 misty forests, heritage stops and cosy caf\u00e9s.",
+      blurb: "the land of white orchids \u2013 misty forests, heritage stops and cosy caf\u00e9s.",
       heroImg: img(29),
       intro: [
         "Kurseong is one of those little hill towns that you might drive past, but once you stop, you\u2019ll wonder why you didn\u2019t stay longer. Known as the \u201cLand of White Orchids,\u201d it is surrounded by misty hills, lush tea gardens and quiet forested roads.",
-        "There\u2019s a slower rhythm here\u2014fewer crowds, peaceful walks, beautiful viewpoints and the occasional sight of the Toy Train making its way through the hills. If Darjeeling feels lively and iconic, Kurseong feels more personal, relaxed and wonderfully unhurried.",
+        "There\u2019s a slower rhythm here\u2013fewer crowds, peaceful walks, beautiful viewpoints and the occasional sight of the Toy Train making its way through the hills. If Darjeeling feels lively and iconic, Kurseong feels more personal, relaxed and wonderfully unhurried.",
       ],
       sights: [
         {
@@ -119,7 +119,7 @@ export const NORTH_BENGAL = {
           img: img(1018),
           body: [
             "Dow Hill is one of those places where nature feels a little mysterious. Surrounded by dense pine forests and often wrapped in mist, this quiet corner near Kurseong has an almost otherworldly atmosphere.",
-            "The area is known for its beautiful forest trails, old colonial-era surroundings and a collection of local legends that have added to its mysterious reputation over the years. Whether you come for the scenery, the stories or simply the peaceful escape, Dow Hill offers a completely different side of the Darjeeling hills\u2014quiet, atmospheric and just a little intriguing.",
+            "The area is known for its beautiful forest trails, old colonial-era surroundings and a collection of local legends that have added to its mysterious reputation over the years. Whether you come for the scenery, the stories or simply the peaceful escape, Dow Hill offers a completely different side of the Darjeeling hills\u2013quiet, atmospheric and just a little intriguing.",
           ],
         },
         {
@@ -171,7 +171,7 @@ export const NORTH_BENGAL = {
       blurb: "a serene lakeside town of pine forests and unhurried afternoons.",
       heroImg: img(1061),
       intro: [
-        "Think of Mirik as Darjeeling\u2019s more laid-back cousin. Sitting quietly among tea gardens, pine forests and rolling hills, this charming town is centred around its beautiful lake\u2014the perfect spot for a relaxed boat ride or an unhurried stroll along the water.",
+        "Think of Mirik as Darjeeling\u2019s more laid-back cousin. Sitting quietly among tea gardens, pine forests and rolling hills, this charming town is centred around its beautiful lake\u2013the perfect spot for a relaxed boat ride or an unhurried stroll along the water.",
         "But there\u2019s more to Mirik than the lake. Winding roads lead through tea estates and little mountain settlements, with plenty of scenic stops along the way. It\u2019s a place where you can swap a packed sightseeing schedule for a cup of tea, a beautiful view and a few hours of simply enjoying the hills.",
       ],
       sights: [
@@ -212,7 +212,7 @@ export const NORTH_BENGAL = {
       blurb: "a quieter hill town of monasteries, colonial lanes and mountain viewpoints.",
       heroImg: img(219),
       intro: [
-        "Kalimpong has a charm that feels a little different from the usual hill stations. It\u2019s quieter, slower and surrounded by beautiful mountain landscapes, with colourful monasteries, old colonial buildings and winding roads adding to its character. Spend a day exploring the town, stop for a cup of tea, or simply find a viewpoint and watch the hills roll into the distance. Kalimpong is best enjoyed without a packed schedule\u2014just take your time and let the town reveal itself.",
+        "Kalimpong has a charm that feels a little different from the usual hill stations. It\u2019s quieter, slower and surrounded by beautiful mountain landscapes, with colourful monasteries, old colonial buildings and winding roads adding to its character. Spend a day exploring the town, stop for a cup of tea, or simply find a viewpoint and watch the hills roll into the distance. Kalimpong is best enjoyed without a packed schedule\u2013just take your time and let the town reveal itself.",
       ],
       sights: [
         {
@@ -252,7 +252,7 @@ export const SIKKIM = {
   num: '02',
   name: 'sikkim',
   heroImg: img(1015),
-  intro: "Sikkim is small, but there\u2019s a lot packed into it. You\u2019ll find everything from busy mountain towns and local markets to quiet monasteries, high-altitude lakes and some seriously beautiful roads. What makes a trip here special is the variety\u2014you can spend the morning exploring a monastery, stop for some local food, and end the day surrounded by mountains. And honestly, sometimes the best parts of Sikkim are the unexpected stops you make along the way.",
+  intro: "Sikkim is small, but there\u2019s a lot packed into it. You\u2019ll find everything from busy mountain towns and local markets to quiet monasteries, high-altitude lakes and some seriously beautiful roads. What makes a trip here special is the variety\u2013you can spend the morning exploring a monastery, stop for some local food, and end the day surrounded by mountains. And honestly, sometimes the best parts of Sikkim are the unexpected stops you make along the way.",
   // the doc has no zone-level intro for the sikkim quarters — east is the
   // canvas's copy, the other three are ours, written to that same pattern.
   zones: [
@@ -263,7 +263,7 @@ export const SIKKIM = {
       blurb: "Lachen \u00b7 Gurudongmar \u00b7 Yumthang \u00b7 Zero Point",
       heroImg: img(1015),
       intro: [
-        "Where the road runs out and the Himalaya take over \u2014 glacial lakes, high passes and villages deep in the mountains. Six stops to build a trip around.",
+        "Where the road runs out and the Himalaya take over \u2013 glacial lakes, high passes and villages deep in the mountains. Six stops to build a trip around.",
       ],
       sights: [
         {
@@ -272,7 +272,7 @@ export const SIKKIM = {
           cap: "the last town",
           img: img(1016),
           body: [
-            "Lachen is a small mountain town in North Sikkim, and it feels wonderfully removed from the usual tourist rush. It\u2019s often the starting point for journeys towards places like Gurudongmar Lake, but Lachen itself is worth taking some time to experience. Surrounded by rugged mountains, forests and traditional homes, the town has a raw, unpolished charm. Don\u2019t expect a long list of attractions here\u2014the real experience is the landscape, the quiet and the feeling of being deep in the mountains.",
+            "Lachen is a small mountain town in North Sikkim, and it feels wonderfully removed from the usual tourist rush. It\u2019s often the starting point for journeys towards places like Gurudongmar Lake, but Lachen itself is worth taking some time to experience. Surrounded by rugged mountains, forests and traditional homes, the town has a raw, unpolished charm. Don\u2019t expect a long list of attractions here\u2013the real experience is the landscape, the quiet and the feeling of being deep in the mountains.",
           ],
         },
         {
@@ -281,7 +281,7 @@ export const SIKKIM = {
           cap: "high water",
           img: img(1039),
           body: [
-            "Gurudongmar Lake is one of those places where the journey is a big part of the experience. Sitting high in the mountains of North Sikkim, the lake is surrounded by stark, dramatic landscapes that look completely different from the greener parts of the region. The bright blue water, rugged mountains and crisp mountain air make the setting unforgettable. It\u2019s remote, quiet and a little surreal\u2014and definitely a place you\u2019ll remember long after the trip is over.",
+            "Gurudongmar Lake is one of those places where the journey is a big part of the experience. Sitting high in the mountains of North Sikkim, the lake is surrounded by stark, dramatic landscapes that look completely different from the greener parts of the region. The bright blue water, rugged mountains and crisp mountain air make the setting unforgettable. It\u2019s remote, quiet and a little surreal\u2013and definitely a place you\u2019ll remember long after the trip is over.",
           ],
         },
         {
@@ -290,7 +290,7 @@ export const SIKKIM = {
           cap: "dark rock",
           img: img(110),
           body: [
-            "Kala Patthar is where Sikkim takes on a completely different look. The landscape becomes stark and rugged, with dark rocks, open mountain slopes and snow-covered peaks creating an almost otherworldly setting. There\u2019s very little around you here\u2014just mountains, sky and an incredible sense of being far away from everything. It\u2019s not a place you visit for a long list of activities; you go there for the experience of standing in the middle of such a raw Himalayan landscape.",
+            "Kala Patthar is where Sikkim takes on a completely different look. The landscape becomes stark and rugged, with dark rocks, open mountain slopes and snow-covered peaks creating an almost otherworldly setting. There\u2019s very little around you here\u2013just mountains, sky and an incredible sense of being far away from everything. It\u2019s not a place you visit for a long list of activities; you go there for the experience of standing in the middle of such a raw Himalayan landscape.",
           ],
         },
         {
@@ -299,7 +299,7 @@ export const SIKKIM = {
           cap: "the village",
           img: img(164),
           body: [
-            "Lachung is a charming mountain village in North Sikkim, surrounded by forests, steep slopes and snow-covered peaks. The village itself is quiet and simple, with traditional houses and the Lachung Chu flowing alongside it. It\u2019s also a convenient base for exploring some of North Sikkim\u2019s most spectacular landscapes. But before heading out, take some time to wander through the village\u2014you\u2019ll get a glimpse of a slower, more authentic side of Sikkim.",
+            "Lachung is a charming mountain village in North Sikkim, surrounded by forests, steep slopes and snow-covered peaks. The village itself is quiet and simple, with traditional houses and the Lachung Chu flowing alongside it. It\u2019s also a convenient base for exploring some of North Sikkim\u2019s most spectacular landscapes. But before heading out, take some time to wander through the village\u2013you\u2019ll get a glimpse of a slower, more authentic side of Sikkim.",
           ],
         },
         {
@@ -308,7 +308,7 @@ export const SIKKIM = {
           cap: "the valley",
           img: img(146),
           body: [
-            "Yumthang Valley is where the landscape really steals the show. Surrounded by towering mountains and crossed by the Teesta River, the valley changes character with the seasons\u2014lush and colourful in spring, while winter can turn it into a snowy wonderland. The drive from Lachung is an experience in itself, with forests, waterfalls and dramatic mountain scenery along the way. Don\u2019t rush through this one; stop wherever the views catch your eye and simply enjoy being surrounded by the Himalayas.",
+            "Yumthang Valley is where the landscape really steals the show. Surrounded by towering mountains and crossed by the Teesta River, the valley changes character with the seasons\u2013lush and colourful in spring, while winter can turn it into a snowy wonderland. The drive from Lachung is an experience in itself, with forests, waterfalls and dramatic mountain scenery along the way. Don\u2019t rush through this one; stop wherever the views catch your eye and simply enjoy being surrounded by the Himalayas.",
           ],
         },
         {
@@ -317,7 +317,7 @@ export const SIKKIM = {
           cap: "end of the road",
           img: img(177),
           body: [
-            "Zero Point feels like the road has taken you to the very edge of the map. With snow-covered mountains all around and hardly any vegetation, the landscape is stark, open and incredibly dramatic. Depending on the season, you can walk around in the snow, play in it or simply take in the views. The weather can change quickly up here, so come prepared\u2014but once you\u2019re there, the cold is easily forgotten in the excitement of the place.",
+            "Zero Point feels like the road has taken you to the very edge of the map. With snow-covered mountains all around and hardly any vegetation, the landscape is stark, open and incredibly dramatic. Depending on the season, you can walk around in the snow, play in it or simply take in the views. The weather can change quickly up here, so come prepared\u2013but once you\u2019re there, the cold is easily forgotten in the excitement of the place.",
           ],
         },
       ],
@@ -329,7 +329,7 @@ export const SIKKIM = {
       blurb: "Gangtok \u00b7 Nathu La \u00b7 Changu \u00b7 Zuluk",
       heroImg: img(1036),
       intro: [
-        "Where Sikkim's laid-back mountain charm meets the buzz of a proper town \u2014 lively streets, high passes and lakes that freeze in winter. Four stops to build a trip around.",
+        "Where Sikkim's laid-back mountain charm meets the buzz of a proper town \u2013 lively streets, high passes and lakes that freeze in winter. Four stops to build a trip around.",
       ],
       sights: [
         {
@@ -347,7 +347,7 @@ export const SIKKIM = {
           cap: "the silk route",
           img: img(225),
           body: [
-            "Nathu La is more than just a mountain pass\u2014it\u2019s a place where history, geography and the Himalayas come together. Sitting at a high altitude on the old Silk Route, the pass connects Sikkim with Tibet and has long been an important trade route. The drive up is filled with dramatic mountain views, winding roads and changing landscapes. Once you reach Nathu La, the sheer altitude and rugged surroundings make you realise just how far into the Himalayas you\u2019ve travelled.",
+            "Nathu La is more than just a mountain pass\u2013it\u2019s a place where history, geography and the Himalayas come together. Sitting at a high altitude on the old Silk Route, the pass connects Sikkim with Tibet and has long been an important trade route. The drive up is filled with dramatic mountain views, winding roads and changing landscapes. Once you reach Nathu La, the sheer altitude and rugged surroundings make you realise just how far into the Himalayas you\u2019ve travelled.",
           ],
         },
         {
@@ -356,7 +356,7 @@ export const SIKKIM = {
           cap: "frozen lake",
           img: img(237),
           body: [
-            "Changu Lake, also known as Tsomgo Lake, is one of Sikkim\u2019s most popular mountain stops\u2014and for good reason. The lake sits high above Gangtok, surrounded by steep mountains that change dramatically with the seasons. In winter, the water can freeze and the landscape turns beautifully snowy, while warmer months bring clearer views and a different kind of charm. Take a little time here to walk around, enjoy the mountain air and soak in the scenery before continuing your journey.",
+            "Changu Lake, also known as Tsomgo Lake, is one of Sikkim\u2019s most popular mountain stops\u2013and for good reason. The lake sits high above Gangtok, surrounded by steep mountains that change dramatically with the seasons. In winter, the water can freeze and the landscape turns beautifully snowy, while warmer months bring clearer views and a different kind of charm. Take a little time here to walk around, enjoy the mountain air and soak in the scenery before continuing your journey.",
           ],
         },
         {
@@ -377,7 +377,7 @@ export const SIKKIM = {
       blurb: "Pelling \u00b7 Pemayangtse \u00b7 Yuksom \u00b7 Kanchenjunga Falls",
       heroImg: img(1039),
       intro: [
-        "Monastery ridges and Kanchenjunga mornings \u2014 old capitals, forest trails and the state's Buddhist heart. Four stops to build a trip around.",
+        "Monastery ridges and Kanchenjunga mornings \u2013 old capitals, forest trails and the state's Buddhist heart. Four stops to build a trip around.",
       ],
       sights: [
         {
@@ -386,7 +386,7 @@ export const SIKKIM = {
           cap: "first light",
           img: img(244),
           body: [
-            "Pelling is a great place to experience Sikkim without the rush of a busy hill town. Its biggest attraction is the spectacular view of the Himalayas, especially on clear mornings when the snow-covered peaks come into full view. But there\u2019s more to Pelling than just the scenery\u2014monasteries, old ruins, forests and peaceful trails give you plenty to explore. It\u2019s the kind of place where you can keep your plans light and let the mountains do most of the entertaining.",
+            "Pelling is a great place to experience Sikkim without the rush of a busy hill town. Its biggest attraction is the spectacular view of the Himalayas, especially on clear mornings when the snow-covered peaks come into full view. But there\u2019s more to Pelling than just the scenery\u2013monasteries, old ruins, forests and peaceful trails give you plenty to explore. It\u2019s the kind of place where you can keep your plans light and let the mountains do most of the entertaining.",
           ],
         },
         {
@@ -425,7 +425,7 @@ export const SIKKIM = {
       blurb: "Ravangla \u00b7 Namchi \u00b7 Tarey Bhir \u00b7 Chardham",
       heroImg: img(29),
       intro: [
-        "The gentler, greener side \u2014 ridge walks, hilltop temples and towns that keep their own pace. Four stops to build a trip around.",
+        "The gentler, greener side \u2013 ridge walks, hilltop temples and towns that keep their own pace. Four stops to build a trip around.",
       ],
       sights: [
         {
@@ -480,7 +480,7 @@ export const DOOARS = {
   name: 'dooars',
   heroImg: img(29),
   intro:
-    'forest country at the foot of the hills — rhino grassland, river valleys and tea gardens, gathered into three great reserves. tap one on the map, or pick from the list.',
+    'forest country at the foot of the hills – rhino grassland, river valleys and tea gardens, gathered into three great reserves. tap one on the map, or pick from the list.',
   zones: [
     {
       slug: "western-dooars",
@@ -489,7 +489,7 @@ export const DOOARS = {
       blurb: "Gorumara \u00b7 Lataguri \u00b7 Chalsa \u00b7 Murti",
       heroImg: img(29),
       intro: [
-        "The western stretch of the Dooars, where the Murti and Jaldhaka rivers spill out of the hills. Gorumara's grasslands are the draw \u2014 rhino, elephant and bison \u2014 with Lataguri, Chalsa and Murti strung around it as quiet bases among the tea gardens.",
+        "The western stretch of the Dooars, where the Murti and Jaldhaka rivers spill out of the hills. Gorumara's grasslands are the draw \u2013 rhino, elephant and bison \u2013 with Lataguri, Chalsa and Murti strung around it as quiet bases among the tea gardens.",
       ],
       sights: [
         {
@@ -498,7 +498,7 @@ export const DOOARS = {
           cap: "the grassland",
           img: img(28),
           body: [
-            "Gorumara National Park is one of North Bengal\u2019s most beautiful wildlife destinations, set amidst lush forests, grasslands and the Dooars landscape. It is best known for its Indian one-horned rhinoceros, along with elephants, Indian bison (gaur), deer and a rich variety of birds. A jungle safari here is less about ticking off animals and more about enjoying the raw, peaceful atmosphere of the forest\u2014where every turn can bring a glimpse of wildlife or a stunning view.",
+            "Gorumara National Park is one of North Bengal\u2019s most beautiful wildlife destinations, set amidst lush forests, grasslands and the Dooars landscape. It is best known for its Indian one-horned rhinoceros, along with elephants, Indian bison (gaur), deer and a rich variety of birds. A jungle safari here is less about ticking off animals and more about enjoying the raw, peaceful atmosphere of the forest\u2013where every turn can bring a glimpse of wildlife or a stunning view.",
           ],
         },
         {
@@ -537,7 +537,7 @@ export const DOOARS = {
       blurb: "Jaldapara \u00b7 Chilapata \u00b7 Hollong",
       heroImg: img(1043),
       intro: [
-        "The Torsa river runs through the middle of the Dooars, with Jaldapara's open grassland on one bank and the dense Chilapata forest on the other. Hollong's sal woodland sits inside the park itself \u2014 this is the stretch people come to for the safari.",
+        "The Torsa river runs through the middle of the Dooars, with Jaldapara's open grassland on one bank and the dense Chilapata forest on the other. Hollong's sal woodland sits inside the park itself \u2013 this is the stretch people come to for the safari.",
       ],
       sights: [
         {

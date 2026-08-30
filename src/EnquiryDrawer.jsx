@@ -35,7 +35,7 @@ export default function EnquiryDrawer({ open, onClose, prefill }) {
         </div>
 
         <p style={{ margin: '14px 0 0', font: "300 14px/1.5 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(41,33,28,.55)' }}>
-          tell us where your mind wanders — we'll shape the rest.
+          tell us where your mind wanders – we'll shape the rest.
         </p>
 
         <EnquiryForm fill collapse={!open} prefill={prefill} style={{ marginTop: 40 }} />

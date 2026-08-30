@@ -5,6 +5,7 @@ import Reveal from './Reveal.jsx';
 import Watermark from './Watermark.jsx';
 import EnquiryForm from './EnquiryForm.jsx';
 import { STORY, TEAM, INSTAGRAM_URL } from './data.js';
+import Brandmark from './Brandmark.jsx';
 
 const LIGHT_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28))';
 
@@ -73,7 +74,7 @@ function Eyebrow({ children, dark, style }) {
 function Head({ num, title, dark, fs, align }) {
   return (
     <Reveal style={{ textAlign: align }}>
-      <Eyebrow dark={dark}>{num} — {title}</Eyebrow>
+      <Eyebrow dark={dark}>{num} – {title}</Eyebrow>
       <div className="script" style={{ fontSize: fs, color: dark ? 'var(--oat)' : 'var(--bark)', lineHeight: .9, marginTop: 6 }}>
         {title}
       </div>
@@ -131,9 +132,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
         ) : (
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30, padding: `46px ${px}px 20px` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-              <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
-                trippin&apos; travels
-              </span>
+              <Brandmark onClick={onHome} />
               <button onClick={onMenu} aria-label="Open menu" style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}>
                 <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
                 <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
@@ -156,7 +155,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
         position: 'relative',
         zIndex: 4,
         marginTop: isDesktop ? -172 : -78,
-        padding: `0 ${px}px ${isDesktop ? 104 : 58}px`,
+        padding: `0 ${px}px ${isDesktop ? 54 : 58}px`,
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
         gap: isDesktop ? 26 : 10,
@@ -186,7 +185,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
           so the nav link opens the page rather than landing here. */}
       <div style={{
         background: 'var(--oat)',
-        padding: `0 ${px}px ${isDesktop ? 92 : 56}px`,
+        padding: `0 ${px}px ${isDesktop ? 52 : 56}px`,
       }}>
         <Reveal as="p" style={{
           margin: '0 auto',
@@ -266,6 +265,10 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
+                  // copy leans toward its photograph, so every row reads inward
+                  // to the centre seam rather than out to the page edges.
+                  // Mobile is a stacked card, so it stays left-aligned.
+                  textAlign: isDesktop ? (textRight ? 'left' : 'right') : 'left',
                 }}
               >
                 <Reveal>
@@ -438,7 +441,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
           <div style={{ gridColumn: isDesktop ? 2 : undefined, textAlign: 'right' }}>
             <Head num="06" title="let's plan yours" fs={isDesktop ? 60 : 44} align="right" />
             <Reveal as="p" delay={150} style={{ margin: '16px 0 0 auto', font: "300 16px/1.6 'Hanken Grotesk', sans-serif", color: 'rgba(41,33,28,.6)', textTransform: 'lowercase', maxWidth: 420 }}>
-              tell us where your mind wanders — we'll shape the rest, and stay with you the whole way.
+              tell us where your mind wanders – we'll shape the rest, and stay with you the whole way.
             </Reveal>
             <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--bark)' }} aria-label="instagram">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

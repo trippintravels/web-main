@@ -1,4 +1,5 @@
 import { FOOTER, LIVE_REGIONS, INSTAGRAM_URL } from './data.js';
+import Logo from './Logo.jsx';
 import { slugify } from './route.js';
 
 // Shared site footer used by every page. The brand block (tagline + Instagram)
@@ -7,8 +8,21 @@ import { slugify } from './route.js';
 export default function SiteFooter({ isDesktop, onStory, onHome, onRegion }) {
   const brand = (
     <div>
-      <div className="script" onClick={onHome} style={{ fontSize: isDesktop ? 52 : 38, color: 'var(--oat)', lineHeight: 1, cursor: onHome ? 'pointer' : 'default' }}>
-        trippin' travels
+      {/* The mark sits beside the script wordmark rather than the Cinzel one used
+          in the nav, so it's sized to that. `.script` carries a negative left
+          margin (the Pinyon ink fix), which eats into a flex gap — hence the
+          explicit padding on the logo instead of relying on `gap` alone. */}
+      <div
+        onClick={onHome}
+        style={{
+          display: 'flex', alignItems: 'center',
+          color: 'var(--oat)', cursor: onHome ? 'pointer' : 'default',
+        }}
+      >
+        <Logo size={isDesktop ? 42 : 32} style={{ marginRight: isDesktop ? 22 : 16 }} />
+        <span className="script" style={{ fontSize: isDesktop ? 52 : 38, lineHeight: 1 }}>
+          trippin&apos; travels
+        </span>
       </div>
       <div style={{ marginTop: isDesktop ? 20 : 14, font: "300 13px/1.6 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.6)', maxWidth: 260 }}>
         go beyond the trails

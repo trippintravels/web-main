@@ -1,8 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { registerScale } from './parallax.js';
-
-// The logo blown up as texture behind the story hero, swelling slowly as you
-// scroll past it.
+// The logo blown up as texture behind the story hero, drifting slowly in and
+// out on its own. The motion is a CSS animation (see .watermark-mark), not tied
+// to scroll — it's ambient texture, so it shouldn't stall when the reader does.
 //
 // The source PNG is white on transparent, so painting it directly would make it
 // invisible on anything pale. Instead its alpha channel drives a CSS mask and
@@ -15,14 +13,8 @@ export default function Watermark({
   tint = 'var(--cream)',
   opacity = 0.06,
   size = '86%',
-  from = 1,
-  to = 1.28,
   style,
 }) {
-  const ref = useRef(null);
-
-  useEffect(() => registerScale(ref.current, { from, to }), [from, to]);
-
   return (
     <div
       aria-hidden="true"
@@ -38,7 +30,7 @@ export default function Watermark({
       }}
     >
       <div
-        ref={ref}
+        className="watermark-mark"
         style={{
           width: size,
           aspectRatio: '1 / 1',

@@ -16,7 +16,7 @@ export default function ZoneMap({ viewBox, zones, active, onPick, label }) {
             className={`mz-g${on ? ' active' : ''}`}
             role="link"
             tabIndex={0}
-            aria-label={`${z.name} — ${z.count} sights`}
+            aria-label={`${z.name} – ${z.count} sights`}
             onClick={() => onPick(z.slug)}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onPick(z.slug))}
           >

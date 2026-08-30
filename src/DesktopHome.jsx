@@ -90,11 +90,11 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
       <div style={{ background: 'var(--oat)', padding: '72px 0 52px' }}>
         <div style={{ padding: '0 72px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 52 }}>
           <Reveal>
-            <div className="eyebrow" style={{ letterSpacing: '.26em' }}>00 — get right to it</div>
+            <div className="eyebrow" style={{ letterSpacing: '.26em' }}>00 – get right to it</div>
             <div className="script" style={{ fontSize: 72, color: 'var(--bark)', lineHeight: .85, marginTop: 6 }}>where to wander</div>
           </Reveal>
           <Reveal delay={150} style={{ font: "300 15px/1.5 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textTransform: 'lowercase', maxWidth: 280, textAlign: 'right', paddingBottom: 10 }}>
-            four corners of the eastern himalaya — pick one, or let us thread a few together.
+            four corners of the eastern himalaya – pick one, or let us thread a few together.
           </Reveal>
         </div>
         <div>
@@ -106,7 +106,7 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
 
       {/* 01 ETHOS */}
       <div style={{ background: 'var(--oat)', padding: '72px 72px 60px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: 40, alignItems: 'start' }}>
-        <Reveal className="eyebrow" style={{ letterSpacing: '.26em', paddingTop: 10 }}>01 — who we are</Reveal>
+        <Reveal className="eyebrow" style={{ letterSpacing: '.26em', paddingTop: 10 }}>01 – who we are</Reveal>
         <Reveal as="p" delay={150} style={{ margin: 0, font: "300 30px/1.4 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textTransform: 'lowercase', textWrap: 'pretty', maxWidth: 860 }}>
           an immersive experience, unexplored destinations, and travel shaped entirely around you. we craft hand-made escapes that connect you to the ethos of each place.
         </Reveal>
@@ -115,10 +115,10 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
       {/* 02 STORY */}
       <div style={{ background: 'var(--sand)', padding: '72px 72px 64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center' }}>
         <Reveal>
-          <div className="eyebrow" style={{ letterSpacing: '.26em' }}>02 — our story</div>
+          <div className="eyebrow" style={{ letterSpacing: '.26em' }}>02 – our story</div>
           <div className="script" style={{ fontSize: 64, color: 'var(--bark)', lineHeight: .9, margin: '8px 0 18px' }}>where it began</div>
           <p style={{ margin: 0, font: "300 17px/1.65 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textTransform: 'lowercase', textWrap: 'pretty' }}>
-            trippin' travels started with three friends and one simple passion — exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected — the stays, the people, the food, and the stories worth coming back with.
+            trippin' travels started with three friends and one simple passion – exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected – the stays, the people, the food, and the stories worth coming back with.
           </p>
         </Reveal>
         <PhotoFrame img={STORY_IMG} drift={60} float={26} style={{ height: 420, borderRadius: 16 }}>
@@ -141,7 +141,7 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
             ))}
           </div>
           <Reveal style={{ textAlign: 'right' }}>
-            <div className="eyebrow" style={{ letterSpacing: '.26em' }}>03 — what we do</div>
+            <div className="eyebrow" style={{ letterSpacing: '.26em' }}>03 – what we do</div>
             <div className="script" style={{ fontSize: 60, color: 'var(--bark)', lineHeight: .9, marginTop: 6 }}>our services</div>
           </Reveal>
         </div>
@@ -149,7 +149,7 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
 
       {/* 04 PROCESS */}
       <div style={{ background: 'var(--sand2)', padding: '72px 72px 68px' }}>
-        <Reveal className="eyebrow" style={{ letterSpacing: '.26em' }}>04 — how it works</Reveal>
+        <Reveal className="eyebrow" style={{ letterSpacing: '.26em' }}>04 – how it works</Reveal>
         <Reveal className="script" delay={150} style={{ fontSize: 60, color: 'var(--bark)', lineHeight: .9, margin: '6px 0 34px' }}>our process</Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 40 }}>
           {PROCESS.map((p, i) => (
@@ -166,7 +166,7 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
       <div style={{ background: 'var(--bark)', padding: '80px 72px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center', color: 'var(--sand)' }}>
         <Reveal className="script" style={{ fontSize: 76, color: 'var(--oat)', lineHeight: .92 }}>made for you, only</Reveal>
         <Reveal as="p" delay={150} style={{ margin: 0, font: "300 18px/1.65 'Hanken Grotesk', sans-serif", color: 'rgba(231,220,203,.82)', textTransform: 'lowercase', textWrap: 'pretty' }}>
-          no fixed packages, no set prices. every trip is customised to your pace, your people and your idea of a good day — then quoted to the journey we build together.
+          no fixed packages, no set prices. every trip is customised to your pace, your people and your idea of a good day – then quoted to the journey we build together.
         </Reveal>
       </div>
 
@@ -175,7 +175,7 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
         <div className="phcap">lachen valley · first light</div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', textAlign: 'right', padding: '0 72px' }}>
           <Reveal className="script" style={{ fontSize: 76, lineHeight: 1, color: 'var(--cream)', maxWidth: 760 }}>
-            the mountains don't rush — and neither do we
+            the mountains don't rush – and neither do we
           </Reveal>
         </div>
       </PhotoFrame>
@@ -183,7 +183,7 @@ export default function DesktopHome({ onPlan, onStory, onHome, onRegion }) {
       {/* ENQUIRY */}
       <div style={{ background: 'var(--oat)', padding: '80px 72px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <Reveal>
-          <div className="eyebrow" style={{ letterSpacing: '.26em' }}>05 — begin</div>
+          <div className="eyebrow" style={{ letterSpacing: '.26em' }}>05 – begin</div>
           <div className="script" style={{ fontSize: 72, color: 'var(--bark)', lineHeight: .92, marginTop: 8 }}>planning something?</div>
         </Reveal>
         <Reveal delay={150} style={{ display: 'flex' }}>

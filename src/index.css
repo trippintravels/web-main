@@ -101,6 +101,21 @@ button { font-family: inherit; }
   text-transform: lowercase;
 }
 
+/* ---- hero logo watermark ----
+   Drifts on its own rather than on scroll: it reads as ambient texture behind
+   the header, so tying it to scroll position made it stall whenever the reader
+   did. Very slow and alternating, so it never resolves into a "pulse". */
+@keyframes watermarkDrift {
+  from { transform: scale(1); }
+  to   { transform: scale(1.22); }
+}
+.watermark-mark { animation: watermarkDrift 26s ease-in-out infinite alternate; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* a chosen resting size, not a frozen frame */
+  .watermark-mark { animation: none; transform: scale(1.08); }
+}
+
 /* ---- shared type helpers ---- */
 /* Pinyon's ink does not stay inside its layout box: an initial g, j or p swings
    its swash up to ~0.55em left of the text origin. Safari clips that overhang to

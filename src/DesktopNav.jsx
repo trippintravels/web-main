@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NAV, LIVE_REGIONS } from './data.js';
 import { slugify } from './route.js';
+import Brandmark from './Brandmark.jsx';
 
 // Shared desktop top nav + mega-menu, used by both the home and story pages so
 // the dropdowns and frosted-glass header behave identically everywhere.
@@ -46,9 +47,7 @@ export default function DesktopNav({ onStory, onWordmark, onRegion, active }) {
           padding: '38px 72px 20px', background: 'transparent',
         }}
       >
-        <span className="wordmark" onClick={onWordmark} style={{ fontSize: 24, color: 'var(--oat)', cursor: onWordmark ? 'pointer' : 'default' }}>
-          trippin' travels
-        </span>
+        <Brandmark fontSize={24} size={42} onClick={onWordmark} />
         <div style={{ display: 'flex', gap: 38, font: "400 14px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
           <span style={navItem} onClick={() => toggle('exp')}>expeditions <span style={caret}>▾</span></span>
           <span style={navItem} onClick={() => toggle('tours')}>tours &amp; rentals <span style={caret}>▾</span></span>

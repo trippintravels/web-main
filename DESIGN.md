@@ -4,7 +4,7 @@ Bespoke travel in the Eastern Himalaya, for a Gen-Z / Gen-Alpha audience. The
 site should feel like an editorial travel journal that happens to be a website:
 unhurried, photographic, warm. Playful in voice, restrained in motion.
 
-The guiding line is the one in the hero: **the mountains don't rush — and
+The guiding line is the one in the hero: **the mountains don't rush – and
 neither do we.** When a choice is between "energetic" and "calm", pick calm.
 
 ---
@@ -41,10 +41,20 @@ sand2 → bark. Dark bands are punctuation, not the default.
 - **Cinzel** — the wordmark only (`.wordmark`), uppercase, wide tracking.
 - **Pinyon Script** — display headings (`.script`). Large, tight leading
   (`.82–.95`), used at genuinely large sizes. Never for body copy.
+  It is **self-hosted and preloaded** (`public/fonts/`, `font-display: block`)
+  rather than fetched from Google. It carries every heading on the site, and
+  waiting on the Google stylesheet before the font was even discovered left a
+  visible window of fallback type. Don't move it back to a CDN.
+  Its ink also **overflows its layout box** — an initial g, j or p swings a
+  swash up to ~0.55em left of the text origin, and the tight leading pushes
+  ascenders and descenders past the line box. Safari clips that overhang to the
+  element's own bounds where Chrome doesn't, so `.script` carries a left padding
+  cancelled by an equal negative margin. Text position is unaffected. Don't
+  remove it because "nothing looks wrong" — nothing looks wrong in Chrome.
 - **Hanken Grotesk** — everything else. Weight 300 for body, 500 for labels.
 - **ui-monospace** — numerals, eyebrows, captions, step markers (`.mono`).
 
-Section headings carry a numbered eyebrow (`00 — get right to it`). The number
+Section headings carry a numbered eyebrow (`00 – get right to it`). The number
 is clay; it is what makes the page read as an index rather than a brochure.
 
 ## Layout
@@ -59,8 +69,10 @@ is clay; it is what makes the page read as an index rather than a brochure.
 
 ## Motion
 
-Two systems, both scroll-driven, both one shared engine rather than per-element
-listeners, and both disabled under `prefers-reduced-motion`.
+Three systems. The first two are scroll-driven and share one rAF loop rather
+than per-element listeners; the third runs on its own clock. All three resolve
+to a deliberate static state under `prefers-reduced-motion` — never a frozen
+mid-animation frame.
 
 ### 1. Photo parallax — `parallax.js`
 
@@ -110,11 +122,67 @@ node it replaces rather than wrapping it:
 <Reveal as="p" delay={150} style={{ margin: 0 }}>{body}</Reveal>
 ```
 
+### 3. Ambient drift — `.watermark-mark`
+
+The logo behind the story hero swells and settles on a 26s loop, independent of
+scroll. It was scroll-driven at first, which was wrong: it is texture, not a
+scroll indicator, and it stalled whenever the reader did. Slow and alternating
+so it never resolves into a pulse; reduced motion parks it at a chosen size
+rather than a frozen frame.
+
 ### Everything else
 
-Hover and focus transitions stay under 300ms. The one piece of looping motion
-on the site is the hero's circular arrow CTA (`.hero-cta`) — deliberately the
-only thing that moves on its own, so it reads as the single invitation to act.
+Hover and focus transitions stay under 300ms. Only two things loop on their own
+— the hero's circular arrow CTA (`.hero-cta`), which is the single invitation to
+act, and the watermark above. Adding a third would make the page restless; the
+bar for one is that it must read as atmosphere or as the one thing to click.
+
+## The story page
+
+Three patterns here were built from the Eloura reference and adapted. Each has a
+rule that isn't obvious from the markup.
+
+**The hero doesn't name itself.** No "our story" title — it opens with what the
+company is: a centred eyebrow and the brand paragraph over a full-bleed
+photograph, with the logo faint behind it. Below, three frames at different
+heights, different resting offsets and different scroll speeds, pulled up so
+they bite into the bottom of the hero photograph by 88–162px. The mismatch is
+the effect; matched speeds would read as one block sliding.
+
+**The service grid is a full-bleed checkerboard.** Every row is one photograph
+and one solid block of copy; both the side and the block colour alternate down
+the page. It bleeds past the 72px gutter on purpose — inset, it reads as cards
+rather than a grid. Colours alternate sand → bark, never clay: clay is the
+single accent and a page of clay blocks would spend it. Desktop photographs are
+static; the mobile ones drift, which is deliberate and not an oversight.
+
+**The process collage runs on bridges.** Each step is a frame bleeding off one
+edge with its copy opposite, and after every step a bridge photograph straddles
+the centre, overlapping the frame above it and the frame below. That handoff is
+the whole point — without it the steps read as three tidy bands. Two rules hold
+it together:
+
+- The gap between a step's frame and its copy is **134px for every step**.
+  Photo cols `1/8` against text `9/13`, mirrored as `6/13` against `1/5`.
+  Change one column and you must change its pair.
+- Bridges deviate from dead centre and vary in width, so the column reads as a
+  spread rather than a stack.
+
+The geometry is hand-set per step and must stay that way. Deriving it from an
+index is the obvious future "cleanup" and it would turn the collage straight
+back into a mirrored pattern, which is the one thing it must not be.
+
+Two traps, both of which caught me while building it:
+
+- **Every item needs an explicit `gridRow`.** Without one they auto-place into a
+  row each, so copy can never sit beside its photograph — and pulling anything
+  up lands text on top of an image.
+- **Overlap comes from negative `mt` on grid items**, which lifts an item and
+  shortens its row so everything below follows. That keeps it all in normal
+  flow: if the copy grows, rows grow and the handoffs hold.
+
+Photographs may overlap each other freely. **Text may never sit on one** — check
+it after any change to the numbers.
 
 ## Destinations
 

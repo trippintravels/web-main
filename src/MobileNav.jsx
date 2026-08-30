@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { NAV, LIVE_REGIONS, INSTAGRAM_URL } from './data.js';
 import { slugify } from './route.js';
+import Brandmark from './Brandmark.jsx';
 
 const link = {
   cursor: 'pointer',
@@ -35,9 +36,7 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome, onRe
     <div className={`navov${open ? ' on' : ''}`} aria-hidden={!open}>
       <div style={{ padding: '46px 26px 40px', minHeight: '100%', boxSizing: 'border-box', color: 'var(--sand)', display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-          <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
-            trippin' travels
-          </span>
+          <Brandmark onClick={onHome} />
           <button
             onClick={onClose}
             aria-label="Close menu"

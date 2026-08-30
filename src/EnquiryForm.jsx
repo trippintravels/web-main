@@ -18,9 +18,9 @@ function phoneProblem(dial, raw) {
   const expected = DIAL_LENGTHS[dial];
   if (expected) {
     if (n.length === expected) return null;
-    return `that number should be ${expected} digits after ${dial} — you've entered ${n.length}.`;
+    return `that number should be ${expected} digits after ${dial} – you've entered ${n.length}.`;
   }
-  if (n.length < 6 || n.length > 14) return "that phone number doesn't look right — mind checking it?";
+  if (n.length < 6 || n.length > 14) return "that phone number doesn't look right – mind checking it?";
   return null;
 }
 
@@ -230,7 +230,7 @@ export default function EnquiryForm({
     // messaging stays inside the design instead of a default validation bubble.
     if (!name.trim()) return fail('add your name so we know who to reply to.');
     if (!phone.trim() && !email.trim()) return fail('add a phone number or an email so we can reach you.');
-    if (email.trim() && !looksLikeEmail(email.trim())) return fail('that email address looks incomplete — mind checking it?');
+    if (email.trim() && !looksLikeEmail(email.trim())) return fail('that email address looks incomplete – mind checking it?');
     if (phone.trim()) {
       const problem = phoneProblem(dial, phone);
       if (problem) return fail(problem);
@@ -238,14 +238,14 @@ export default function EnquiryForm({
 
     // The Worker isn't live yet; say so plainly rather than failing obscurely.
     if (!isNotifierConfigured()) {
-      return fail("our enquiry line isn't live just yet — please write to us at", true);
+      return fail("our enquiry line isn't live just yet – please write to us at", true);
     }
     // Turnstile usually resolves before anyone finishes typing. If it hasn't —
     // most often because the previous token aged out while the form sat open —
     // ask for a fresh challenge rather than leaving the form unable to submit.
     if (isTurnstileConfigured() && !tsToken) {
       setTsNonce((n) => n + 1);
-      return fail('just a moment — finishing a quick security check. try again in a second.');
+      return fail('just a moment – finishing a quick security check. try again in a second.');
     }
 
     setStatus('sending');
@@ -264,7 +264,7 @@ export default function EnquiryForm({
     try {
       await sendEnquiry(payload);
       setStatus('sent');
-      setFeedback({ text: "thank you — we'll be in touch shortly." });
+      setFeedback({ text: "thank you – we'll be in touch shortly." });
       onSent?.(payload);
       setName(''); setPhone(''); setEmail(''); setDial(DEFAULT_DIAL);
       setIntent(null); setWhere(null); setMessage('');

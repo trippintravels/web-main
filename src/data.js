@@ -37,17 +37,17 @@ export const SERVICES = [
   {
     n: '02',
     title: 'shadowing your journey',
-    body: "once you set off, we're only a call away — a friend on the other end who knows your trip.",
+    body: "once you set off, we're only a call away – a friend on the other end who knows your trip.",
   },
   {
     n: '03',
     title: 'an augmenting experience',
-    body: 'the local side of every place — hidden corners, food locals love, and quiet moments of solace.',
+    body: 'the local side of every place – hidden corners, food locals love, and quiet moments of solace.',
   },
   {
     n: '04',
     title: 'encompassing all segments',
-    body: 'stays, transfers, permits, guides — every detail handled, so the journey stays seamless.',
+    body: 'stays, transfers, permits, guides – every detail handled, so the journey stays seamless.',
   },
 ];
 
@@ -92,14 +92,14 @@ export const STORY = {
   intro:
     "An immersive experience, unexplored destinations, redefined luxury and catering to your every need. Trippin' Travels has got it all covered, and then some more. We present a unique hand-crafted escape guide that connects you to the ethos of each place.",
   aboutUs:
-    "Trippin Travels started with three friends who shared one simple passion — exploring places that most people haven't discovered yet. What began as weekend getaways and a curiosity to see what lies beyond the usual tourist trails slowly turned into something much bigger. We wanted to create travel experiences that felt personal, not packaged. From finding beautiful, character-filled stays to experiencing the culture, people, food, and stories that make each place unique, our idea of luxury is all about feeling connected. Trippin Travels is our attempt to make every journey feel less like a holiday and more like a story worth coming back with.",
-  servicesTagline: 'everything we take off your plate — so the journey stays yours.',
+    "Trippin Travels started with three friends who shared one simple passion – exploring places that most people haven't discovered yet. What began as weekend getaways and a curiosity to see what lies beyond the usual tourist trails slowly turned into something much bigger. We wanted to create travel experiences that felt personal, not packaged. From finding beautiful, character-filled stays to experiencing the culture, people, food, and stories that make each place unique, our idea of luxury is all about feeling connected. Trippin Travels is our attempt to make every journey feel less like a holiday and more like a story worth coming back with.",
+  servicesTagline: 'everything we take off your plate – so the journey stays yours.',
   services: [
     {
       n: '01',
       img: img(1016),
       title: 'hand-crafted itinerary',
-      body: "At Trippin Travels, we believe no two travellers are the same, which is why we don't believe in one-size-fits-all itineraries. We take the time to listen — to what you want, how you like to travel, and the little things that matter to you. From handpicking the best properties to planning every transfer, experience, meal, and moment, we pay attention to the details that can make a trip truly special. Every itinerary is thoughtfully built around your needs, giving you access to stays and experiences we genuinely believe are worth your time. For us, planning a trip isn't just about putting together an itinerary — it's about understanding you first, and then creating a journey that feels uniquely yours.",
+      body: "At Trippin Travels, we believe no two travellers are the same, which is why we don't believe in one-size-fits-all itineraries. We take the time to listen – to what you want, how you like to travel, and the little things that matter to you. From handpicking the best properties to planning every transfer, experience, meal, and moment, we pay attention to the details that can make a trip truly special. Every itinerary is thoughtfully built around your needs, giving you access to stays and experiences we genuinely believe are worth your time. For us, planning a trip isn't just about putting together an itinerary – it's about understanding you first, and then creating a journey that feels uniquely yours.",
     },
     {
       n: '02',
@@ -111,13 +111,13 @@ export const STORY = {
       n: '03',
       img: img(164),
       title: 'an augmenting experience',
-      body: "We want our clients to experience a place, not just visit it. That means taking you beyond the usual tourist spots and helping you discover the local side of every destination — the food that locals love, quiet little corners, hidden viewpoints, and places that often don't make it onto the usual travel lists. We also love bringing you closer to the culture and everyday life of the people who call these places home. And when you need a little escape from it all, we curate peaceful excursions and experiences that let you slow down, breathe, and find your own little moment of solace. For us, the best souvenirs are the stories, connections, and experiences you carry back home.",
+      body: "We want our clients to experience a place, not just visit it. That means taking you beyond the usual tourist spots and helping you discover the local side of every destination – the food that locals love, quiet little corners, hidden viewpoints, and places that often don't make it onto the usual travel lists. We also love bringing you closer to the culture and everyday life of the people who call these places home. And when you need a little escape from it all, we curate peaceful excursions and experiences that let you slow down, breathe, and find your own little moment of solace. For us, the best souvenirs are the stories, connections, and experiences you carry back home.",
     },
     {
       n: '04',
       img: img(1039),
       title: 'encompassing all segments',
-      body: "At Trippin Travels, we take care of every little detail so you can focus on enjoying the journey. From handpicked hotels, homestays, resorts, cottages and tents to great food and recommendations for authentic local food joints, we make sure you're well taken care of throughout. Our personal cab services make the journey more than just a transfer — helping you discover hidden gems and unexplored places along the way. We also handle permits, local guides and everything else you may need, making your trip seamless, enriching and truly stress-free.",
+      body: "At Trippin Travels, we take care of every little detail so you can focus on enjoying the journey. From handpicked hotels, homestays, resorts, cottages and tents to great food and recommendations for authentic local food joints, we make sure you're well taken care of throughout. Our personal cab services make the journey more than just a transfer – helping you discover hidden gems and unexplored places along the way. We also handle permits, local guides and everything else you may need, making your trip seamless, enriching and truly stress-free.",
     },
   ],
   process: [
@@ -126,24 +126,24 @@ export const STORY = {
       img: img(1015),
       img2: img(28),
       title: 'commencing the journey',
-      body: "It all starts with a conversation. A quick call — video or audio — or simply a text or email. We take the time to hear you out, understand what you're looking for, and get to know how you like to travel. From there, we start shaping a journey that feels right for you.",
+      body: "It all starts with a conversation. A quick call – video or audio – or simply a text or email. We take the time to hear you out, understand what you're looking for, and get to know how you like to travel. From there, we start shaping a journey that feels right for you.",
     },
     {
       step: 'step 02',
       img: img(1039),
       img2: img(146),
       title: 'tailored planning',
-      body: "The next step is where your ideas start taking shape. We put together an itinerary based entirely on what you've told us — your preferences, pace, interests, and the little things that matter to you. Once it's ready, we connect with you again and walk you through it, explaining everything in detail and making changes wherever needed. We want you to know exactly what your trip will look like before you set off.",
+      body: "The next step is where your ideas start taking shape. We put together an itinerary based entirely on what you've told us – your preferences, pace, interests, and the little things that matter to you. Once it's ready, we connect with you again and walk you through it, explaining everything in detail and making changes wherever needed. We want you to know exactly what your trip will look like before you set off.",
     },
     {
       step: 'step 03',
       img: img(1043),
       img2: img(177),
       title: 'trippin begins',
-      body: "The planning is done. The bags are packed. Now it's time to actually enjoy the journey. Once you're on the road, our role is simple — we make sure you never feel lost or left on your own. From the first pickup to the last goodbye, we're there in the background, ready when you need us. You focus on soaking in the views, trying something new, meeting people, and making memories. We'll quietly take care of the rest.",
+      body: "The planning is done. The bags are packed. Now it's time to actually enjoy the journey. Once you're on the road, our role is simple – we make sure you never feel lost or left on your own. From the first pickup to the last goodbye, we're there in the background, ready when you need us. You focus on soaking in the views, trying something new, meeting people, and making memories. We'll quietly take care of the rest.",
     },
   ],
-  teamTagline: 'three friends who shared one simple passion — and turned it into trippin travels.',
+  teamTagline: 'three friends who shared one simple passion – and turned it into trippin travels.',
   teamFallbackPhone: '+91 93828 43212',
   // Staggered row under the story hero. `float` is the scroll speed — the
   // whole effect is that the three move at different rates, so keep them

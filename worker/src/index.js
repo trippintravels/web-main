@@ -192,7 +192,7 @@ const escapeHtml = (s) =>
 
 function subjectFor(d) {
   const tail = d.where ? ` · ${d.where}` : '';
-  return `Enquiry — ${d.name}${tail}`;
+  return `Enquiry – ${d.name}${tail}`;
 }
 
 function textBody(d) {

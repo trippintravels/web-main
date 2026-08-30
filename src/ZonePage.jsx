@@ -3,6 +3,7 @@ import DesktopNav from './DesktopNav.jsx';
 import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
 import BackLink from './BackLink.jsx';
+import Brandmark from './Brandmark.jsx';
 
 const HERO_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.14) 30%,rgba(20,16,12,.74))';
 
@@ -69,9 +70,7 @@ export default function ZonePage({ region, zone, isDesktop, onHome, onMenu, onSt
         ) : (
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30, padding: `46px ${px}px 20px` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-              <span className="wordmark" onClick={onHome} style={{ fontSize: 17, color: 'var(--oat)', cursor: 'pointer' }}>
-                trippin' travels
-              </span>
+              <Brandmark onClick={onHome} />
               <button onClick={onMenu} aria-label="Open menu" style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}>
                 <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
                 <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />

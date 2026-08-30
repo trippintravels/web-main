@@ -2,6 +2,7 @@ import PhotoFrame from './PhotoFrame.jsx';
 import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
 import ExploreLink from './ExploreLink.jsx';
+import Brandmark from './Brandmark.jsx';
 import {
   DESTINATIONS, SERVICES, PROCESS, destinationHref,
   HERO_IMG, STORY_IMG, QUOTE_IMG,
@@ -58,9 +59,7 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
         <div className="phcap">eastern himalaya · morning mist</div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', padding: '46px 26px 34px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-            <span className="wordmark" style={{ fontSize: 17, color: 'var(--oat)' }}>
-              trippin' travels
-            </span>
+            <Brandmark />
             <button
               onClick={onMenu}
               aria-label="Open menu"
@@ -93,7 +92,7 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
       {/* 00 EXPLORE */}
       <div style={{ background: 'var(--oat)', padding: '44px 0 22px' }}>
         <Reveal style={{ padding: '0 26px' }}>
-          <div className="eyebrow">00 — get right to it</div>
+          <div className="eyebrow">00 – get right to it</div>
           <div className="script" style={{ fontSize: 44, color: 'var(--bark)', lineHeight: .9, marginTop: 6 }}>where to wander</div>
         </Reveal>
         <div style={{ marginTop: 6 }}>
@@ -105,7 +104,7 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
 
       {/* 01 ETHOS */}
       <div style={{ background: 'var(--oat)', padding: '44px 26px 40px', textAlign: 'left' }}>
-        <Reveal className="eyebrow">01 — who we are</Reveal>
+        <Reveal className="eyebrow">01 – who we are</Reveal>
         <Reveal as="p" delay={150} style={{ margin: '16px 0 0', font: "300 21px/1.45 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textTransform: 'lowercase', textWrap: 'pretty' }}>
           an immersive experience, unexplored destinations, and travel shaped entirely around you. we craft hand-made escapes that connect you to the ethos of each place.
         </Reveal>
@@ -116,16 +115,16 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
         <div className="phcap">three friends · beyond the usual trails</div>
       </PhotoFrame>
       <div style={{ background: 'var(--sand)', padding: '44px 26px 42px', textAlign: 'left' }}>
-        <Reveal className="eyebrow">02 — our story</Reveal>
+        <Reveal className="eyebrow">02 – our story</Reveal>
         <Reveal className="script" delay={150} style={{ fontSize: 42, color: 'var(--bark)', lineHeight: .9, margin: '6px 0 16px' }}>where it began</Reveal>
         <Reveal as="p" delay={300} style={{ margin: 0, font: "300 16px/1.6 'Hanken Grotesk', sans-serif", color: 'var(--ink)', textTransform: 'lowercase', textWrap: 'pretty' }}>
-          trippin' travels started with three friends and one simple passion — exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected — the stays, the people, the food, and the stories worth coming back with.
+          trippin' travels started with three friends and one simple passion – exploring places most people haven't found yet. weekend getaways became a way to make every journey feel personal, not packaged. our idea of luxury is about feeling connected – the stays, the people, the food, and the stories worth coming back with.
         </Reveal>
       </div>
 
       {/* 03 SERVICES */}
       <div style={{ background: 'var(--oat)', padding: '44px 26px 40px', textAlign: 'right' }}>
-        <Reveal className="eyebrow">03 — what we do</Reveal>
+        <Reveal className="eyebrow">03 – what we do</Reveal>
         <Reveal className="script" delay={150} style={{ fontSize: 42, color: 'var(--bark)', lineHeight: .9, margin: '6px 0 22px' }}>our services</Reveal>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {SERVICES.map((s, i) => (
@@ -142,7 +141,7 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
 
       {/* 04 PROCESS */}
       <div style={{ background: 'var(--sand2)', padding: '44px 26px 42px', textAlign: 'left' }}>
-        <Reveal className="eyebrow">04 — how it works</Reveal>
+        <Reveal className="eyebrow">04 – how it works</Reveal>
         <Reveal className="script" delay={150} style={{ fontSize: 42, color: 'var(--bark)', lineHeight: .9, margin: '6px 0 22px' }}>our process</Reveal>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
           {PROCESS.map((p) => (
@@ -159,7 +158,7 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
       <div style={{ background: 'var(--bark)', padding: '46px 26px', textAlign: 'left', color: 'var(--sand)' }}>
         <Reveal className="script" style={{ fontSize: 40, color: 'var(--oat)', lineHeight: .95 }}>made for you, only</Reveal>
         <Reveal as="p" delay={150} style={{ margin: '14px 0 0', font: "300 15px/1.6 'Hanken Grotesk', sans-serif", color: 'rgba(231,220,203,.82)', textTransform: 'lowercase' }}>
-          no fixed packages, no set prices. every trip is customised to your pace, your people and your idea of a good day — then quoted to the journey we build together.
+          no fixed packages, no set prices. every trip is customised to your pace, your people and your idea of a good day – then quoted to the journey we build together.
         </Reveal>
       </div>
 
@@ -168,14 +167,14 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
         <div className="phcap">lachen valley · first light</div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', textAlign: 'right', padding: '34px 30px' }}>
           <Reveal className="script" style={{ fontSize: 38, lineHeight: 1.05, color: 'var(--cream)' }}>
-            the mountains<br />don't rush —<br />and neither do we
+            the mountains<br />don't rush –<br />and neither do we
           </Reveal>
         </div>
       </PhotoFrame>
 
       {/* ENQUIRY */}
       <div style={{ background: 'var(--oat)', padding: '48px 26px 46px', textAlign: 'left' }}>
-        <Reveal className="eyebrow">05 — begin</Reveal>
+        <Reveal className="eyebrow">05 – begin</Reveal>
         <Reveal className="script" delay={150} style={{ fontSize: 44, color: 'var(--bark)', lineHeight: .92, margin: '8px 0 18px' }}>planning something?</Reveal>
         <Reveal delay={300}>
           <button
