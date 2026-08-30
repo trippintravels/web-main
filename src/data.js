@@ -2,6 +2,12 @@
 // imagery reads identically to the design doc.
 const img = (id) => `https://picsum.photos/id/${id}/1200/900`;
 
+// Real photography for the our-story page, in public/photos/story/. Named by
+// the slot it fills rather than by subject, so swapping a picture is a one-file
+// change with no code edit. The trailing note on each entry below is the
+// original frame in the shared drive, kept so a swap can be traced back.
+const photo = (name) => `/photos/story/${name}.jpg`;
+
 // Social + contact, in one place — these appear in the footer, the mobile menu
 // and the story page's contact block, so they can't be allowed to drift.
 export const INSTAGRAM_URL = 'https://www.instagram.com/trippintravels.in';
@@ -88,7 +94,7 @@ export const FOOTER = {
 
 // ---- "Our story" single-page content (verbatim doc copy) ----
 export const STORY = {
-  heroImg: img(1025),
+  heroImg: photo('hero'), // Our Story10 — kanchenjunga above the cloud sea
   intro:
     "An immersive experience, unexplored destinations, redefined luxury and catering to your every need. Trippin' Travels has got it all covered, and then some more. We present a unique hand-crafted escape guide that connects you to the ethos of each place.",
   aboutUs:
@@ -97,25 +103,29 @@ export const STORY = {
   services: [
     {
       n: '01',
-      img: img(1016),
+      img: photo('service-1'), // Our Story17 — the old stationers, in black and white
+      cap: 'your pace, your people',
       title: 'hand-crafted itinerary',
       body: "At Trippin Travels, we believe no two travellers are the same, which is why we don't believe in one-size-fits-all itineraries. We take the time to listen – to what you want, how you like to travel, and the little things that matter to you. From handpicking the best properties to planning every transfer, experience, meal, and moment, we pay attention to the details that can make a trip truly special. Every itinerary is thoughtfully built around your needs, giving you access to stays and experiences we genuinely believe are worth your time. For us, planning a trip isn't just about putting together an itinerary – it's about understanding you first, and then creating a journey that feels uniquely yours.",
     },
     {
       n: '02',
-      img: img(110),
+      img: photo('service-2'), // Our Story27 — a hillside village at last light
+      cap: "we're one text away",
       title: 'shadowing your journey',
       body: "Once your trip begins, we don't just disappear. We're always just a call or message away whenever you need us. Whether it's a last-minute change, a recommendation for a great place to grab a bite, help with your stay, or something unexpected that comes up along the way, you can reach out to us. Think of it as having a friend on the other end who knows your trip and is ready to help whenever you need it.",
     },
     {
       n: '03',
-      img: img(164),
+      img: photo('service-3'), // akash1 — the milky way over the ridge
+      cap: 'find your little moment of solace',
       title: 'an augmenting experience',
       body: "We want our clients to experience a place, not just visit it. That means taking you beyond the usual tourist spots and helping you discover the local side of every destination – the food that locals love, quiet little corners, hidden viewpoints, and places that often don't make it onto the usual travel lists. We also love bringing you closer to the culture and everyday life of the people who call these places home. And when you need a little escape from it all, we curate peaceful excursions and experiences that let you slow down, breathe, and find your own little moment of solace. For us, the best souvenirs are the stories, connections, and experiences you carry back home.",
     },
     {
       n: '04',
-      img: img(1039),
+      img: photo('service-4'), // Our Story19 — glacier water
+      cap: 'you just show up',
       title: 'encompassing all segments',
       body: "At Trippin Travels, we take care of every little detail so you can focus on enjoying the journey. From handpicked hotels, homestays, resorts, cottages and tents to great food and recommendations for authentic local food joints, we make sure you're well taken care of throughout. Our personal cab services make the journey more than just a transfer – helping you discover hidden gems and unexplored places along the way. We also handle permits, local guides and everything else you may need, making your trip seamless, enriching and truly stress-free.",
     },
@@ -123,22 +133,25 @@ export const STORY = {
   process: [
     {
       step: 'step 01',
-      img: img(1015),
-      img2: img(28),
+      cap: 'start with a hello',
+      img: photo('process-1'),   // Our Story11 — the first conversation
+      img2: photo('bridge-1'), // Our Story16 — the bridge straddling the seam
       title: 'commencing the journey',
       body: "It all starts with a conversation. A quick call – video or audio – or simply a text or email. We take the time to hear you out, understand what you're looking for, and get to know how you like to travel. From there, we start shaping a journey that feels right for you.",
     },
     {
       step: 'step 02',
-      img: img(1039),
-      img2: img(146),
+      cap: "say what you'd change",
+      img: photo('process-2'),   // Our Story5 — the route taking shape
+      img2: photo('bridge-2'), // Our Story15 — the bridge straddling the seam
       title: 'tailored planning',
       body: "The next step is where your ideas start taking shape. We put together an itinerary based entirely on what you've told us – your preferences, pace, interests, and the little things that matter to you. Once it's ready, we connect with you again and walk you through it, explaining everything in detail and making changes wherever needed. We want you to know exactly what your trip will look like before you set off.",
     },
     {
       step: 'step 03',
-      img: img(1043),
-      img2: img(177),
+      cap: "bags on, we've got the rest",
+      img: photo('process-3'),   // Our Story28 — bags on, engines running
+      img2: photo('bridge-3'), // Our Story26 — the bridge straddling the seam
       title: 'trippin begins',
       body: "The planning is done. The bags are packed. Now it's time to actually enjoy the journey. Once you're on the road, our role is simple – we make sure you never feel lost or left on your own. From the first pickup to the last goodbye, we're there in the background, ready when you need us. You focus on soaking in the views, trying something new, meeting people, and making memories. We'll quietly take care of the rest.",
     },
@@ -149,9 +162,11 @@ export const STORY = {
   // whole effect is that the three move at different rates, so keep them
   // distinct. Heights differ too, so the row reads as composed, not a grid.
   heroRow: [
-    { img: img(1015), h: 300, top: 44, float: 12, cap: 'the high passes' },
-    { img: img(1043), h: 420, top: 0,  float: 40, cap: 'tea country' },
-    { img: img(1036), h: 340, top: 76, float: 24, cap: 'first light' },
+    // The tallest frame sits in the middle and is the one the eye lands on, so
+    // it carries the strongest picture of the three.
+    { img: photo('row-1'), h: 300, top: 44, float: 12, cap: 'cloud line' }, // Our Story9
+    { img: photo('row-2'), h: 420, top: 0,  float: 40, cap: 'first light' }, // Our Story25
+    { img: photo('row-3'), h: 340, top: 76, float: 24, cap: 'to the pass' },  // Our Story32
   ],
   // The gallery slab. Order matters: StoryPage deals these round-robin into
   // four columns on desktop and two on mobile, so every fourth entry shares a
@@ -159,23 +174,39 @@ export const STORY = {
   // and wide frames rather than a repeating pattern -- reordering it reshuffles
   // that rhythm, so move entries in fours if you want a column left alone.
   // `ar` is the frame's aspect-ratio; the photograph is cropped to it.
+  // The gallery slab. Order matters twice over: StoryPage deals these
+  // round-robin into four columns on desktop and two on mobile, so every fourth
+  // entry shares a column -- and each column has to stay taller than its window
+  // or the loop opens a gap at an edge. The sequence below keeps every column
+  // well clear of that and gives each its own rhythm of tall and wide frames.
+  // Move entries in fours if you want a column left alone.
+  //
+  // `ar` is set to the picture's own orientation so nothing is badly cropped:
+  // 3/4 and 4/5 for uprights, 4/3 for landscapes, 1/1 for the near-squares.
+  //
+  // The two quiet frames -- 05 the misty line out of town, 10 the rain -- are
+  // placed so the pictures directly above and below each of them, in the same
+  // column, are bright ones. Because the columns counter-scroll, a tile's
+  // left and right neighbours slide past constantly; only the ones stacked
+  // with it in its own column stay put, so those are the ones that have to
+  // carry the contrast. It holds at four columns and at two.
   gallery: [
-    { id: 1039, ar: '3/4', cap: 'the high passes' },
-    { id: 1015, ar: '1/1', cap: 'tea country' },
-    { id: 1016, ar: '4/5', cap: 'first light' },
-    { id: 28,   ar: '4/3', cap: 'prayer flags' },
-    { id: 1043, ar: '1/1', cap: 'river bend' },
-    { id: 29,   ar: '4/3', cap: 'monastery ridge' },
-    { id: 1036, ar: '3/4', cap: 'cardamom trail' },
-    { id: 1061, ar: '4/5', cap: 'morning mist' },
-    { id: 1018, ar: '4/5', cap: 'the old rail' },
-    { id: 1019, ar: '3/4', cap: 'silver fir' },
-    { id: 1024, ar: '4/3', cap: 'cloud line' },
-    { id: 1025, ar: '1/1', cap: 'yak pasture' },
-    { id: 1035, ar: '4/3', cap: 'stone village' },
-    { id: 1038, ar: '4/5', cap: 'night camp' },
-    { id: 1041, ar: '1/1', cap: 'last light' },
-  ].map((g) => ({ ...g, img: img(g.id) })),
+    { n: 'gallery-01', ar: '4/3', cap: 'the range over the roofs' }, // Our Story6
+    { n: 'gallery-02', ar: '4/5', cap: 'a village under stars' },    // Our Story35
+    { n: 'gallery-03', ar: '4/5', cap: 'the temple square' },        // Our Story12
+    { n: 'gallery-04', ar: '3/4', cap: 'the falls in cloud' },       // Our Story34
+    { n: 'gallery-05', ar: '3/4', cap: 'the line out of town' },     // Our Story14 — moved down from services
+    { n: 'gallery-06', ar: '4/3', cap: 'river country' },            // Our Story (the unnumbered one)
+    { n: 'gallery-07', ar: '1/1', cap: 'kanchenjunga, clear' },      // Our Story7
+    { n: 'gallery-08', ar: '3/4', cap: 'the pass in snow' },         // Our Story30
+    { n: 'gallery-09', ar: '4/3', cap: 'the range at dusk' },        // Our Story31
+    { n: 'gallery-10', ar: '3/4', cap: 'the rain comes in' },        // Our Story22 — moved down from services
+    { n: 'gallery-11', ar: '3/4', cap: 'the wet road up' },          // Our Story3
+    { n: 'gallery-12', ar: '3/4', cap: 'cold water' },               // Our Story18
+    { n: 'gallery-13', ar: '4/3', cap: 'the town after dark' },      // Our Story23
+    { n: 'gallery-14', ar: '4/3', cap: 'the high lake' },            // Our Story29
+    { n: 'gallery-15', ar: '3/4', cap: 'fog on the treeline' },      // Our Story33
+  ].map((g) => ({ ...g, img: photo(g.n) })),
 };
 
 // Founders — photos to be added later (placeholder tiles until then).

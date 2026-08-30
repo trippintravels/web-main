@@ -315,7 +315,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
                 float={0}
                 style={{ height: isDesktop ? '100%' : 260, minHeight: isDesktop ? 520 : undefined }}
               >
-                <div className="phcap">{sv.n} · {sv.title}</div>
+                <div className="phcap">{sv.cap}</div>
               </PhotoFrame>
             );
             const copy = (
@@ -423,7 +423,21 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
                     position: 'relative', zIndex: it.z, borderRadius: 3,
                   }}
                 >
-                  {isBig && <div className="phcap">{pr.step}</div>}
+                  {isBig && (
+                    <div
+                      className="phcap"
+                      /* A one-off, and only this frame. Step 02's photograph
+                         bleeds right, and the bridge beneath it runs back under
+                         its bottom-left corner and buries the caption there.
+                         Its right side is the only clear corner it has. Every
+                         other caption on the site sits bottom-left and should
+                         stay there -- this is a fix for one collision, not a
+                         convention to copy. */
+                      style={it.step === 1 ? { left: 'auto', right: 12 } : undefined}
+                    >
+                      {pr.cap}
+                    </div>
+                  )}
                 </PhotoFrame>
               );
             })}
@@ -437,7 +451,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
               <div key={pr.step}>
                 <PhotoFrame img={pr.img} overlay={LIGHT_OVERLAY} drift={44} float={0}
                   style={{ height: 240, marginLeft: -px, marginRight: -px }}>
-                  <div className="phcap">{pr.step}</div>
+                  <div className="phcap">{pr.cap}</div>
                 </PhotoFrame>
                 <div style={{ padding: `26px 0 ${i === STORY.process.length - 1 ? 0 : 46}px` }}>
                   <Reveal>

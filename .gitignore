@@ -2,6 +2,7 @@ node_modules/
 dist/
 design_ins/
 .DS_Store
+used/
 
 # local env (keys are build-time inlined; see .env.example)
 .env
