@@ -53,6 +53,9 @@ components take `isDesktop` and branch inline; there is no CSS framework.
 | `Reveal` + `reveal.js` | one-shot fade-in on first view |
 | `Brandmark` / `Logo` | brand lockup; `Logo` is a CSS mask so it takes the parent's colour |
 | `EnquiryForm` | the whole form, shared by the drawer and the story page |
+| `GallerySlab` + `.knit` | the story page's moving photo slab — see DESIGN.md motion §4 |
+| `public/photos/story/` | the story page's real photography, named by the slot it fills |
+| `used/` | gitignored archive of the drive originals, plus `MAPPING.md` |
 | `worker/` | Cloudflare Worker; deployed separately with `wrangler`, never by the site build |
 
 Pages: `DesktopHome`/`MobileHome`, `StoryPage`, `RegionPage`, `ZonePage`.
@@ -89,6 +92,30 @@ secrets are invisible to it).
 `uploads/destinations.docx` via a throwaway Python script. Retyping risks silent
 drift from the brand doc — regenerate instead.
 
+**Playwright's element screenshot scrolls the element into view first.** So
+`el.screenshot()` silently moves the page before it captures, which invalidates
+anything measured against scroll position — two "the animation isn't working"
+conclusions came from this and both were wrong. For scroll-driven work, scroll,
+then `page.screenshot({ clip })`. Same family: `elementFromPoint` only sees the
+current viewport, so scroll a thing into view before hit-testing whether it is
+covered.
+
+**The gallery slab has one load-bearing inequality.** Each column must stay
+taller than its window across the whole travel, or a gap opens at an edge
+mid-loop. DESIGN.md motion §4 states it; the aspect ratios in `data.js` are what
+can break it. Re-check after reordering the gallery.
+
+**Captions overflow small frames silently.** `.phcap` has no width constraint,
+so a long caption runs past its tile — the hero-row frames are only ~106px wide
+on a phone. Keep those under about 12 characters and measure rather than guess.
+
+**Pulling from the shared drive.** The folder page only renders its first 50
+items; `https://drive.google.com/embeddedfolderview?id=<id>#list` returns the
+lot. `thumbnail?id=<id>&sz=w1400` gives a JPEG at any size — and will happily
+hand back a still frame for a *video* without saying so, which is how two `.MOV`
+files ended up used as photographs. `uc?export=download&id=<id>` gives the true
+original. Check the magic bytes before trusting a file is a photo.
+
 **`LIVE_REGIONS` in `data.js` is the dead-link switch.** A region not listed
 renders as plain text in the nav, footer and landing page instead of a link to
 nothing. Add a slug only when its page exists.
@@ -108,7 +135,15 @@ sikkim, dooars) with zone pages under each, the enquiry form end-to-end
   started in the .docx, but **the "Offbeat" heading there is malformed** and
   extracts as raw XML. Fix the document before generating.
 - Team photos — `TEAM[].img` is `null` for all three, rendering `/ photo /` tiles.
-- All photography is picsum placeholder.
+- Photography: the **our-story page is real** (`public/photos/story/`, 29
+  frames from the shared drive). The landing page and every destination page are
+  still picsum via `img(id)` in `data.js` / `destinations.js`.
+- Two frames on the story page — `row-3` and `gallery-10` — are single stills
+  pulled from QuickTime **videos**; there is no still original for either. See
+  `used/story_page/MAPPING.md`.
+- Seven "Our Story" frames from the drive went unused: 2, 4, 8, 13, 20, 21, 24.
+  21 (prayer flags over a roadside nursery) is the strongest of them and the
+  obvious candidate if service 04 ever gets replaced.
 
 **Enquiry / infra**
 - Add repository secrets so the deployed form submits: `VITE_NOTIFIER_URL`,
@@ -121,6 +156,6 @@ sikkim, dooars) with zone pages under each, the enquiry form end-to-end
 - WhatsApp notification is parked. The Worker's fan-out is already shaped for a
   second channel; the research is in the runbook artifact.
 
-**Uncommitted right now:** the logo work (`Logo.jsx`, `Brandmark.jsx`,
-`public/logo-mark-sm.png`, the six components that use them), the watermark's
-switch to a self-driven animation, and the `DESIGN.md` update.
+**Keep this file in step with `DESIGN.md`.** They are a pair: DESIGN.md carries
+the reasoning, this one carries the rules, the map and the traps. A change worth
+recording in one is usually worth a line in the other.

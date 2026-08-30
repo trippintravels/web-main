@@ -134,6 +134,7 @@ button { font-family: inherit; }
   grid-template-columns: repeat(2, 1fr);
   height: clamp(320px, 84vw, 430px);
 }
+.kcol-wrap { will-change: transform; }
 .kcol { will-change: transform; }
 .kcol-up   { animation: knitUp   var(--kdur, 64s) linear infinite; }
 .kcol-down { animation: knitDown var(--kdur, 64s) linear infinite; }
@@ -161,16 +162,85 @@ button { font-family: inherit; }
 .kph {
   position: relative;
   width: 100%;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
   background-color: var(--oat-bg);
 }
+/* The photograph sits on its own layer inside the frame. That is what lets the
+   opened one zoom without the frame growing: the box keeps its exact layout
+   size, so nothing reflows, no neighbour is lapped over, and the even gaps hold.
+   It is a crop rather than a magnification -- you see less of the picture, not
+   more of it, and it crops toward the centre. */
+.kimg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform .6s cubic-bezier(.2, .7, .3, 1);
+}
+.knit.has-open .kph.is-open .kimg { transform: scale(1.18); }
 /* one flat overlay, not the .ph radial vignette: with the frames touching, a
    vignette per tile would draw a dark lattice along every seam */
 .kph .kgrad {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(180deg, rgba(20,16,12,.10), rgba(20,16,12,.30));
 }
+/* ---- click a frame: it opens, the slab parts around it ----
+   Why this is on click and not hover, and why the reel stops at the same
+   moment: a frame may only grow while the animation is NOT running. Each column
+   renders its photographs twice and travels exactly -50% of its own height, so
+   the two copies have to stay the same size for the wrap to land on a matching
+   frame. Enlarge one copy while the reel is moving and the halves desynchronise
+   -- measured at 44px, which shows up as a jump every cycle. Stopped, the
+   animation never reaches a wrap, so the growth costs nothing. Stopping also
+   means the frame you opened is not sliding away while you look at it.
+
+   The parting is done with transforms rather than real layout, so the columns
+   never reflow: the frames above and below slide clear, and the other columns
+   slide sideways, opening sand around the opened frame. */
+.kph {
+  cursor: pointer;
+  transition:
+    transform .44s cubic-bezier(.2, .7, .3, 1),
+    filter .44s ease;
+}
+.kcol-wrap {
+  transition: transform .44s cubic-bezier(.2, .7, .3, 1);
+}
+
+/* Opening spreads the WHOLE slab: every column steps away from the slab's
+   centre line and every frame steps away from its column's centre, so an even
+   gap opens everywhere at once. Offsets come from --c / --i (position) measured
+   against --cmid / --mid (midpoint), both set in StoryPage, so this stays pure
+   CSS with no measuring.
+
+   One `--spread` drives both axes, which is the point: the band between two
+   columns and the band between two frames are the same width, and they cannot
+   drift apart later because there is only one number.
+
+   Nothing is scaled. An earlier version enlarged the opened frame, and that is
+   what forced the two gaps apart -- a frame growing from its centre reaches
+   past its own edges, so its neighbours needed extra room that the rest of the
+   slab did not. With no zoom there is no overhang, every gap can be equal, and
+   the opened frame is marked by contrast alone. If a zoom is ever wanted back,
+   the gaps around it have to grow with it. */
+.knit { --spread: 20px; }
+.knit.knit-m { --spread: 12px; }
+
+.knit.has-open .kcol-wrap {
+  transform: translateX(calc((var(--c) - var(--cmid)) * var(--spread)));
+}
+.knit.has-open .kph {
+  transform: translateY(calc((var(--i) - var(--mid)) * var(--spread)));
+}
+
+/* and every other frame goes obviously dim */
+.knit.has-open .kph { filter: brightness(.34); }
+.knit.has-open .kph.is-open { filter: none; }
+/* the opened frame keeps its caption; the dim ones lose theirs */
+.knit.has-open .phcap { opacity: 0; }
+.knit.has-open .kph.is-open .phcap { opacity: 1; }
+
 /* fifteen captions with no gutters between them is noise, so they are held
    back until the frame is pointed at */
 .kph .phcap { opacity: 0; transition: opacity .22s ease; }
@@ -182,6 +252,14 @@ button { font-family: inherit; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* opening still works, it just arrives rather than travels: no easing, and
+     the slab does not part -- the opened frame is picked out by contrast */
+  .kph, .kcol-wrap { transition: none; }
+  .knit.has-open .kph,
+  .knit.has-open .kcol-wrap { transform: none; }
+  /* the crop still marks which frame is open, it just arrives rather than
+     travels -- a state change, not motion */
+  .kimg { transition: none; }
   /* a chosen resting composition, offset column to column, not a frozen frame.
      Any offset between 0 and -50% keeps the window covered. */
   .kcol-up   { animation: none; transform: translate3d(0, -8%, 0); }

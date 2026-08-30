@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PhotoFrame from './PhotoFrame.jsx';
 import DesktopNav from './DesktopNav.jsx';
 import SiteFooter from './SiteFooter.jsx';
@@ -98,51 +98,105 @@ function GallerySlab({ isDesktop }) {
     STORY.gallery.filter((_, i) => i % n === c),
   );
 
-  // Click holds the reel still so a frame can actually be looked at. Kept in
-  // component state on purpose: it is a viewing preference for this visit, not
-  // something to remember, so a refresh starts it moving again.
+  // Clicking a frame opens it: the reel stops, that photograph comes forward,
+  // the rest of the slab parts around it and dims. Clicking it again closes it.
   //
-  // It is a real control rather than a hover: content that moves on its own
-  // needs a way to stop it, and a hover gives keyboard users nothing.
-  const [paused, setPaused] = useState(false);
-  const toggle = () => setPaused((p) => !p);
+  // Opening is deliberately tied to stopping. The two copies of a column only
+  // stay interchangeable while every frame is its layout size, so a frame may
+  // only grow while the animation is not running -- see the note in index.css.
+  // Holding it still is also what makes the zoom worth having: on a moving reel
+  // the frame you enlarged would slide out from under you.
+  //
+  // `open` is the key of the opened frame, or null. Kept in component state on
+  // purpose: it is a viewing preference for this visit, not something to
+  // remember, so a refresh starts the reel moving again.
+  const [open, setOpen] = useState(null);
+  // Enter/Space on the slab stops the reel without opening anything -- content
+  // that moves on its own needs a keyboard-reachable way to stop it.
+  const [held, setHeld] = useState(false);
+  const stopped = held || open !== null;
+
+  // Clicking away from the slab puts it back: an opened frame stops the reel,
+  // and a reader who has moved on should not have to come back and close it.
+  // Only the opened frame is cleared -- `held` is a deliberate keyboard stop, and
+  // forcing motion back on because someone clicked elsewhere would undo it.
+  const knitRef = useRef(null);
+  useEffect(() => {
+    if (open === null) return undefined;
+    const away = (e) => {
+      if (knitRef.current && !knitRef.current.contains(e.target)) setOpen(null);
+    };
+    document.addEventListener('pointerdown', away, true);
+    return () => document.removeEventListener('pointerdown', away, true);
+  }, [open]);
+
+  const toggleFrame = (key) => setOpen((k) => (k === key ? null : key));
+  const toggleHold = () => {
+    setHeld((h) => !h);
+    setOpen(null);
+  };
 
   return (
     <div
-      className={`knit${isDesktop ? '' : ' knit-m'}${paused ? ' is-paused' : ''}`}
+      ref={knitRef}
+      className={`knit${isDesktop ? '' : ' knit-m'}${stopped ? ' is-paused' : ''}${open !== null ? ' has-open' : ''}`}
       role="button"
       tabIndex={0}
-      aria-pressed={paused}
-      aria-label={paused ? 'start the gallery moving' : 'hold the gallery still'}
-      onClick={toggle}
+      aria-pressed={stopped}
+      aria-label={stopped ? 'start the gallery moving' : 'hold the gallery still'}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          toggle();
+          toggleHold();
         }
+        if (e.key === 'Escape') setOpen(null);
       }}
     >
       {columns.map((photos, c) => (
-        <div
-          key={c}
-          className={`kcol ${c % 2 === 0 ? 'kcol-up' : 'kcol-down'}`}
-          style={{ '--kdur': `${secs[c]}s` }}
-        >
-          {/* twice through: the second pass is what makes the wrap invisible.
-              It is the same photographs, so it is hidden from screen readers. */}
-          {[0, 1].map((pass) =>
-            photos.map((p, i) => (
-              <div
-                key={`${pass}-${i}`}
-                className="kph"
-                style={{ backgroundImage: `url('${p.img}')`, aspectRatio: p.ar }}
-                aria-hidden={pass === 1 ? 'true' : undefined}
-              >
-                <div className="kgrad" />
-                <div className="phcap">{p.cap}</div>
-              </div>
-            )),
-          )}
+        /* The wrapper exists only to carry the sideways shift when a frame in
+           another column opens. It cannot go on .kcol itself: that element's
+           transform belongs to the scroll animation, and a second transform
+           there would overwrite it and throw the column back to the start. */
+        <div className="kcol-wrap" key={c} style={{ '--c': c, '--cmid': (n - 1) / 2 }}>
+          <div
+            className={`kcol ${c % 2 === 0 ? 'kcol-up' : 'kcol-down'}`}
+            style={{ '--kdur': `${secs[c]}s` }}
+          >
+            {/* twice through: the second pass is what makes the wrap invisible.
+                It is the same photographs, so it is hidden from screen readers. */}
+            {[0, 1].map((pass) =>
+              photos.map((p, i) => {
+                const key = `${c}-${pass}-${i}`;
+                // position in the column across both passes, and the column's
+                // midpoint -- the spread offsets are derived from these, so the
+                // whole slab opens out evenly instead of only around the frame
+                // that was clicked.
+                const idx = pass * photos.length + i;
+                return (
+                  <div
+                    key={key}
+                    className={`kph${open === key ? ' is-open' : ''}`}
+                    style={{
+                      aspectRatio: p.ar,
+                      '--i': idx,
+                      '--mid': (photos.length * 2 - 1) / 2,
+                    }}
+                    aria-hidden={pass === 1 ? 'true' : undefined}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFrame(key);
+                    }}
+                  >
+                    {/* the photograph is its own layer so it can zoom inside
+                        the frame without the frame itself changing size */}
+                    <div className="kimg" style={{ backgroundImage: `url('${p.img}')` }} />
+                    <div className="kgrad" />
+                    <div className="phcap">{p.cap}</div>
+                  </div>
+                );
+              }),
+            )}
+          </div>
         </div>
       ))}
     </div>
