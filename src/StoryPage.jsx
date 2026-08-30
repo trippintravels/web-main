@@ -85,7 +85,7 @@ function Head({ num, title, dark, fs, align }) {
 
 // Column travel times. Deliberately not multiples of one another, so the four
 // columns never fall back into step and the slab never resolves into a pulse --
-// the same reasoning as the watermark's 26s drift. Mobile columns hold roughly
+// the same reasoning as the watermark's drift. Mobile columns hold roughly
 // twice the photographs, so they need longer to keep the apparent speed even.
 const SLAB_SECS = { desktop: [58, 71, 64, 79], mobile: [96, 115] };
 

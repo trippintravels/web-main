@@ -124,7 +124,7 @@ node it replaces rather than wrapping it:
 
 ### 3. Ambient drift — `.watermark-mark`
 
-The logo behind the story hero swells and settles on a 26s loop, independent of
+The logo behind the story hero swells and settles on a 15s loop, independent of
 scroll. It was scroll-driven at first, which was wrong: it is texture, not a
 scroll indicator, and it stalled whenever the reader did. Slow and alternating
 so it never resolves into a pulse; reduced motion parks it at a chosen size

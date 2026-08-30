@@ -197,7 +197,7 @@ button { font-family: inherit; }
   from { transform: scale(1); }
   to   { transform: scale(1.22); }
 }
-.watermark-mark { animation: watermarkDrift 26s ease-in-out infinite alternate; }
+.watermark-mark { animation: watermarkDrift 15s ease-in-out infinite alternate; }
 
 @media (prefers-reduced-motion: reduce) {
   /* a chosen resting size, not a frozen frame */
