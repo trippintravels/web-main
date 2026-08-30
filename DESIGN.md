@@ -69,10 +69,10 @@ is clay; it is what makes the page read as an index rather than a brochure.
 
 ## Motion
 
-Three systems. The first two are scroll-driven and share one rAF loop rather
-than per-element listeners; the third runs on its own clock. All three resolve
-to a deliberate static state under `prefers-reduced-motion` — never a frozen
-mid-animation frame.
+Four systems. The first two are scroll-driven and share one rAF loop rather
+than per-element listeners; the last two run on their own clock. All four
+resolve to a deliberate static state under `prefers-reduced-motion` — never a
+frozen mid-animation frame.
 
 ### 1. Photo parallax — `parallax.js`
 
@@ -130,12 +130,44 @@ scroll indicator, and it stalled whenever the reader did. Slow and alternating
 so it never resolves into a pulse; reduced motion parks it at a chosen size
 rather than a frozen frame.
 
+### 4. The gallery slab — `.knit`
+
+The story page's gallery is four columns packed edge to edge with no gutter,
+alternate columns travelling in opposite directions. Like the watermark it runs
+on its own clock, and for the same reason: it is a reel, and on scroll it would
+stall whenever the reader did.
+
+Two rules hold the loop together and neither is optional:
+
+- **Each column renders its photographs twice** and the animation moves it by
+  exactly one set (`-50%` of a double-length column). At the end of the pass the
+  second set sits precisely where the first started, so the wrap is invisible.
+  Render the set once and the column runs off its own bottom.
+- **The window must never exceed one set's height.** The column is two sets tall
+  and travels one, so the region from 0 to one set is always covered — that
+  single inequality is the whole guarantee against a gap opening at an edge. The
+  clamps in `index.css` sit far under it at every width; re-check if the aspect
+  ratios in `data.js` change.
+
+Because it loops, the window does *not* have to be tall enough to show
+everything at once — every photograph comes round. That is what lets mobile run
+a short frame instead of a tall one.
+
+Column durations are deliberately not multiples of one another, so the columns
+never fall back into step. Hovering the slab pauses it, which is also what makes
+the captions readable: they fade in on the same hover, because fifteen captions
+with no gutters between them is noise.
+
 ### Everything else
 
-Hover and focus transitions stay under 300ms. Only two things loop on their own
+Hover and focus transitions stay under 300ms. Three things now loop on their own
 — the hero's circular arrow CTA (`.hero-cta`), which is the single invitation to
-act, and the watermark above. Adding a third would make the page restless; the
-bar for one is that it must read as atmosphere or as the one thing to click.
+act, the watermark, and the gallery slab. The slab was a deliberate exception to
+what used to be a two-loop rule: a gallery that reads as a reel is atmosphere in
+the same sense the watermark is, and it earns the exception by being confined to
+one section and pausing under the pointer. The bar stays high — anything further
+must read as atmosphere or as the one thing to click, and the story page is now
+carrying two of the three.
 
 ## The story page
 

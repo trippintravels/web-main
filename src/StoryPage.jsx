@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PhotoFrame from './PhotoFrame.jsx';
 import DesktopNav from './DesktopNav.jsx';
 import SiteFooter from './SiteFooter.jsx';
@@ -79,6 +80,72 @@ function Head({ num, title, dark, fs, align }) {
         {title}
       </div>
     </Reveal>
+  );
+}
+
+// Column travel times. Deliberately not multiples of one another, so the four
+// columns never fall back into step and the slab never resolves into a pulse --
+// the same reasoning as the watermark's 26s drift. Mobile columns hold roughly
+// twice the photographs, so they need longer to keep the apparent speed even.
+const SLAB_SECS = { desktop: [58, 71, 64, 79], mobile: [96, 115] };
+
+// The gallery as one moving slab. Photographs are dealt round-robin into the
+// columns, so the order in data.js is what shapes each column's rhythm.
+function GallerySlab({ isDesktop }) {
+  const n = isDesktop ? 4 : 2;
+  const secs = isDesktop ? SLAB_SECS.desktop : SLAB_SECS.mobile;
+  const columns = Array.from({ length: n }, (_, c) =>
+    STORY.gallery.filter((_, i) => i % n === c),
+  );
+
+  // Click holds the reel still so a frame can actually be looked at. Kept in
+  // component state on purpose: it is a viewing preference for this visit, not
+  // something to remember, so a refresh starts it moving again.
+  //
+  // It is a real control rather than a hover: content that moves on its own
+  // needs a way to stop it, and a hover gives keyboard users nothing.
+  const [paused, setPaused] = useState(false);
+  const toggle = () => setPaused((p) => !p);
+
+  return (
+    <div
+      className={`knit${isDesktop ? '' : ' knit-m'}${paused ? ' is-paused' : ''}`}
+      role="button"
+      tabIndex={0}
+      aria-pressed={paused}
+      aria-label={paused ? 'start the gallery moving' : 'hold the gallery still'}
+      onClick={toggle}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      }}
+    >
+      {columns.map((photos, c) => (
+        <div
+          key={c}
+          className={`kcol ${c % 2 === 0 ? 'kcol-up' : 'kcol-down'}`}
+          style={{ '--kdur': `${secs[c]}s` }}
+        >
+          {/* twice through: the second pass is what makes the wrap invisible.
+              It is the same photographs, so it is hidden from screen readers. */}
+          {[0, 1].map((pass) =>
+            photos.map((p, i) => (
+              <div
+                key={`${pass}-${i}`}
+                className="kph"
+                style={{ backgroundImage: `url('${p.img}')`, aspectRatio: p.ar }}
+                aria-hidden={pass === 1 ? 'true' : undefined}
+              >
+                <div className="kgrad" />
+                <div className="phcap">{p.cap}</div>
+              </div>
+            )),
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -199,21 +266,16 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
         </Reveal>
       </div>
 
-      {/* 02 GALLERY */}
-      <div {...section('gallery', { background: 'var(--sand)', padding: `${isDesktop ? 72 : 44}px ${px}px` })}>
-        <Head num="02" title="gallery" fs={isDesktop ? 64 : 44} align="right" />
-        <div style={{ marginTop: 30, display: 'grid', gridTemplateColumns: `repeat(${isDesktop ? 4 : 2}, 1fr)`, gridAutoRows: isDesktop ? 150 : 116, gap: 14 }}>
-          {STORY.gallery.map((g, i) => (
-            <PhotoFrame
-              key={i}
-              img={g.img}
-              overlay={LIGHT_OVERLAY}
-              drift={34}
-              float={0}
-              style={{ gridColumn: `span ${Math.min(g.cs, isDesktop ? 4 : 2)}`, gridRow: `span ${g.rs}`, height: '100%', borderRadius: 4 }}
-            />
-          ))}
+      {/* 02 GALLERY
+          A slab rather than a grid. The band drops its horizontal padding so
+          the photography runs edge to edge -- inset behind the 72px gutter it
+          read as a tray of cards, which is the same failure the service grid
+          below is shaped to avoid. The heading keeps the gutter. */}
+      <div {...section('gallery', { background: 'var(--sand)', padding: `${isDesktop ? 72 : 44}px 0 0` })}>
+        <div style={{ padding: `0 ${px}px`, marginBottom: isDesktop ? 30 : 22 }}>
+          <Head num="02" title="gallery" fs={isDesktop ? 64 : 44} align="right" />
         </div>
+        <GallerySlab isDesktop={isDesktop} />
       </div>
 
       {/* 03 OUR SERVICES

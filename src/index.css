@@ -101,6 +101,94 @@ button { font-family: inherit; }
   text-transform: lowercase;
 }
 
+/* ---- gallery slab (story page, 02) ----
+   Four columns packed edge to edge with no gutter, alternate columns
+   travelling in opposite directions. It runs on its own clock rather than on
+   scroll: the gallery is a reel, and tying it to scroll position would stall
+   it whenever the reader stopped.
+
+   Two things make the loop work and neither is optional:
+
+   1. Each column renders its photographs TWICE and the animation moves it by
+      exactly one set (-50% of a double-length column). At the end of the pass
+      the second set sits precisely where the first started, so the reset is
+      invisible. Render the set once and the column runs off its own bottom.
+   2. Every column must stay taller than the window across its whole travel.
+      Because the column is two sets tall and moves by one, the region from 0
+      to one set height is always covered -- so the rule is simply: the window
+      must never exceed one set's height. The clamps below sit far under that
+      at every width; check it again if the aspect ratios in data.js change.
+
+   Because it loops, the window does NOT have to be tall enough to show
+   everything at once. Every photograph comes round on its own. */
+.knit {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+  gap: 0;
+  height: clamp(380px, 46vw, 620px);
+  overflow: hidden;
+  position: relative;
+}
+.knit-m {
+  grid-template-columns: repeat(2, 1fr);
+  height: clamp(320px, 84vw, 430px);
+}
+.kcol { will-change: transform; }
+.kcol-up   { animation: knitUp   var(--kdur, 64s) linear infinite; }
+.kcol-down { animation: knitDown var(--kdur, 64s) linear infinite; }
+
+@keyframes knitUp {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -50%, 0); }
+}
+@keyframes knitDown {
+  from { transform: translate3d(0, -50%, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+/* Click holds the reel still. It is a control rather than a hover because
+   content that moves on its own needs a way to stop it, and a hover offers
+   keyboard users nothing. Pausing also lights every caption, so the click has
+   a visible result and the frames can actually be read. */
+.knit { cursor: pointer; }
+.knit.is-paused .kcol { animation-play-state: paused; }
+.knit:focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: -2px;
+}
+
+.kph {
+  position: relative;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--oat-bg);
+}
+/* one flat overlay, not the .ph radial vignette: with the frames touching, a
+   vignette per tile would draw a dark lattice along every seam */
+.kph .kgrad {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(20,16,12,.10), rgba(20,16,12,.30));
+}
+/* fifteen captions with no gutters between them is noise, so they are held
+   back until the frame is pointed at */
+.kph .phcap { opacity: 0; transition: opacity .22s ease; }
+.kph:hover .phcap { opacity: 1; }
+.knit.is-paused .phcap { opacity: 1; }
+/* nothing hovers on a touch screen, so show them there */
+@media (hover: none) {
+  .kph .phcap { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* a chosen resting composition, offset column to column, not a frozen frame.
+     Any offset between 0 and -50% keeps the window covered. */
+  .kcol-up   { animation: none; transform: translate3d(0, -8%, 0); }
+  .kcol-down { animation: none; transform: translate3d(0, -32%, 0); }
+  .kph .phcap { opacity: 1; transition: none; }
+}
+
 /* ---- hero logo watermark ----
    Drifts on its own rather than on scroll: it reads as ambient texture behind
    the header, so tying it to scroll position made it stall whenever the reader

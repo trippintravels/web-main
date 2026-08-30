@@ -153,15 +153,28 @@ export const STORY = {
     { img: img(1043), h: 420, top: 0,  float: 40, cap: 'tea country' },
     { img: img(1036), h: 340, top: 76, float: 24, cap: 'first light' },
   ],
+  // The gallery slab. Order matters: StoryPage deals these round-robin into
+  // four columns on desktop and two on mobile, so every fourth entry shares a
+  // column. The list is sequenced to give each column its own rhythm of tall
+  // and wide frames rather than a repeating pattern -- reordering it reshuffles
+  // that rhythm, so move entries in fours if you want a column left alone.
+  // `ar` is the frame's aspect-ratio; the photograph is cropped to it.
   gallery: [
-    { id: 1039, cs: 2, rs: 2 },
-    { id: 1015, cs: 2, rs: 1 },
-    { id: 1016, cs: 1, rs: 1 },
-    { id: 28,   cs: 1, rs: 1 },
-    { id: 1043, cs: 2, rs: 1 },
-    { id: 29,   cs: 1, rs: 2 },
-    { id: 1036, cs: 1, rs: 1 },
-    { id: 1061, cs: 1, rs: 1 },
+    { id: 1039, ar: '3/4', cap: 'the high passes' },
+    { id: 1015, ar: '1/1', cap: 'tea country' },
+    { id: 1016, ar: '4/5', cap: 'first light' },
+    { id: 28,   ar: '4/3', cap: 'prayer flags' },
+    { id: 1043, ar: '1/1', cap: 'river bend' },
+    { id: 29,   ar: '4/3', cap: 'monastery ridge' },
+    { id: 1036, ar: '3/4', cap: 'cardamom trail' },
+    { id: 1061, ar: '4/5', cap: 'morning mist' },
+    { id: 1018, ar: '4/5', cap: 'the old rail' },
+    { id: 1019, ar: '3/4', cap: 'silver fir' },
+    { id: 1024, ar: '4/3', cap: 'cloud line' },
+    { id: 1025, ar: '1/1', cap: 'yak pasture' },
+    { id: 1035, ar: '4/3', cap: 'stone village' },
+    { id: 1038, ar: '4/5', cap: 'night camp' },
+    { id: 1041, ar: '1/1', cap: 'last light' },
   ].map((g) => ({ ...g, img: img(g.id) })),
 };
 
