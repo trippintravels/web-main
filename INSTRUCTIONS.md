@@ -52,6 +52,7 @@ components take `isDesktop` and branch inline; there is no CSS framework.
 | `PhotoFrame` + `parallax.js` | every photo; `drift` moves the image, `float` moves the frame |
 | `Reveal` + `reveal.js` | one-shot fade-in on first view |
 | `Brandmark` / `Logo` | brand lockup; `Logo` is a CSS mask so it takes the parent's colour |
+| `MobileTopBar` | the wordmark + hamburger strip on every page under 900px; `floating` lifts it over a hero photograph, plain otherwise |
 | `EnquiryForm` | the whole form, shared by the drawer and the story page |
 | `GallerySlab` + `.knit` | the story page's moving photo slab — see DESIGN.md motion §4 |
 | `public/photos/story/` | the story page's real photography, named by the slot it fills |

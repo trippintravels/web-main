@@ -6,7 +6,7 @@ import Reveal from './Reveal.jsx';
 import Watermark from './Watermark.jsx';
 import EnquiryForm from './EnquiryForm.jsx';
 import { STORY, TEAM, INSTAGRAM_URL } from './data.js';
-import Brandmark from './Brandmark.jsx';
+import MobileTopBar from './MobileTopBar.jsx';
 
 const LIGHT_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28))';
 
@@ -251,15 +251,7 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
         {isDesktop ? (
           <DesktopNav onStory={onStory} onWordmark={onHome} onRegion={onRegion} active="story" />
         ) : (
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30, padding: `46px ${px}px 20px` }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-              <Brandmark onClick={onHome} />
-              <button onClick={onMenu} aria-label="Open menu" style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}>
-                <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
-                <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
-              </button>
-            </div>
-          </div>
+          <MobileTopBar floating onHome={onHome} onMenu={onMenu} />
         )}
       </div>
 

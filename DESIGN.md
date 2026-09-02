@@ -64,6 +64,13 @@ is clay; it is what makes the page read as an index rather than a brochure.
   left / right, and destination rows alternate which edge the photo bleeds to.
 - Two hand-written breakpoints, not a framework: a single 900px switch between
   `MobileHome` / `DesktopHome`, mirrored by `isDesktop` on the story page.
+- The mobile header is one component (`MobileTopBar`) and its geometry — 46px
+  from the top, the 26px gutter, a 24px row — is fixed inside it rather than
+  passed in. The full-screen menu redraws the brand lockup over the page's own,
+  and the swap only reads as a panel opening instead of a page replacing itself
+  if the two land on exactly the same point. Move both or neither. Region pages
+  run the bar in normal flow in `--bark`: they are the one page that opens
+  without a hero photograph, so there is nothing to sit the cream lockup on.
 - Inline styles for layout; `index.css` for anything shared, stateful, or
   animated.
 

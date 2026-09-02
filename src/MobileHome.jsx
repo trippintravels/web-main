@@ -2,7 +2,7 @@ import PhotoFrame from './PhotoFrame.jsx';
 import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
 import ExploreLink from './ExploreLink.jsx';
-import Brandmark from './Brandmark.jsx';
+import MobileTopBar from './MobileTopBar.jsx';
 import {
   DESTINATIONS, SERVICES, PROCESS, destinationHref,
   HERO_IMG, STORY_IMG, QUOTE_IMG,
@@ -58,17 +58,7 @@ export default function MobileHome({ onMenu, onPlan, onStory, onHome, onRegion }
       <PhotoFrame img={HERO_IMG} drift={80} float={0} style={{ height: 600 }}>
         <div className="phcap">eastern himalaya · morning mist</div>
         <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', flexDirection: 'column', padding: '46px 26px 34px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-            <Brandmark />
-            <button
-              onClick={onMenu}
-              aria-label="Open menu"
-              style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}
-            >
-              <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
-              <span style={{ width: 22, height: 1.5, background: 'var(--oat)' }} />
-            </button>
-          </div>
+          <MobileTopBar onMenu={onMenu} />
           <div style={{ marginTop: 'auto', textAlign: 'left' }}>
             <Reveal className="script" style={{ fontSize: 90, lineHeight: .82, color: 'var(--cream)' }}>go<br />beyond</Reveal>
             <Reveal delay={150} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>

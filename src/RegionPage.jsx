@@ -5,7 +5,7 @@ import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
 import ZoneMap from './ZoneMap.jsx';
 import BackLink from './BackLink.jsx';
-import Brandmark from './Brandmark.jsx';
+import MobileTopBar from './MobileTopBar.jsx';
 
 // Heroes carry type at the bottom edge, so weight the gradient there — keeps the
 // eyebrow and title legible whatever photograph ends up behind them.
@@ -62,13 +62,7 @@ export default function RegionPage({ region, map, isDesktop, onHome, onMenu, onS
         </div>
       ) : (
         <div style={{ padding: `46px ${px}px 0` }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 24 }}>
-            <Brandmark onClick={onHome} color="var(--bark)" />
-            <button onClick={onMenu} aria-label="Open menu" style={{ display: 'flex', flexDirection: 'column', gap: 4, cursor: 'pointer', background: 'none', border: 0, padding: 4 }}>
-              <span style={{ width: 22, height: 1.5, background: 'var(--bark)' }} />
-              <span style={{ width: 22, height: 1.5, background: 'var(--bark)' }} />
-            </button>
-          </div>
+          <MobileTopBar onHome={onHome} onMenu={onMenu} color="var(--bark)" />
           <div style={{ marginTop: 30 }}>{title(false)}</div>
         </div>
       )}
