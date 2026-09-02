@@ -1,6 +1,12 @@
 // Photo IDs match the picsum ids used in the original mockup so the
 // imagery reads identically to the design doc.
-const img = (id) => `https://picsum.photos/id/${id}/1200/900`;
+// Placeholder photography for every page except our-story, self-hosted in
+// public/photos/placeholder/ rather than fetched from picsum at page load.
+// picsum went down once and took the landing page's photography with it;
+// these ship with the build so the site cannot lose its images to someone
+// else's outage. Same pictures, same ids, so swapping in real photography
+// stays a one-line change per image.
+const img = (id) => `/photos/placeholder/${id}.jpg`;
 
 // Real photography for the our-story page, in public/photos/story/. Named by
 // the slot it fills rather than by subject, so swapping a picture is a one-file

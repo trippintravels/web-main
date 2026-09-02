@@ -260,9 +260,12 @@ Rules that keep this coherent as regions are added:
 
 Moody, atmospheric, mountain-first. Every photo tile carries a gradient overlay
 (`.ph-grad`) so `--cream` type stays legible on top, plus a lowercase monospace
-caption (`.phcap`) bottom-left. Photography is currently picsum placeholders via
-`img(id)` in `data.js` — the ids match the original mockup, so swapping in real
-photography is a one-line change per image.
+caption (`.phcap`) bottom-left. The our-story page carries real photography from
+`public/photos/story/`. Everywhere else still shows the mockup's placeholder
+imagery, self-hosted in `public/photos/placeholder/` and named by its original
+mockup id, so swapping in real photography stays a one-line change per image.
+Nothing is fetched from another domain: photography that arrives over someone
+else's network can vanish on someone else's outage, and it did.
 
 ### One exception: the Dooars sketch map
 

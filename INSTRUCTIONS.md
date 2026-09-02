@@ -55,6 +55,7 @@ components take `isDesktop` and branch inline; there is no CSS framework.
 | `EnquiryForm` | the whole form, shared by the drawer and the story page |
 | `GallerySlab` + `.knit` | the story page's moving photo slab — see DESIGN.md motion §4 |
 | `public/photos/story/` | the story page's real photography, named by the slot it fills |
+| `public/photos/placeholder/` | self-hosted mockup imagery for every other page, named by its original picsum id |
 | `used/` | gitignored archive of the drive originals, plus `MAPPING.md` |
 | `worker/` | Cloudflare Worker; deployed separately with `wrangler`, never by the site build |
 
@@ -116,6 +117,13 @@ hand back a still frame for a *video* without saying so, which is how two `.MOV`
 files ended up used as photographs. `uc?export=download&id=<id>` gives the true
 original. Check the magic bytes before trusting a file is a photo.
 
+**Nothing fetches an image from another domain.** All photography ships with
+the build. It used to come from picsum at page load, and when picsum went down
+the landing page and every destination page lost their imagery to someone else's
+outage while our-story, already on local files, was untouched. Two `img()`
+helpers point at `public/photos/placeholder/` — one in `data.js`, one in
+`destinations.js` — and they have to be changed together.
+
 **`LIVE_REGIONS` in `data.js` is the dead-link switch.** A region not listed
 renders as plain text in the nav, footer and landing page instead of a link to
 nothing. Add a slug only when its page exists.
@@ -136,8 +144,10 @@ sikkim, dooars) with zone pages under each, the enquiry form end-to-end
   extracts as raw XML. Fix the document before generating.
 - Team photos — `TEAM[].img` is `null` for all three, rendering `/ photo /` tiles.
 - Photography: the **our-story page is real** (`public/photos/story/`, 29
-  frames from the shared drive). The landing page and every destination page are
-  still picsum via `img(id)` in `data.js` / `destinations.js`.
+  frames from the shared drive). Every other page is still on the mockup's
+  placeholder imagery, but **self-hosted** now (`public/photos/placeholder/`,
+  21 files) rather than fetched from picsum. Swapping in real photography is
+  still one line per image.
 - Two frames on the story page — `row-3` and `gallery-10` — are single stills
   pulled from QuickTime **videos**; there is no still original for either. See
   `used/story_page/MAPPING.md`.

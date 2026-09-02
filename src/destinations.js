@@ -4,7 +4,9 @@
 // one entry per paragraph in the doc. Generated from the .docx, not retyped.
 // Photo captions, list blurbs and the north bengal region intro are ours.
 
-const img = (id) => `https://picsum.photos/id/${id}/1200/900`;
+// Self-hosted placeholders, same ids as data.js -- see the note there.
+// These are its own copy of the helper, so a change to one needs the other.
+const img = (id) => `/photos/placeholder/${id}.jpg`;
 
 export const NORTH_BENGAL = {
   slug: 'north-bengal',
