@@ -19,6 +19,11 @@ neither do we.** When a choice is between "energetic" and "calm", pick calm.
   as a name. (Long-form doc copy in `data.js` is quoted verbatim and is the one
   exception.)
 - Second person. We take things off the reader's plate; we don't sell to them.
+- The contact details are brand data, not page copy — `INSTAGRAM_URL` and
+  `CONTACT_EMAIL` in `data.js`, drawn by the footer, the mobile menu and the
+  story page's contact block. The Instagram mark is one component
+  (`InstagramLink`) carrying the glyph, the link and its `rel` together, so a
+  copy can't quietly lose one of the three.
 
 ## Palette
 

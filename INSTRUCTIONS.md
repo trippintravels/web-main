@@ -46,13 +46,14 @@ components take `isDesktop` and branch inline; there is no CSS framework.
 | --- | --- |
 | `App.jsx` | hash routing, viewport switch, drawer + mobile-menu state |
 | `route.js` | `#/our-story/<section>`, `#/destinations/<region>/<zone>` |
-| `data.js` | **single source of truth** — regions, nav, footer, story copy, dial codes, `LIVE_REGIONS` |
+| `data.js` | **single source of truth** — regions, nav, footer, story copy, dial codes, contact details, `LIVE_REGIONS` |
 | `destinations.js` | region → zone → sight content, **generated from the .docx** |
 | `maps/` | zone-map geometry, one file per region |
 | `PhotoFrame` + `parallax.js` | every photo; `drift` moves the image, `float` moves the frame |
 | `Reveal` + `reveal.js` | one-shot fade-in on first view |
 | `Brandmark` / `Logo` | brand lockup; `Logo` is a CSS mask so it takes the parent's colour |
 | `MobileTopBar` | the wordmark + hamburger strip on every page under 900px; `floating` lifts it over a hero photograph, plain otherwise |
+| `InstagramLink` | the Instagram glyph and its anchor — footer, mobile menu, story-page contact block |
 | `EnquiryForm` | the whole form, shared by the drawer and the story page |
 | `GallerySlab` + `.knit` | the story page's moving photo slab — see DESIGN.md motion §4 |
 | `public/photos/story/` | the story page's real photography, named by the slot it fills |
@@ -80,6 +81,20 @@ wrong — nothing looks wrong in Chrome.
 **Screenshot diffing is noisy** while picsum images load. Always take a control
 (same shot twice, no change) before trusting a comparison. Two "findings" were
 reported from this noise before the control was added.
+
+Since the photography ships with the build, what's left moving is the site's own
+motion — the hero CTA, the watermark, the gallery slab — and a fresh Turnstile
+widget in the contact block. Driving Chrome with `reducedMotion: 'reduce'` parks
+all four motion systems at their deliberate static states and takes the noise
+floor to zero, which makes a byte comparison meaningful. Turnstile still
+redraws; it is the only thing that should.
+
+**A build passing proves nothing about the page rendering.** There is no linter
+in this project, and Vite will happily bundle JSX that references a component
+nobody imported — it fails at runtime, on that page only, as a blank screen with
+`ReferenceError: X is not defined` in the console. `npm run build` succeeded on
+exactly that in this repo. Load every page you touched and check the console,
+not just the build log.
 
 **Reveals need ~2.2s to settle** after scrolling (1.25s animation + up to 300ms
 stagger). Asserting earlier reports false "stuck" elements. Also use

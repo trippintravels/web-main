@@ -1,4 +1,5 @@
-import { FOOTER, LIVE_REGIONS, INSTAGRAM_URL } from './data.js';
+import { FOOTER, LIVE_REGIONS, CONTACT_EMAIL } from './data.js';
+import InstagramLink from './InstagramLink.jsx';
 import Logo from './Logo.jsx';
 import { slugify } from './route.js';
 
@@ -27,20 +28,14 @@ export default function SiteFooter({ isDesktop, onStory, onHome, onRegion }) {
       <div style={{ marginTop: isDesktop ? 20 : 14, font: "300 13px/1.6 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(231,220,203,.6)', maxWidth: 260 }}>
         go beyond the trails
       </div>
-      <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--sand)' }} aria-label="instagram">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="3" y="3" width="18" height="18" rx="5" />
-          <circle cx="12" cy="12" r="4.2" />
-          <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
-        </svg>
-      </a>
+      <InstagramLink style={{ marginTop: 22 }} />
       <a
-        href="mailto:hey@trippintravels.in"
+        href={`mailto:${CONTACT_EMAIL}`}
         style={{ display: 'block', width: 'fit-content', marginTop: 16, font: "300 13px 'Hanken Grotesk', sans-serif", color: 'rgba(231,220,203,.72)', textDecoration: 'none' }}
         onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--oat)')}
         onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(231,220,203,.72)')}
       >
-        hey@trippintravels.in
+        {CONTACT_EMAIL}
       </a>
     </div>
   );

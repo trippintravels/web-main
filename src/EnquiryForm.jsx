@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
   INTENT_OPTIONS, WHERE_OPTIONS, INTENT_LOC,
-  DIAL_CODES, DEFAULT_DIAL, DIAL_LENGTHS,
+  DIAL_CODES, DEFAULT_DIAL, DIAL_LENGTHS, CONTACT_EMAIL,
 } from './data.js';
 import { sendEnquiry, isNotifierConfigured } from './lib/sendEnquiry.js';
 import Turnstile, { isTurnstileConfigured } from './Turnstile.jsx';
 
-const CONTACT_EMAIL = 'hey@trippintravels.in';
 const looksLikeEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
 const digitsOf = (s) => s.replace(/\D/g, '');

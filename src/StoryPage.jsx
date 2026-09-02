@@ -5,7 +5,8 @@ import SiteFooter from './SiteFooter.jsx';
 import Reveal from './Reveal.jsx';
 import Watermark from './Watermark.jsx';
 import EnquiryForm from './EnquiryForm.jsx';
-import { STORY, TEAM, INSTAGRAM_URL } from './data.js';
+import InstagramLink from './InstagramLink.jsx';
+import { STORY, TEAM, CONTACT_EMAIL } from './data.js';
 import MobileTopBar from './MobileTopBar.jsx';
 
 const LIGHT_OVERLAY = 'linear-gradient(180deg,rgba(20,16,12,.10),rgba(20,16,12,.28))';
@@ -565,21 +566,15 @@ export default function StoryPage({ isDesktop, onHome, onMenu, onStory, onRegion
             <Reveal as="p" delay={150} style={{ margin: '16px 0 0 auto', font: "300 16px/1.6 'Hanken Grotesk', sans-serif", color: 'rgba(41,33,28,.6)', textTransform: 'lowercase', maxWidth: 420 }}>
               tell us where your mind wanders – we'll shape the rest, and stay with you the whole way.
             </Reveal>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ marginTop: 22, display: 'inline-flex', width: 30, height: 30, color: 'var(--bark)' }} aria-label="instagram">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-                <circle cx="12" cy="12" r="4.2" />
-                <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
-              </svg>
-            </a>
+            <InstagramLink color="var(--bark)" style={{ marginTop: 22 }} />
             <div style={{ marginTop: 18, font: "300 13px 'Hanken Grotesk', sans-serif", color: 'rgba(41,33,28,.5)', textTransform: 'lowercase' }}>or write to us at</div>
             <a
-              href="mailto:hey@trippintravels.in"
+              href={`mailto:${CONTACT_EMAIL}`}
               style={{ display: 'inline-block', marginTop: 4, font: "400 16px 'Hanken Grotesk', sans-serif", color: 'var(--clay)', textDecoration: 'none' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--bark)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--clay)')}
             >
-              hey@trippintravels.in
+              {CONTACT_EMAIL}
             </a>
           </div>
           <EnquiryForm style={{ gridColumn: isDesktop ? 1 : undefined, gridRow: isDesktop ? 1 : undefined, marginTop: isDesktop ? 8 : 32 }} />

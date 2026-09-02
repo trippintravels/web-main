@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { NAV, LIVE_REGIONS, INSTAGRAM_URL } from './data.js';
+import { NAV, LIVE_REGIONS, CONTACT_EMAIL } from './data.js';
+import InstagramLink from './InstagramLink.jsx';
 import { slugify } from './route.js';
 import Brandmark from './Brandmark.jsx';
 
@@ -83,20 +84,14 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome, onRe
 
         {/* instagram + email pinned to the bottom-right corner */}
         <div style={{ marginTop: 'auto', paddingTop: 44, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 12 }}>
-          <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', width: 28, height: 28, color: 'var(--sand)' }} aria-label="instagram">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4.2" />
-              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
-            </svg>
-          </a>
+          <InstagramLink size={28} />
           <a
-            href="mailto:hey@trippintravels.in"
+            href={`mailto:${CONTACT_EMAIL}`}
             style={{ font: "300 13px 'Hanken Grotesk', sans-serif", color: 'rgba(231,220,203,.72)', textDecoration: 'none' }}
             onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--oat)')}
             onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(231,220,203,.72)')}
           >
-            hey@trippintravels.in
+            {CONTACT_EMAIL}
           </a>
         </div>
       </div>

@@ -17,6 +17,7 @@ const photo = (name) => `/photos/story/${name}.jpg`;
 // Social + contact, in one place — these appear in the footer, the mobile menu
 // and the story page's contact block, so they can't be allowed to drift.
 export const INSTAGRAM_URL = 'https://www.instagram.com/trippintravels.in';
+export const CONTACT_EMAIL = 'hey@trippintravels.in';
 
 export const HERO_IMG = img(1018);
 export const STORY_IMG = img(1061);
