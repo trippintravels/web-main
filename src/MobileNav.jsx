@@ -66,10 +66,7 @@ export default function MobileNav({ open, onClose, onPlan, onStory, onHome, onRe
           </div>
 
           <div>
-            <div className="script" style={{ fontSize: 38, color: 'var(--oat)', lineHeight: .9 }}>tours &amp; rentals</div>
-            <div style={{ marginTop: 14, font: "400 10px ui-monospace, Menlo, monospace", color: 'var(--clay-light)', textTransform: 'lowercase' }}>tours</div>
-            <Group items={NAV.tours} />
-            <div style={{ marginTop: 14, font: "400 10px ui-monospace, Menlo, monospace", color: 'var(--clay-light)', textTransform: 'lowercase' }}>rentals</div>
+            <div className="script" style={{ fontSize: 38, color: 'var(--oat)', lineHeight: .9 }}>rentals</div>
             <Group items={NAV.rentals} />
           </div>
 

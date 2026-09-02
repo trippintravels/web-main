@@ -77,8 +77,10 @@ is clay; it is what makes the page read as an index rather than a brochure.
   run the bar in normal flow in `--bark`: they are the one page that opens
   without a hero photograph, so there is nothing to sit the cream lockup on.
 - The nav and the footer are two readings of the same index, so they carry the
-  same four sections in the same order — expeditions, experiences, tours &
-  rentals, our story. Add a section to one and it belongs in the other.
+  same four sections in the same order — expeditions, experiences, rentals, our
+  story. Add a section to one and it belongs in the other. Expeditions is
+  *where*; experiences is *what*, and the group, corporate, school and solo
+  trips sit there rather than beside the vehicles.
   Both are width-critical at four sections: the top bar tapers its gap and type
   between 900 and 1080px, and the footer's brand column takes `2fr` so the
   script wordmark holds one line. See the trap in `INSTRUCTIONS.md`.

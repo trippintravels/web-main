@@ -22,7 +22,7 @@ const megaItem = { cursor: 'pointer' };
 const megaGrid = (cols) => ({ display: 'grid', gridTemplateColumns: `repeat(${cols},1fr)`, gap: '16px 30px', marginTop: 20, font: "300 17px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(241,235,224,.85)' });
 
 export default function DesktopNav({ onStory, onWordmark, onRegion, active }) {
-  const [panel, setPanel] = useState(null); // 'expeditions' | 'experiences' | 'tours' | 'story' | null
+  const [panel, setPanel] = useState(null); // 'expeditions' | 'experiences' | 'rentals' | 'story' | null
   const toggle = (p) => setPanel((cur) => (cur === p ? null : p));
 
   // Expedition items only become clickable once their region page exists.
@@ -55,7 +55,7 @@ export default function DesktopNav({ onStory, onWordmark, onRegion, active }) {
         <div className="topnav-links" style={{ display: 'flex', fontFamily: "'Hanken Grotesk', sans-serif", fontWeight: 400, textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
           <span style={navItem} onClick={() => toggle('expeditions')}>expeditions <span style={caret}>▾</span></span>
           <span style={navItem} onClick={() => toggle('experiences')}>experiences <span style={caret}>▾</span></span>
-          <span style={navItem} onClick={() => toggle('tours')}>tours &amp; rentals <span style={caret}>▾</span></span>
+          <span style={navItem} onClick={() => toggle('rentals')}>rentals <span style={caret}>▾</span></span>
           <span style={storyItem} onClick={() => toggle('story')}>our story <span style={caret}>▾</span></span>
         </div>
       </div>
@@ -80,15 +80,11 @@ export default function DesktopNav({ onStory, onWordmark, onRegion, active }) {
           </div>
         </div>
       )}
-      {panel === 'tours' && (
-        <div style={{ ...megaPanel, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
-          <div>
-            <div style={megaLabel}>tours</div>
-            <div style={megaGrid(2)}>{NAV.tours.map((x) => <span key={x} style={megaItem}>{x}</span>)}</div>
-          </div>
-          <div>
-            <div style={megaLabel}>rentals</div>
-            <div style={megaGrid(2)}>{NAV.rentals.map((x) => <span key={x} style={megaItem}>{x}</span>)}</div>
+      {panel === 'rentals' && (
+        <div style={megaPanel}>
+          <div style={megaLabel}>rentals</div>
+          <div style={megaGrid(4)}>
+            {NAV.rentals.map((x) => <span key={x} style={megaItem}>{x}</span>)}
           </div>
         </div>
       )}

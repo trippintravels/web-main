@@ -49,7 +49,7 @@ export default function SiteFooter({ isDesktop, onStory, onHome, onRegion }) {
         isLive={(x) => LIVE_REGIONS.has(slugify(x))}
       />
       <FooterCol title="experiences" items={FOOTER.experiences} />
-      <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
+      <FooterCol title="rentals" items={FOOTER.rentals} />
       <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
     </>
   );
