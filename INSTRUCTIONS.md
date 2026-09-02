@@ -144,6 +144,21 @@ helpers point at `public/photos/placeholder/` — one in `data.js`, one in
 renders as plain text in the nav, footer and landing page instead of a link to
 nothing. Add a slug only when its page exists.
 
+**A nav section is four surfaces and two width problems.** The list itself goes
+in `data.js` (`NAV` *and* `FOOTER`), then it has to be drawn in `DesktopNav`,
+`MobileNav` and `SiteFooter`. Both horizontal surfaces are close to full at four
+sections, and neither fails loudly:
+
+- The **top bar** ran out at 900px, where the desktop layout starts — every item
+  silently wrapped to two lines. `.topnav-links` in `index.css` closes the gap
+  and drops a type step below 1080px; items are `white-space: nowrap` so a tight
+  bar can never become a broken word. 23px of clearance is left at 900px, so a
+  fifth section needs a different answer, not a smaller gap.
+- The **footer** squeezed its brand column until the script wordmark broke
+  across "trippin'" / "travels" at every width below 1680. It holds one line
+  from 1280 up at `2fr` with a 32px gap. Measure the wordmark's line count
+  after touching that grid — nothing else reports it.
+
 ---
 
 ## State

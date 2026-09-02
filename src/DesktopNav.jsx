@@ -22,7 +22,7 @@ const megaItem = { cursor: 'pointer' };
 const megaGrid = (cols) => ({ display: 'grid', gridTemplateColumns: `repeat(${cols},1fr)`, gap: '16px 30px', marginTop: 20, font: "300 17px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', color: 'rgba(241,235,224,.85)' });
 
 export default function DesktopNav({ onStory, onWordmark, onRegion, active }) {
-  const [panel, setPanel] = useState(null); // 'exp' | 'tours' | 'story' | null
+  const [panel, setPanel] = useState(null); // 'expeditions' | 'experiences' | 'tours' | 'story' | null
   const toggle = (p) => setPanel((cur) => (cur === p ? null : p));
 
   // Expedition items only become clickable once their region page exists.
@@ -48,18 +48,35 @@ export default function DesktopNav({ onStory, onWordmark, onRegion, active }) {
         }}
       >
         <Brandmark fontSize={24} size={42} onClick={onWordmark} />
-        <div style={{ display: 'flex', gap: 38, font: "400 14px 'Hanken Grotesk', sans-serif", textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
-          <span style={navItem} onClick={() => toggle('exp')}>expeditions <span style={caret}>▾</span></span>
+        {/* gap and font-size are in index.css (.topnav-links): they taper
+            between 900 and 1080px, where four dropdowns stop fitting beside
+            the wordmark. The shorthand `font` would beat the media rule, so
+            the family and weight are set as longhands here. */}
+        <div className="topnav-links" style={{ display: 'flex', fontFamily: "'Hanken Grotesk', sans-serif", fontWeight: 400, textTransform: 'lowercase', letterSpacing: '.03em', color: 'rgba(241,235,224,.92)' }}>
+          <span style={navItem} onClick={() => toggle('expeditions')}>expeditions <span style={caret}>▾</span></span>
+          <span style={navItem} onClick={() => toggle('experiences')}>experiences <span style={caret}>▾</span></span>
           <span style={navItem} onClick={() => toggle('tours')}>tours &amp; rentals <span style={caret}>▾</span></span>
           <span style={storyItem} onClick={() => toggle('story')}>our story <span style={caret}>▾</span></span>
         </div>
       </div>
 
-      {panel === 'exp' && (
+      {panel === 'expeditions' && (
         <div style={megaPanel}>
           <div style={megaLabel}>expeditions</div>
           <div style={megaGrid(4)}>
             {NAV.expeditions.map((x) => <span key={x} {...regionProps(x)}>{x}</span>)}
+          </div>
+        </div>
+      )}
+      {/* nothing under experiences is built yet, so these are named, not linked
+          — the same treatment tours and rentals get. The 4-column grid is the
+          expeditions grid, so the two panels share a rhythm rather than each
+          sizing itself to how many items it happens to hold. */}
+      {panel === 'experiences' && (
+        <div style={megaPanel}>
+          <div style={megaLabel}>experiences</div>
+          <div style={megaGrid(4)}>
+            {NAV.experiences.map((x) => <span key={x} style={megaItem}>{x}</span>)}
           </div>
         </div>
       )}

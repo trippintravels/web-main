@@ -86,8 +86,14 @@ export const PROCESS = [
 // all read this, so the lists can't drift apart.
 export const EXPEDITIONS = ['north bengal', 'sikkim', 'dooars', 'offbeat & unexplored'];
 
+// What we run, as against where. Same deal — nav, hamburger and footer all read
+// this one list. Nothing under it is built yet, so it renders like tours and
+// rentals do: named, not linked.
+export const EXPERIENCES = ['treks', 'bike rides'];
+
 export const NAV = {
   expeditions: EXPEDITIONS,
+  experiences: EXPERIENCES,
   tours: ['group trips', 'corporate trips', 'school excursions', 'solo trips'],
   rentals: ['cars', 'bikes'],
   story: ['about us', 'gallery', 'our services', 'our process', 'our team', 'contact'],
@@ -95,6 +101,7 @@ export const NAV = {
 
 export const FOOTER = {
   expeditions: EXPEDITIONS,
+  experiences: EXPERIENCES,
   toursRentals: ['group trips', 'corporate trips', 'school excursions', 'solo trips', 'car rentals', 'bike rentals'],
   story: ['about us', 'gallery', 'our services', 'our process', 'our team', 'contact'],
 };

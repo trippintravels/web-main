@@ -585,3 +585,18 @@ button { font-family: inherit; }
   .only-desktop { display: block; }
   .only-mobile  { display: none; }
 }
+
+/* =========================================================
+   Desktop top nav — the narrow-desktop taper
+   =========================================================
+   Four dropdowns and the 24px Cinzel lockup do not both fit at 900px, which is
+   where the desktop layout starts: at the default 38px gap every item wrapped
+   onto two lines the moment "experiences" was added. Between 900 and 1080 the
+   gap closes and the type drops a step; above that the bar is untouched.
+   Items never wrap — better a tight bar than a broken word. */
+.topnav-links { gap: 38px; font-size: 14px; }
+.topnav-links > span { white-space: nowrap; }
+
+@media (max-width: 1080px) {
+  .topnav-links { gap: 24px; font-size: 13px; }
+}

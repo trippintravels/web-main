@@ -48,6 +48,7 @@ export default function SiteFooter({ isDesktop, onStory, onHome, onRegion }) {
         onItem={onRegion && ((x) => LIVE_REGIONS.has(slugify(x)) && onRegion(slugify(x)))}
         isLive={(x) => LIVE_REGIONS.has(slugify(x))}
       />
+      <FooterCol title="experiences" items={FOOTER.experiences} />
       <FooterCol title="tours & rentals" items={FOOTER.toursRentals} />
       <FooterCol title="our story" items={FOOTER.story} onItem={(x) => onStory(slugify(x))} />
     </>
@@ -56,7 +57,11 @@ export default function SiteFooter({ isDesktop, onStory, onHome, onRegion }) {
   return (
     <footer style={{ background: 'var(--bark-deep)', color: 'var(--sand)', padding: isDesktop ? '60px 72px 44px' : '44px 26px 38px', textAlign: 'left' }}>
       {isDesktop ? (
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', gap: 40 }}>
+        // Four link columns, not three: the brand column has to hold the script
+        // wordmark on one line or it breaks across "trippin'" / "travels", so it
+        // takes 2fr and the gap tightens to 32. Measured — at 1.4fr/40 the
+        // wordmark wrapped from 1440px all the way down.
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: 32 }}>
           {brand}
           {cols}
         </div>
