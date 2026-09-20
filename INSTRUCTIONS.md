@@ -48,7 +48,9 @@ components take `isDesktop` and branch inline; there is no CSS framework.
 | `route.js` | `#/our-story/<section>`, `#/destinations/<region>/<zone>` |
 | `data.js` | **single source of truth** — regions, nav, footer, story copy, dial codes, contact details, `LIVE_REGIONS` |
 | `destinations.js` | region → zone → sight content, **generated from the .docx** |
-| `maps/` | zone-map geometry, one file per region |
+| `maps/` | zone-map geometry, one file per region (plus `offbeat.js`, the offbeat base-map contours) |
+| `OffbeatPage` + `OffbeatMap` | the offbeat region — a pinned field map over a hamlet index, in place of `RegionPage`'s zone map (offbeat has no zones); content in `offbeat.js`, pin positions ride with each hamlet. Pins *and* register rows open the hamlet |
+| `HamletPage` | an offbeat hamlet (level 3) — hero + the verbatim doc paragraph + a prev/next strip through the register + a `plan <hamlet>` CTA. Its slug fills the `<zone>` slot of the route |
 | `PhotoFrame` + `parallax.js` | every photo; `drift` moves the image, `float` moves the frame |
 | `Reveal` + `reveal.js` | one-shot fade-in on first view |
 | `Brandmark` / `Logo` | brand lockup; `Logo` is a CSS mask so it takes the parent's colour |
@@ -61,7 +63,8 @@ components take `isDesktop` and branch inline; there is no CSS framework.
 | `used/` | gitignored archive of the drive originals, plus `MAPPING.md` |
 | `worker/` | Cloudflare Worker; deployed separately with `wrangler`, never by the site build |
 
-Pages: `DesktopHome`/`MobileHome`, `StoryPage`, `RegionPage`, `ZonePage`.
+Pages: `DesktopHome`/`MobileHome`, `StoryPage`, `RegionPage`, `ZonePage`,
+`OffbeatPage`, `HamletPage`.
 
 ---
 
@@ -144,6 +147,17 @@ helpers point at `public/photos/placeholder/` — one in `data.js`, one in
 renders as plain text in the nav, footer and landing page instead of a link to
 nothing. Add a slug only when its page exists.
 
+**Offbeat is the region that isn't in `REGIONS`.** It has no zones, so it skips
+the `REGIONS` map / `RegionPage` / `ZoneMap` machinery entirely and is
+special-cased in `App.jsx`: a region URL renders `OffbeatPage`, and the
+`<zone>` slot of the route is instead a **hamlet slug** → `HamletPage` (an
+unresolved slug falls back to the register). Both read `offbeat.js`. Adding a
+fifth *zoned* region still means the `REGIONS` map + `destinations.js` + a
+`maps/` file; offbeat won't appear there. Pin positions and hamlet slugs ride
+with each hamlet in `offbeat.js`, so the map, the register and the level-3
+routes can't drift — but reorder the hamlets and you've renumbered the pins, so
+re-check the map after.
+
 **A nav section is four surfaces and two width problems.** The list itself goes
 in `data.js` (`NAV` *and* `FOOTER`), then it has to be drawn in `DesktopNav`,
 `MobileNav` and `SiteFooter`. Both horizontal surfaces are close to full at four
@@ -166,20 +180,26 @@ sections, and neither fails loudly:
 ## State
 
 Built and working: landing page, our story, three region pages (north bengal,
-sikkim, dooars) with zone pages under each, the enquiry form end-to-end
-(Turnstile → Worker → Resend → inbox).
+sikkim, dooars) with zone pages under each, offbeat & unexplored end to end
+(level-2 field map + register, and a level-3 page for each of the 19 hamlets),
+the enquiry form end-to-end (Turnstile → Worker → Resend → inbox).
 
 ### Open
 
 **Content**
-- `offbeat & unexplored` — no content, deliberately unlinked. Its copy has
-  started in the .docx, but **the "Offbeat" heading there is malformed** and
-  extracts as raw XML. Fix the document before generating.
+- `offbeat & unexplored` — built end to end (`OffbeatPage` level 2 +
+  `HamletPage` level 3, `offbeat.js`, `maps/offbeat.js`), linked, and the 19
+  hamlet bodies are the **verbatim doc copy** from `Website Content.docx` (the
+  "Offbeat" section). What's still placeholder: each hamlet's **photography**
+  (register thumbnail + hero share one self-hosted picsum stand-in), and the
+  register's own `coord`/`blurb` one-liners are ours, not the doc's. (The 19
+  pins are projected from real lat/long and the two state contours are lifted
+  geometry — treat both like the other maps, not re-derived.)
 - Team photos — `TEAM[].img` is `null` for all three, rendering `/ photo /` tiles.
 - Photography: the **our-story page is real** (`public/photos/story/`, 29
   frames from the shared drive). Every other page is still on the mockup's
   placeholder imagery, but **self-hosted** now (`public/photos/placeholder/`,
-  21 files) rather than fetched from picsum. Swapping in real photography is
+  29 files) rather than fetched from picsum. Swapping in real photography is
   still one line per image.
 - Two frames on the story page — `row-3` and `gallery-10` — are single stills
   pulled from QuickTime **videos**; there is no still original for either. See

@@ -250,6 +250,26 @@ needs no rewrites: `#/destinations/<region>` and `#/destinations/<region>/<zone>
    intro, then one photo + text card per sight, an optional featured band, and a
    `plan <zone>` CTA.
 
+**Offbeat & unexplored is the exception, and deliberately so.** It isn't carved
+into zones — it's a loose scatter of hamlets that spill across bengal into
+sikkim, so a zone map would be a lie. Its level 2 (`OffbeatPage`) drops the
+region/zone-index pattern for a **pinned field map over a register**: the two
+state contours (west bengal neutral, sikkim clay-tinted, per the legend) carry
+a numbered pin on each hamlet's real position, and the same numbers run down
+`the quiet register` below — one photo + coords + line per hamlet, two columns
+on desktop, one on mobile. Map and register are the same list read twice, so
+hovering either lights the other, exactly as a region page ties its map to its
+zone list. The pins carry no scroll motion; the map is a fixed diagram, and the
+hamlet numbering is the whole coherence, so it lives with the data (`offbeat.js`)
+and the geometry is lifted, never re-derived — the same discipline as every
+other map. Level 3 (`HamletPage`) is one page per hamlet, and deliberately the
+quietest on the site: there is a single paragraph of copy for each, so it's a
+hero, that paragraph, a prev/next strip that wanders the register sideways, and
+a plan CTA — nothing padded to look busier than the place is. Hamlet names keep
+their capitalisation here (in the register and the level-3 title), the one place
+the site titles in title case rather than lowercase — they read as the proper
+names of real villages, not UI.
+
 Rules that keep this coherent as regions are added:
 
 - **Mobile region pages have no hero photo.** The map is the hero; a full-bleed

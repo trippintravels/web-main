@@ -6,6 +6,9 @@ import EnquiryDrawer from './EnquiryDrawer.jsx';
 import StoryPage from './StoryPage.jsx';
 import RegionPage from './RegionPage.jsx';
 import ZonePage from './ZonePage.jsx';
+import OffbeatPage from './OffbeatPage.jsx';
+import HamletPage from './HamletPage.jsx';
+import { OFFBEAT } from './offbeat.js';
 import { NORTH_BENGAL, SIKKIM, DOOARS } from './destinations.js';
 import { NB_MAP } from './maps/northBengal.js';
 import { SK_MAP } from './maps/sikkim.js';
@@ -63,6 +66,7 @@ export default function App() {
   const goHome = () => navigate('#/');
   const goRegion = (slug) => { setNavOpen(false); navigate(toDestination(slug)); };
   const goZone = (regionSlug, zoneSlug) => { setNavOpen(false); navigate(toDestination(regionSlug, zoneSlug)); };
+  const goHamlet = (slug) => { setNavOpen(false); navigate(toDestination(OFFBEAT.slug, slug)); };
 
   // Resolve the destination route against what's actually built. An unknown
   // region or zone falls back rather than rendering a blank page.
@@ -70,6 +74,16 @@ export default function App() {
   const zone = entry && route.zone
     ? entry.region.zones.find((z) => z.slug === route.zone)
     : null;
+
+  // Offbeat is the region that isn't carved into zones, so it lives outside the
+  // REGIONS/ZonePage machinery and renders its own pages. Its "zone" slot is a
+  // hamlet (level 3, HamletPage); a region URL — or a zone URL whose hamlet
+  // doesn't resolve — lands on the level-2 register (OffbeatPage).
+  const offbeatHamlet = route.region === OFFBEAT.slug && route.zone
+    ? OFFBEAT.hamlets.find((h) => h.slug === route.zone)
+    : null;
+  const isOffbeat = route.region === OFFBEAT.slug && !offbeatHamlet
+    && (route.page === 'region' || route.page === 'zone');
 
   // Lock body scroll while an overlay is open. Compensate for the scrollbar
   // width so full-width / centered content doesn't shift when it disappears.
@@ -102,6 +116,27 @@ export default function App() {
     <>
       {route.page === 'story' ? (
         <StoryPage isDesktop={isDesktop} onHome={goHome} onMenu={() => setNavOpen(true)} onStory={goStory} onRegion={goRegion} />
+      ) : offbeatHamlet ? (
+        <HamletPage
+          hamlet={offbeatHamlet}
+          isDesktop={isDesktop}
+          onHome={goHome}
+          onMenu={() => setNavOpen(true)}
+          onStory={goStory}
+          onRegion={goRegion}
+          onHamlet={goHamlet}
+          onPlan={openPlan}
+        />
+      ) : isOffbeat ? (
+        <OffbeatPage
+          isDesktop={isDesktop}
+          onHome={goHome}
+          onMenu={() => setNavOpen(true)}
+          onStory={goStory}
+          onRegion={goRegion}
+          onHamlet={goHamlet}
+          onPlan={openPlan}
+        />
       ) : zone ? (
         <ZonePage
           region={entry.region}

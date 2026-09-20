@@ -17,6 +17,10 @@
   --clay: #a9674c;
   --clay-light: #c98e6f;
   --cream: #f6f1e7;
+  /* offbeat field map land: neutral (west bengal) and a clay-tinted variant
+     (sikkim), so the two states read apart per the map legend. */
+  --map-land: #e1dacd;
+  --map-land-sk: #d8c7b8;
 }
 
 * { box-sizing: border-box; }
@@ -397,6 +401,8 @@ button { font-family: inherit; }
 .back-link:hover { color: var(--bl-hover); }
 .back-link:hover .bl-label { border-bottom-color: currentColor; }
 .back-link:hover svg { transform: translateX(-3px); }
+/* the "next hamlet" link mirrors it — arrow on the right, nudging right */
+.back-link-fwd:hover svg { transform: translateX(3px); }
 .back-link:focus-visible { outline: 2px solid var(--bl-hover); outline-offset: 4px; border-radius: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -466,6 +472,57 @@ button { font-family: inherit; }
 .mz-g:hover .mz-num, .mz-g.active .mz-num { fill: rgba(246,241,231,.85); }
 .mz-g:focus { outline: none; }
 .mz-g:focus-visible path { stroke: var(--clay); stroke-width: 7; }
+
+/* ---- offbeat field map (OffbeatMap.jsx + src/maps/offbeat.js) ---- */
+/* A static base map — no zone fills to toggle. The two state contours are the
+   land; their seams are stroked in the page ground so adjacent shapes read
+   apart. The interaction lives in the pins (.mk), which light together with
+   the field index (active hamlet) — the map's counterpart to .mz-g. */
+.ofmap { display: block; width: 100%; height: auto; overflow: visible; }
+.ofmap .land { stroke: var(--oat); stroke-linejoin: round; }
+.ofmap .land-bengal { fill: var(--map-land); }
+.ofmap .land-sikkim { fill: var(--map-land-sk); }
+.ofmap .ofmap-sea { fill: var(--map-land); }
+.ofmap .oflbl {
+  fill: rgba(41,33,28,var(--l,.32));
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* the numbered pins — mirrored from the mockup, coloured from the palette */
+.mk { cursor: pointer; }
+.mk:focus { outline: none; }
+.mk:focus-visible .mko { opacity: .95; stroke-width: 3.5; }
+.mk .mko { fill: none; stroke: var(--clay); stroke-width: 2; opacity: .45; transition: opacity .25s ease; }
+.mk .mkd { fill: var(--clay); transition: fill .25s ease; }
+.mk .mkt { fill: var(--bark); font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; transition: fill .25s ease; }
+.mk:hover .mko, .mk.active .mko { opacity: .95; }
+.mk:hover .mkt, .mk.active .mkt { fill: var(--clay); }
+
+/* legend swatches beside the map heading */
+.of-key { width: 15px; height: 15px; border-radius: 3px; flex: none; box-shadow: 0 0 0 1px rgba(41,33,28,.15); }
+.of-key-bengal { background: var(--map-land); }
+.of-key-sikkim { background: var(--map-land-sk); box-shadow: 0 0 0 1px rgba(169,103,76,.3); }
+.of-key-pin { width: 10px; height: 10px; border-radius: 50%; background: transparent; border: 1.5px solid var(--clay); box-shadow: none; }
+
+/* field-index thumbnail */
+.of-thumb {
+  flex: none; width: 64px; height: 64px; border-radius: 3px;
+  background-size: cover; background-position: center;
+}
+
+/* field-index row — links to the hamlet's level-3 page */
+.of-row:focus { outline: none; }
+.of-row:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; border-radius: 3px; }
+.of-arrow svg { transition: transform .2s ease; }
+.of-row:hover .of-arrow svg, .of-row:focus-visible .of-arrow svg { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) {
+  .of-arrow svg { transition: none; }
+  .of-row:hover .of-arrow svg, .of-row:focus-visible .of-arrow svg { transform: none; }
+}
 
 /* ---- underlined form input ---- */
 .uline {
