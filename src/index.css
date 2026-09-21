@@ -2,7 +2,7 @@
    Trippin' Travels — Eastern Himalaya
    Palette:  oat #f1ebe0 · deep bark #29211c · #211a15 · clay #a9674c
              warm clay-light #c98e6f · sand #e7dccb · #efe6d6
-   Type:     Pinyon Script (display cursive) · Hanken Grotesk (body/ui)
+   Type:     Great Vibes (display cursive) · Hanken Grotesk (body/ui)
              ui-monospace (captions / data)
 =================================================================== */
 
@@ -287,16 +287,19 @@ button { font-family: inherit; }
 }
 
 /* ---- shared type helpers ---- */
-/* Pinyon's ink does not stay inside its layout box: an initial g, j or p swings
-   its swash up to ~0.55em left of the text origin. Safari clips that overhang to
-   the element's own bounds — Chrome does not, which is why this reproduces on
-   Safari only and measures clean in Chrome. Widen the box to the left and pull
-   it straight back with an equal negative margin: the ink lands inside the box
-   and the text does not move (verified across 162 headings, none shifted).
-   Horizontal only — vertical padding here changes the line box and shifts the
-   whole page. */
+/* Cursive display ink does not stay inside its layout box: an initial swash or a
+   descender can swing left of the text origin, and Safari clips that overhang to
+   the element's own bounds where Chrome does not — so it reproduces on Safari
+   only and measures clean in Chrome. Widen the box to the left and pull it
+   straight back with an equal negative margin: the ink lands inside the box and
+   the text does not move. Horizontal only — vertical padding here changes the
+   line box and shifts the whole page.
+   The 0.62em was measured for the previous face (Pinyon Script); Great Vibes has
+   a gentler left overhang, so it's conservative here (over-reserving is
+   invisible, it's cancelled by the negative margin). Re-check on real Safari if
+   a heading ever looks clipped — Safari can't be tested in this repo. */
 .script {
-  font-family: 'Pinyon Script', cursive;
+  font-family: 'Great Vibes', cursive;
   padding-left: 0.62em;
   /* !important because many call sites set a `margin` shorthand for vertical
      rhythm, which silently zeroes margin-left and would leave the padding

@@ -11,7 +11,7 @@ export default function SiteFooter({ isDesktop, onStory, onHome, onRegion }) {
     <div>
       {/* The mark sits beside the script wordmark rather than the Cinzel one used
           in the nav, so it's sized to that. `.script` carries a negative left
-          margin (the Pinyon ink fix), which eats into a flex gap — hence the
+          margin (the cursive ink fix), which eats into a flex gap — hence the
           explicit padding on the logo instead of relying on `gap` alone. */}
       <div
         onClick={onHome}

@@ -208,7 +208,7 @@ export const OFFBEAT = {
   },
   {
     n: '19', slug: 'chatakpur', name: "Chatakpur",
-    coord: "approx. \u00b7 kurseong hills",
+    coord: "26.97\u00b0N \u00b7 88.31\u00b0E \u00b7 kurseong hills",
     blurb: "A red-panda forest village above Kurseong.",
     img: img(129),
     pin: { cx: 475.0, cy: 995.0, tx: 459.0, ty: 989.0, anchor: 'end' },

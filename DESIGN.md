@@ -44,18 +44,24 @@ sand2 → bark. Dark bands are punctuation, not the default.
 ## Type
 
 - **Cinzel** — the wordmark only (`.wordmark`), uppercase, wide tracking.
-- **Pinyon Script** — display headings (`.script`). Large, tight leading
-  (`.82–.95`), used at genuinely large sizes. Never for body copy.
-  It is **self-hosted and preloaded** (`public/fonts/`, `font-display: block`)
-  rather than fetched from Google. It carries every heading on the site, and
-  waiting on the Google stylesheet before the font was even discovered left a
-  visible window of fallback type. Don't move it back to a CDN.
-  Its ink also **overflows its layout box** — an initial g, j or p swings a
-  swash up to ~0.55em left of the text origin, and the tight leading pushes
+- **Great Vibes** — display headings (`.script`). Large, tight leading
+  (`.82–.95`), used at genuinely large sizes. Never for body copy. A flowing
+  modern cursive — chosen over the original Pinyon Script for a warmer, more
+  approachable hand while keeping the luxury register.
+  It is **self-hosted and preloaded** (`public/fonts/great-vibes-latin.woff2`,
+  `font-display: block`) rather than fetched from Google. It carries every
+  heading on the site, and waiting on the Google stylesheet before the font was
+  even discovered left a visible window of fallback type. Don't move it back to
+  a CDN. Swapping the face is a single family name on `.script` plus the
+  `@font-face`/preload pair in `index.html` — see the note in `INSTRUCTIONS.md`.
+  Cursive ink also **overflows its layout box** — an initial swash or a
+  descender can swing left of the text origin, and the tight leading pushes
   ascenders and descenders past the line box. Safari clips that overhang to the
   element's own bounds where Chrome doesn't, so `.script` carries a left padding
-  cancelled by an equal negative margin. Text position is unaffected. Don't
-  remove it because "nothing looks wrong" — nothing looks wrong in Chrome.
+  cancelled by an equal negative margin. Text position is unaffected. The
+  padding was measured for Pinyon (a heavier overhang); it's conservative for
+  Great Vibes, and over-reserving is invisible. Don't remove it because "nothing
+  looks wrong" — nothing looks wrong in Chrome.
 - **Hanken Grotesk** — everything else. Weight 300 for body, 500 for labels.
 - **ui-monospace** — numerals, eyebrows, captions, step markers (`.mono`).
 

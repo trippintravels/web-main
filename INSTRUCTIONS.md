@@ -30,8 +30,9 @@ with Playwright. Screenshot both breakpoints. Do not report a visual change as
 done without looking at it.
 
 **Safari can't be tested here.** Playwright's browsers aren't installed — only
-system Chrome via `channel: 'chrome'`. At least one real bug (Pinyon glyphs
-clipping) reproduced *only* in Safari and measured perfectly clean in Chrome. If
+system Chrome via `channel: 'chrome'`. At least one real bug (the cursive
+heading glyphs clipping) reproduced *only* in Safari and measured perfectly
+clean in Chrome. If
 Akash reports something you cannot reproduce, believe the report before the
 measurement.
 
