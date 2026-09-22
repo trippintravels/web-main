@@ -80,7 +80,11 @@ wrapper. This is why links under the big script headings were unclickable.
 **Script headings overhang their box.** `.script` carries a left padding with a
 cancelling negative margin, marked `!important`. Safari clips glyph overhang to
 the element's bounds; Chrome doesn't. Don't remove it because nothing looks
-wrong — nothing looks wrong in Chrome.
+wrong — nothing looks wrong in Chrome. A **right-aligned** heading has the same
+problem on its right edge (Safari slices a final `&`/`d` swash); those add
+`.script-r` for the mirrored reservation. This is Safari-only, so it can't be
+verified in this repo's Chrome — the desktop destination rows are where it
+shows.
 
 **Screenshot diffing is noisy** while picsum images load. Always take a control
 (same shot twice, no change) before trusting a comparison. Two "findings" were

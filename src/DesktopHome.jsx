@@ -38,7 +38,7 @@ function DeskRow({ dest, side, w, h, fs }) {
   const text = (
     <Reveal style={{ flex: 1, textAlign: side === 'left' ? 'left' : 'right',
       paddingRight: side === 'left' ? 72 : 0, paddingLeft: side === 'right' ? 72 : 0 }}>
-      <div className="script" style={{ fontSize: fs, color: 'var(--bark)', lineHeight: .88 }}>
+      <div className={side === 'right' ? 'script script-r' : 'script'} style={{ fontSize: fs, color: 'var(--bark)', lineHeight: .88 }}>
         {dest.name === 'offbeat & unexplored' ? <>offbeat &amp;<br />unexplored</> : dest.name}
       </div>
       <div className="mono" style={{ font: '400 12px ui-monospace, Menlo, monospace', color: 'rgba(41,33,28,.5)', textTransform: 'lowercase', marginTop: 12 }}>

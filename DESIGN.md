@@ -62,6 +62,12 @@ sand2 → bark. Dark bands are punctuation, not the default.
   padding was measured for Pinyon (a heavier overhang); it's conservative for
   Great Vibes, and over-reserving is invisible. Don't remove it because "nothing
   looks wrong" — nothing looks wrong in Chrome.
+  The same clip bites the *right* edge when a heading is **right-aligned** (the
+  desktop destination rows): the final glyph's terminal ink sits at the box's
+  right bound and Safari slices it. Those headings add `.script-r`, which mirrors
+  the reservation on the right. It's a separate class, not part of `.script`,
+  because the big inline hero spans have a CTA to their right that an em-scaled
+  right margin would drag inward. Left-aligned headings never need it.
 - **Hanken Grotesk** — everything else. Weight 300 for body, 500 for labels.
 - **ui-monospace** — numerals, eyebrows, captions, step markers (`.mono`).
 

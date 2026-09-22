@@ -307,6 +307,20 @@ button { font-family: inherit; }
      elements sets a left margin deliberately, so nothing legitimate is lost. */
   margin-left: -0.62em !important;
 }
+/* Right-aligned script headings (the desktop destination rows) sit the final
+   glyph's terminal ink — an ampersand's tail, a closing d/g — right at the
+   element's right bound, where Safari clips it exactly like the left overhang
+   (Chrome measures clean, so it reproduces on Safari only). Mirror the left
+   reservation on the right: widen the box and pull it straight back with an
+   equal negative margin, so Safari has room for the ink and the right-aligned
+   text does not move. Only right-aligned headings need this — left-aligned ones
+   already have empty box to their right. Applied via a second class, not on
+   `.script`, because the big inline `.script` spans (the hero, with a CTA to
+   their right) would have their neighbour pulled in by an em-scaled margin. */
+.script-r {
+  padding-right: 0.5em;
+  margin-right: -0.5em;
+}
 /* top wordmark — one definition, used on every page for consistency.
    Size is set per breakpoint at the call site (desktop larger than mobile). */
 .wordmark {
