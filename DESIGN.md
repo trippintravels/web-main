@@ -277,10 +277,12 @@ and the geometry is lifted, never re-derived — the same discipline as every
 other map. Level 3 (`HamletPage`) is one page per hamlet, and deliberately the
 quietest on the site: there is a single paragraph of copy for each, so it's a
 hero, that paragraph, a prev/next strip that wanders the register sideways, and
-a plan CTA — nothing padded to look busier than the place is. Hamlet names keep
-their capitalisation here (in the register and the level-3 title), the one place
-the site titles in title case rather than lowercase — they read as the proper
-names of real villages, not UI.
+a plan CTA — nothing padded to look busier than the place is. Hamlet names are
+lowercased in the script face like every other heading: Great Vibes' ornamental
+capitals rise past the tight-leading line box into the breadcrumb above the
+level-3 hero, so an uppercased name (`Rishop`) overlaps the nav. The proper-case
+spelling still rides in `offbeat.js` for the breadcrumb tooltip, the map pins
+and screen-reader labels — only the display title is lowercased.
 
 Rules that keep this coherent as regions are added:
 

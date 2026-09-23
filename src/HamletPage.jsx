@@ -18,8 +18,9 @@ function Paras({ items, style, gap = 14 }) {
 // Level 3 — a single offbeat hamlet. There is one paragraph of copy per hamlet,
 // so this stays a deliberately quiet page: hero, the coordinates line, the doc
 // paragraph, then a plan CTA. A prev/next strip lets you wander the register
-// sideways without climbing back up to level 2. Names keep their capitalisation
-// here, matching the register (the one place the site titles in title case).
+// sideways without climbing back up to level 2. The script title is lowercased
+// like every heading on the site — Great Vibes' ornamental capitals rise into
+// the breadcrumb above, and lowercase keeps the tight-leading hero clean.
 export default function HamletPage({ hamlet, isDesktop, onHome, onMenu, onStory, onRegion, onHamlet, onPlan }) {
   const px = isDesktop ? 72 : 26;
 
@@ -44,7 +45,7 @@ export default function HamletPage({ hamlet, isDesktop, onHome, onMenu, onStory,
               </span>
             </Reveal>
             <Reveal className="script" delay={150} style={{ fontSize: isDesktop ? 116 : 62, lineHeight: .86, color: 'var(--cream)', marginTop: 4 }}>
-              {hamlet.name}
+              {hamlet.name.toLowerCase()}
             </Reveal>
             <Reveal as="p" delay={300} style={{ margin: '14px 0 0', font: "400 12px ui-monospace, Menlo, monospace", letterSpacing: '.06em', color: 'rgba(246,241,231,.75)' }}>
               {hamlet.coord}
@@ -92,10 +93,10 @@ export default function HamletPage({ hamlet, isDesktop, onHome, onMenu, onStory,
       {/* PLAN CTA */}
       <div style={{ background: 'var(--bark)', padding: `${isDesktop ? 84 : 56}px ${px}px`, textAlign: 'center' }}>
         <Reveal className="script" style={{ fontSize: isDesktop ? 64 : 42, color: 'var(--cream)', lineHeight: .95 }}>
-          plan {hamlet.name}
+          plan {hamlet.name.toLowerCase()}
         </Reveal>
         <Reveal as="p" delay={150} style={{ margin: '16px auto 0', maxWidth: 460, font: `300 ${isDesktop ? 16 : 14.5}px/1.6 'Hanken Grotesk', sans-serif`, color: 'rgba(231,220,203,.8)', textTransform: 'lowercase' }}>
-          we'll thread {hamlet.name} into an unhurried route through the hills around it.
+          we'll thread {hamlet.name.toLowerCase()} into an unhurried route through the hills around it.
         </Reveal>
         <Reveal delay={300} style={{ marginTop: 28 }}>
           <button

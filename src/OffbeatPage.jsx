@@ -122,7 +122,7 @@ export default function OffbeatPage({ isDesktop, onHome, onMenu, onStory, onRegi
                 style={{ backgroundImage: `linear-gradient(rgba(20,16,12,.1),rgba(20,16,12,.3)),url('${h.img}')` }}
               />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="script" style={{ fontSize: 30, color: 'var(--bark)', lineHeight: .9 }}>{h.name}</div>
+                <div className="script" style={{ fontSize: 30, color: 'var(--bark)', lineHeight: .9 }}>{h.name.toLowerCase()}</div>
                 <div style={{ font: "400 9px ui-monospace, Menlo, monospace", color: 'rgba(41,33,28,.45)', letterSpacing: '.03em', marginTop: 3 }}>{h.coord}</div>
                 <div style={{ font: "300 12.5px/1.4 'Hanken Grotesk', sans-serif", color: 'rgba(41,33,28,.6)', marginTop: 4, textWrap: 'pretty' }}>{h.blurb}</div>
               </div>
