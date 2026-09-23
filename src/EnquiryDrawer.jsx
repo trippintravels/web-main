@@ -18,7 +18,7 @@ export default function EnquiryDrawer({ open, onClose, prefill }) {
         role="dialog"
         aria-modal="true"
         aria-label="Plan your journey"
-        style={{ padding: '60px 44px 44px' }}
+        style={{ padding: '60px 44px 44px', paddingBottom: 'calc(44px + env(safe-area-inset-bottom, 0px))' }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
           <div className="script" style={{ fontSize: 46, color: 'var(--bark)', lineHeight: 1 }}>
