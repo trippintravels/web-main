@@ -92,6 +92,9 @@ body{margin:0;background:#E0D6C2;-webkit-font-smoothing:antialiased;}
 #dash-root .tt-nav.on{color:#F6ECE2; font-weight:600; background:linear-gradient(150deg,var(--tt-terra-2),var(--tt-terra));
   box-shadow:0 1px 1px rgba(255,255,255,.18) inset, var(--tt-sh);}
 #dash-root .tt-nav.on svg{opacity:1;}
+#dash-root .tt-logout{margin-top:18px; color:var(--tt-bad); text-decoration:none;}
+#dash-root .tt-logout svg{opacity:.85;}
+#dash-root .tt-logout:hover{background:var(--tt-bad-tint); color:var(--tt-bad);}
 /* ---- main ---- */
 #dash-root .tt-main{flex:1 1 auto; min-width:0; padding:22px 24px 30px;}
 #dash-root .tt-head{display:flex; align-items:flex-end; justify-content:space-between; gap:18px; flex-wrap:wrap; margin-bottom:22px;}
@@ -112,7 +115,7 @@ body{margin:0;background:#E0D6C2;-webkit-font-smoothing:antialiased;}
 #dash-root .tt-group h3{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--tt-muted); font-weight:650; margin:0; white-space:nowrap;}
 #dash-root .tt-group .rule{height:1px; background:var(--tt-line); flex:1;}
 /* ---- KPI primary ---- */
-#dash-root .tt-primes{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+#dash-root .tt-primes{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
 #dash-root .tt-prime{position:relative; background:var(--tt-paper); border:1px solid var(--tt-line); border-radius:var(--tt-r);
   padding:16px 16px 14px; box-shadow:var(--tt-sh); overflow:hidden; transition:box-shadow .18s, transform .18s;}
 #dash-root .tt-prime:hover{box-shadow:var(--tt-sh-lift); transform:translateY(-1px);}
@@ -321,7 +324,7 @@ body{margin:0;background:#E0D6C2;-webkit-font-smoothing:antialiased;}
   #dash-root .tt-row{grid-template-columns:1fr;}
 }
 @media (max-width:640px){
-  #dash-root .tt-primes{grid-template-columns:1fr 1fr;} #dash-root .tt-primes .tt-prime:nth-child(3){grid-column:1 / -1;}
+  #dash-root .tt-primes{grid-template-columns:1fr 1fr;}
   #dash-root .tt-stats{grid-template-columns:1fr 1fr;} #dash-root .tt-main{padding:18px 15px 24px;} #dash-root .tt-h1{font-size:25px;}
   #dash-root .tt-aitem{flex-wrap:wrap;} #dash-root .tt-atag{order:3;} #dash-root .tt-aact{order:4; margin-left:auto;}
 }

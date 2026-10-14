@@ -2,6 +2,12 @@ name = "enquiry-notifier"
 main = "src/index.js"
 compatibility_date = "2026-08-01"
 
+# Admin subdomain: this Worker answers /admin/* on admin.trippintravels.in;
+# the Pages project serves everything else on that host (the SPA).
+routes = [
+  { pattern = "admin.trippintravels.in/admin/*", zone_name = "trippintravels.in" }
+]
+
 # Plain config — safe to commit. Secrets never live here; see README.
 [vars]
 # The Worker rejects any Origin not listed here. The localhost entries let you

@@ -1,6 +1,7 @@
 // Pure data layer for the dashboard — turns raw API rows into the `D` object
 // the design's build/draw functions already consume. No DOM, no network here,
 // so it is unit-testable on its own.
+import { fullPaidMonth } from './settlelib.js';  // monthly revenue is cash-basis, aligned with the settlement engine
 
 const D0 = () => { const t = new Date(); t.setHours(0,0,0,0); return t; };
 const days = (s) => { if (!s) return null; const t = D0(); return Math.ceil((new Date(String(s).slice(0,10)) - t) / 864e5); };
@@ -56,16 +57,35 @@ export function computeD(d) {
   standaloneLive.forEach(c => { const a = carAmount(c); if (a == null) return; const pend = a - (paidC[c.id]||0); if (pend > 0) { pendingTotal += pend; pendingCount++; } });
 
   // ---- monthly revenue (last 6 months, in lakhs) ----
+  // Cash-basis & collection-month, aligned with settlelib: a booking's gross+net is
+  // recognised in the month it becomes FULLY PAID (travel net folds in its linked
+  // car net → the car pot side), and a cancellation reverses it in ym(cancelled_at).
   const months = []; for (let i = 5; i >= 0; i--) { const dt = new Date(t.getFullYear(), t.getMonth()-i, 1); months.push({ key: dt.toISOString().slice(0,7), label: MON[dt.getMonth()] }); }
   const grossByMonth = {}, netByMonth = {}; months.forEach(m => { grossByMonth[m.key] = 0; netByMonth[m.key] = 0; });
-  const bMonth = (b) => ym(b.start_date) || ym(dpart(b.created_at));
-  travelLive.forEach(b => { const k = bMonth(b); if (k in grossByMonth) { grossByMonth[k] += travelAmt(b); netByMonth[k] += travelNet(b); } });
-  standaloneLive.forEach(c => { const k = bMonth(c); if (k in grossByMonth) { const a = carAmount(c)||0; grossByMonth[k] += a; netByMonth[k] += carNet(c); } });
+  const bookDate = (b) => b.end_date || b.start_date || dpart(b.created_at);
+  const payTList = {}, payCList = {};
+  payments.forEach(p => { if (p.travel_booking_id != null) (payTList[p.travel_booking_id] = payTList[p.travel_booking_id] || []).push(p);
+                          if (p.car_booking_id != null) (payCList[p.car_booking_id] = payCList[p.car_booking_id] || []).push(p); });
+  const addRev = (k, g, n) => { if (k in grossByMonth) { grossByMonth[k] += g; netByMonth[k] += n; } };
+  travel.forEach(b => {
+    const fp = fullPaidMonth(travelAmt(b), bookDate(b), payTList[b.id] || []);
+    const lc = linkedCar[b.id], g = travelAmt(b), n = travelNet(b) + (lc ? (carNet(lc) || 0) : 0);
+    if (fp) addRev(fp, g, n);
+    if (b.cancelled && b.cancelled_at && fp) addRev(ym(b.cancelled_at), -g, -n);  // reverse the refund
+  });
+  standalone.forEach(c => {
+    const a = carAmount(c), fp = fullPaidMonth(a, bookDate(c), payCList[c.id] || []), g = a || 0, n = carNet(c) || 0;
+    if (fp) addRev(fp, g, n);
+    if (c.cancelled && c.cancelled_at && fp) addRev(ym(c.cancelled_at), -g, -n);
+  });
   const revGross = months.map(m => +(grossByMonth[m.key]/1e5).toFixed(2));
   const curKey = months[months.length-1].key, prevKey = months[months.length-2].key;
   const revNet = +(netByMonth[curKey]/1e5).toFixed(2);
   const grossCur = grossByMonth[curKey], grossPrev = grossByMonth[prevKey];
   const revDelta = grossPrev > 0 ? Math.round((grossCur-grossPrev)/grossPrev*100) : (grossCur > 0 ? 100 : 0);
+  const netCur = netByMonth[curKey], netPrev = netByMonth[prevKey];
+  const netDelta = netPrev > 0 ? Math.round((netCur-netPrev)/netPrev*100) : (netCur > 0 ? 100 : 0);
+  const revNetSeries = months.map(m => +(netByMonth[m.key]/1e5).toFixed(2));
 
   // ---- weekly trend (last 8 weeks, by created_at) ----
   const wb = (items) => { const counts = new Array(8).fill(0);
@@ -81,6 +101,7 @@ export function computeD(d) {
     Object.assign({ ic:'travel', cls:'terra', label:'Travel bookings', value:String(travel.length), sub:'all time', dlabel:'vs last week', series: trTravel }, dlt(trTravel)),
     Object.assign({ ic:'car', cls:'sky', label:'Car bookings', value:String(car.length), sub:'incl. '+travelLinkedN+' travel-linked', dlabel:'vs last week', series: trCar }, dlt(trCar)),
     { ic:'rev', cls:'gold', label:'Revenue', value: moneyShort(grossCur), sub: MON[t.getMonth()]+' · gross', delta:(revDelta>=0?'+':'')+revDelta+'%', dir: revDelta>0?'up':revDelta<0?'down':'flat', dlabel:'vs last month', series: revGross },
+    { ic:'rev', cls:'olive', label:'Net profit', value: moneyShort(netCur), sub: MON[t.getMonth()]+' · net', delta:(netDelta>=0?'+':'')+netDelta+'%', dir: netDelta>0?'up':netDelta<0?'down':'flat', dlabel:'vs last month', series: revNetSeries },
   ];
 
   // ---- stats ----

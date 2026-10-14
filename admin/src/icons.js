@@ -18,5 +18,6 @@ export const I = {
   plus:'<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>',
   edit:'<path d="M4 20h4L18.5 9.5a2 2 0 0 0-3-3L5 17v3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
   trash:'<path d="M5 7h14M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M7 7l1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  logout:'<path d="M14 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 16l-4-4 4-4M5 12h10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
 };
 export const svg = (p, cls) => '<svg viewBox="0 0 24 24" class="' + (cls || '') + '">' + p + '</svg>';

@@ -93,7 +93,7 @@ var root = document.getElementById('dash-root'); if(!root) return;
     var last=pts[pts.length-1].split(',');
     return '<svg class="tt-spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="'+last[0]+'" cy="'+last[1]+'" r="1.9" fill="'+color+'"/></svg>';
   }
-  var sparkColor={terra:'#9D5636',sky:'#5B6F82',gold:'#B58A4E'};
+  var sparkColor={terra:'#9D5636',sky:'#5B6F82',gold:'#B58A4E',olive:'#5F7A37'};
 
   function buildPrimes(){
     $('primes').innerHTML = D.primes.map(function(m){

@@ -1,5 +1,6 @@
 // App shell: persistent top bar + sidebar, client-side routing, mobile drawer.
 import { I, svg } from './icons.js';
+import { get } from './api.js';
 import { renderDashboard } from './dashboard.js';
 import { renderPartners } from './partners.js';
 import { renderCars } from './cars.js';
@@ -35,15 +36,39 @@ const NAV = [
 const SCREENS = { dashboard: renderDashboard, partners: renderPartners, cars: renderCars, drivers: renderDrivers, carb: renderCarBookings, travel: renderTravelBookings, payments: renderPayments, expenses: renderExpenses, settlements: renderSettlements };
 let current = 'dashboard';
 
+const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// Signed-in account shown in the sidebar. Default (dev / no match) = Administrator;
+// in production (behind Cloudflare Access) we resolve the real partner by email.
+const acct = { name: 'Administrator', initial: 'A', sub: import.meta.env.DEV ? 'signed in (dev)' : 'signed in' };
+
+// In prod, Cloudflare Access exposes the logged-in email at /cdn-cgi/access/get-identity.
+// Match it to a partner and show their first name; fall back to Administrator.
+async function resolveAccount(){
+  if (import.meta.env.DEV) return;                       // no Access locally — keep the default
+  try {
+    const res = await fetch('/cdn-cgi/access/get-identity', { credentials: 'include' });
+    if (!res.ok) return;
+    const id = await res.json();
+    const email = ((id && id.email) || '').trim().toLowerCase();
+    if (!email) return;
+    const users = (await get('users')).data || [];
+    const u = users.find(x => (x.email || '').trim().toLowerCase() === email);
+    const first = u && u.name ? u.name.trim().split(/\s+/)[0] : '';
+    if (first) { acct.name = first; acct.initial = first.charAt(0).toUpperCase(); buildSidebar(); }
+  } catch (_) { /* keep the default */ }
+}
+
 function buildSidebar(){
   const side = document.getElementById('tt-side'); if (!side) return;
-  let h = '<div class="tt-acct"><div class="av">A</div><div><div class="nm">Administrator</div><div class="sub">signed in (dev)</div></div></div>';
+  let h = '<div class="tt-acct"><div class="av">' + esc(acct.initial) + '</div><div><div class="nm">' + esc(acct.name) + '</div><div class="sub">' + esc(acct.sub) + '</div></div></div>';
   NAV.forEach(g => {
     h += '<div class="tt-navsec">' + g.sec + '</div>';
     g.items.forEach(it => {
       h += '<div class="tt-nav' + (it.k === current ? ' on' : '') + '" data-screen="' + it.k + '">' + svg(I[it.ic]) + '<span>' + it.label + '</span></div>';
     });
   });
+  // Cloudflare Access logout — clears the Zero-Trust session (prod only)
+  h += '<a class="tt-nav tt-logout" href="/cdn-cgi/access/logout">' + svg(I.logout) + '<span>Log out</span></a>';
   side.innerHTML = h;
   side.querySelectorAll('[data-screen]').forEach(el =>
     el.addEventListener('click', () => { navigate(el.getAttribute('data-screen')); closeMenu(); }));
@@ -76,5 +101,6 @@ export function initApp(){
   const sc = document.getElementById('tt-scrim'); if (sc) sc.addEventListener('click', closeMenu);
   // screens (e.g. dashboard action links) request navigation via a tt-nav event
   document.addEventListener('tt-nav', (e) => { const k = e.detail; if (k && NAV.some(g => g.items.some(it => it.k === k))) { navigate(k); closeMenu(); } });
+  resolveAccount();   // prod: swap "Administrator" for the signed-in partner's first name
   navigate('dashboard');
 }

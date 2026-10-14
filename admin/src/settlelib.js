@@ -60,44 +60,49 @@ export function computeSettlement(data, month){
   const per = {}; const ensure = (uid) => (per[uid] = per[uid] || { travel: 0, car: 0, reimburse: 0 });
   const pools = { travelNet: 0, carNet: 0, travelExp: 0, carExp: 0, reimburse: 0 };
   const blockers = [], detail = [];
-  // add `amount` (may be negative) to a pot, split among `members`, seeded by `seed`
-  function addPool(agg, amount, members, seed){
+  // split `net` among `members` (seeded), then add sign*share per partner. Reverse
+  // (sign −1) is the EXACT element-wise negation of recognize (sign +1): same net,
+  // members and seed → a same-month recognize+reverse nets to exactly 0 per partner.
+  function addPool(agg, net, members, seed, sign){
     if (!members) return false;
-    const d = distribute(amount, members, seed);
-    for (const uid in d) ensure(uid)[agg] += d[uid];
+    const d = distribute(net, members, seed);
+    for (const uid in d) ensure(uid)[agg] += sign * d[uid];
     return true;
   }
 
   // ---- travel bookings (+ their linked car) ----
+  // Two independent events: +net in the full-paid month, −net in the cancel month.
+  // When both fall in the same month they both fire and net to 0 (fixes A1).
   travel.forEach(b => {
     const date = bookDate(b), net = travelNet(b);
     const fp = fullPaidMonth(travelGross(b), date, payT[b.id] || []);
     const lc = linkedCar[b.id], cNet = lc ? carNet(lc) : null;
-    const recognizeHere = fp === month, reverseHere = b.cancelled && ym(b.cancelled_at) === month && fp != null;
-    if (recognizeHere || reverseHere) {
-      const sign = recognizeHere ? 1 : -1;
-      const tm = resolveMembers(versions, 'travel', date);
-      if (!tm) blockers.push({ kind: 'no-version', ref: b.display_id, reason: 'no travel split version at ' + date });
-      else { addPool('travel', sign * net, tm, b.id); pools.travelNet += sign * net; detail.push({ ref: b.display_id, pool: 'travel', net: sign * net, kind: recognizeHere ? 'recognize' : 'reverse' }); }
-      if (lc && cNet != null) {
-        const cm = resolveMembers(versions, 'car', date);
-        if (!cm) blockers.push({ kind: 'no-version', ref: b.display_id + ' (car)', reason: 'no car split version at ' + date });
-        else { addPool('car', sign * cNet, cm, lc.id); pools.carNet += sign * cNet; detail.push({ ref: b.display_id + ' (car)', pool: 'car', net: sign * cNet, kind: recognizeHere ? 'recognize' : 'reverse' }); }
-      }
+    const signs = [];
+    if (fp === month) signs.push(1);                                              // recognize
+    if (b.cancelled && ym(b.cancelled_at) === month && fp != null) signs.push(-1); // reverse
+    if (!signs.length) return;
+    const tm = resolveMembers(versions, 'travel', date);
+    if (!tm) blockers.push({ kind: 'no-version', ref: b.display_id, reason: 'no travel split version at ' + date });
+    else for (const sign of signs) { addPool('travel', net, tm, b.id, sign); pools.travelNet += sign * net; detail.push({ ref: b.display_id, pool: 'travel', net: sign * net, kind: sign > 0 ? 'recognize' : 'reverse' }); }
+    if (lc && cNet != null) {
+      const cm = resolveMembers(versions, 'car', date);
+      if (!cm) blockers.push({ kind: 'no-version', ref: b.display_id + ' (car)', reason: 'no car split version at ' + date });
+      else for (const sign of signs) { addPool('car', cNet, cm, lc.id, sign); pools.carNet += sign * cNet; detail.push({ ref: b.display_id + ' (car)', pool: 'car', net: sign * cNet, kind: sign > 0 ? 'recognize' : 'reverse' }); }
     }
   });
 
   // ---- standalone car bookings ----
   car.filter(c => c.origin === 'standalone').forEach(c => {
     const date = bookDate(c), net = carNet(c);
+    if (net == null) return;
     const fp = fullPaidMonth(carAmount(c), date, payC[c.id] || []);
-    const recognizeHere = fp === month, reverseHere = c.cancelled && ym(c.cancelled_at) === month && fp != null;
-    if ((recognizeHere || reverseHere) && net != null) {
-      const sign = recognizeHere ? 1 : -1;
-      const cm = resolveMembers(versions, 'car', date);
-      if (!cm) blockers.push({ kind: 'no-version', ref: c.display_id, reason: 'no car split version at ' + date });
-      else { addPool('car', sign * net, cm, c.id); pools.carNet += sign * net; detail.push({ ref: c.display_id, pool: 'car', net: sign * net, kind: recognizeHere ? 'recognize' : 'reverse' }); }
-    }
+    const signs = [];
+    if (fp === month) signs.push(1);
+    if (c.cancelled && ym(c.cancelled_at) === month && fp != null) signs.push(-1);
+    if (!signs.length) return;
+    const cm = resolveMembers(versions, 'car', date);
+    if (!cm) blockers.push({ kind: 'no-version', ref: c.display_id, reason: 'no car split version at ' + date });
+    else for (const sign of signs) { addPool('car', net, cm, c.id, sign); pools.carNet += sign * net; detail.push({ ref: c.display_id, pool: 'car', net: sign * net, kind: sign > 0 ? 'recognize' : 'reverse' }); }
   });
 
   // ---- expenses dated in the month ----
@@ -106,7 +111,7 @@ export function computeSettlement(data, month){
     const stream = e.category === 'agency' ? 'travel' : 'car', amt = num(e.amount) || 0;
     const members = resolveMembers(versions, stream, e.date);
     if (!members) blockers.push({ kind: 'no-version', ref: 'expense #' + e.id, reason: 'no ' + stream + ' split version at ' + e.date });
-    else { addPool(stream, -amt, members, e.id); if (stream === 'travel') pools.travelExp += amt; else pools.carExp += amt; }
+    else { addPool(stream, amt, members, e.id, -1); if (stream === 'travel') pools.travelExp += amt; else pools.carExp += amt; }
     if (e.paid_by_user_id != null) { ensure(e.paid_by_user_id).reimburse += amt; pools.reimburse += amt; }
     detail.push({ ref: 'expense #' + e.id, pool: stream, net: -amt, kind: 'expense', reimburse: amt });
   });
