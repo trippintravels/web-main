@@ -16,3 +16,13 @@ MAIL_FROM = "Trippin' Travels <hey@trippintravels.in>"
 [[kv_namespaces]]
 binding = "RATE_LIMIT"
 id = "04ff276c9128439895afb04aaeec44d3"
+
+
+[[d1_databases]]
+binding       = "DB"
+database_name = "trippin-admin"
+database_id   = "e7a67de7-9ff7-46c6-b73d-5b948ede5198"
+
+[[r2_buckets]]
+binding     = "DOCS"
+bucket_name = "trippin-docs"
