@@ -4,7 +4,7 @@ The public marketing site for **Trippin' Travels**, a bespoke travel + car-renta
 operator in **North Bengal / the Eastern Himalaya**, aimed at a Gen-Z / Gen-Alpha
 audience. It's a single-page React/Vite app served at **`trippintravels.in`** — a
 browsable showcase of regions, zones and offbeat hamlets, an "our story" page, and an
-enquiry drawer that relays leads to WhatsApp.
+enquiry drawer that emails leads (and stores them for the admin team).
 
 > This README covers the **public site only** (the repo root / `src/`). The internal
 > **admin app** (`admin/`) and the **Worker's admin API** are documented separately in
@@ -21,8 +21,9 @@ enquiry drawer that relays leads to WhatsApp.
 - **Routing:** **hash-based** (`#/…`) so it's GitHub-Pages-safe (no server rewrites)
   and still deep-linkable.
 - **Enquiry backend:** a Cloudflare **Worker** (`enquiry-notifier`) receives form
-  submissions and relays them to WhatsApp. Its source lives in `worker/` (see also
-  `admin/README.md`, which shares that Worker for the admin API).
+  submissions, **emails** them (Resend) and **stores** them in D1 for the admin
+  **Enquiries** screen. Its source lives in `worker/` (see also `admin/README.md`,
+  which shares that Worker for the admin API).
 
 ---
 
@@ -118,7 +119,11 @@ Content is data-driven so copy/photos swap without touching components:
 
 ## 6. Enquiry flow (`lib/sendEnquiry.js`)
 
-The enquiry form posts to the notifier Worker, which relays the lead to WhatsApp.
+The enquiry form posts to the notifier Worker, which **emails the lead** (via Resend) to
+`hey@trippintravels.in` and, since migration 0008, **stores every valid enquiry in D1**
+(the `enquiries` table) so none is lost and the team can triage them on the admin
+**Enquiries** screen. Persistence is insert-first (independent of the email), and the
+email flow / response below are unchanged. See `admin/README.md` for the Worker side.
 
 - **Request:** `POST <VITE_NOTIFIER_URL>` with `content-type: application/json` and
   `x-api-key: <VITE_NOTIFIER_KEY>`; body `{ name, phone, email, intent, where, message }`

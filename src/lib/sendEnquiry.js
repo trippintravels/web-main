@@ -1,4 +1,4 @@
-// Posts an enquiry to the notifier Worker, which relays it to WhatsApp.
+// Posts an enquiry to the notifier Worker, which emails it (Resend) and stores it in D1.
 //
 // ---- Worker contract ----------------------------------------------------
 //   POST  <VITE_NOTIFIER_URL>

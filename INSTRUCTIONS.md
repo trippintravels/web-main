@@ -187,7 +187,7 @@ sections, and neither fails loudly:
 Built and working: landing page, our story, three region pages (north bengal,
 sikkim, dooars) with zone pages under each, offbeat & unexplored end to end
 (level-2 field map + register, and a level-3 page for each of the 19 hamlets),
-the enquiry form end-to-end (Turnstile → Worker → Resend → inbox).
+the enquiry form end-to-end (Turnstile → Worker → Resend → inbox, and stored in D1 for the admin Enquiries screen).
 
 ### Open
 

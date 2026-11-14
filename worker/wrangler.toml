@@ -2,6 +2,11 @@ name = "enquiry-notifier"
 main = "src/index.js"
 compatibility_date = "2026-08-01"
 
+# Keep the workers.dev subdomain (enquiry-notifier.hey-fdf.workers.dev) enabled.
+# Local admin dev proxies /admin to it via VITE_API_BASE, so a deploy must NOT
+# disable it. Without this flag `wrangler deploy` turns workers.dev OFF by default.
+workers_dev = true
+
 # Admin subdomain: this Worker answers /admin/* on admin.trippintravels.in;
 # the Pages project serves everything else on that host (the SPA).
 routes = [
