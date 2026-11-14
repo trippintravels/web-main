@@ -64,7 +64,7 @@ export function renderPayments(main){
       '<div class="tt-fgrid">' +
         '<label class="tt-field"><span>Against</span><select data-pf="type"><option value="travel"' + (f.type !== 'car' ? ' selected' : '') + '>Travel booking</option><option value="car"' + (f.type === 'car' ? ' selected' : '') + '>Car booking</option></select></label>' +
         '<label class="tt-field"><span>Booking</span><select data-pf="booking_id">' + bookingOptions(f.type, f.booking_id) + '</select></label>' +
-        '<label class="tt-field"><span>Amount</span><input type="number" min="0" step="1" data-pf="amount" value="' + esc(f.amount == null ? '' : f.amount) + '" placeholder="₹"></label>' +
+        '<label class="tt-field"><span>Amount</span><input type="number" min="0" step="1" inputmode="numeric" data-pf="amount" value="' + esc(f.amount == null ? '' : f.amount) + '" placeholder="₹"></label>' +
         '<label class="tt-field"><span>Received on</span><input type="date" data-pf="received_on" value="' + esc(f.received_on || today()) + '"></label>' +
         '<label class="tt-field"><span>Note</span><input type="text" data-pf="note" value="' + esc(f.note || '') + '" placeholder="e.g. advance, UPI"></label>' +
       '</div>' +
@@ -156,6 +156,7 @@ export function renderPayments(main){
     const f = state.form, err = main.querySelector('#pm-ferr'); err.textContent = '';
     if (!f.booking_id) { err.textContent = 'Pick a booking.'; return; }
     if (num(f.amount) == null || num(f.amount) <= 0) { err.textContent = 'Enter an amount greater than zero.'; return; }
+    if (!Number.isInteger(num(f.amount))) { err.textContent = 'Enter a whole rupee amount — no decimals.'; return; }
     if (!f.received_on) { err.textContent = 'Pick the received date.'; return; }
     const payload = { amount: num(f.amount), received_on: f.received_on, note: (f.note || '').trim() || null };
     if (f.type === 'car') payload.car_booking_id = Number(f.booking_id); else payload.travel_booking_id = Number(f.booking_id);

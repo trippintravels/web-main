@@ -39,7 +39,7 @@ const DASH_MAIN = `
           <div class="tt-cardhd"><h2>Bookings</h2><span class="meta">Last 8 weeks</span></div>
           <div class="tt-legend">
             <span><i style="background:var(--tt-terra)"></i>Travel</span>
-            <span><i style="background:var(--tt-olive)"></i>Car</span>
+            <span><i style="background:var(--tt-sky)"></i>Car</span>
           </div>
           <div class="tt-chartwrap" id="bk-wrap">
             <svg id="bk-chart" width="100%" viewBox="0 0 660 230" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Weekly bookings"></svg>
@@ -93,7 +93,7 @@ var root = document.getElementById('dash-root'); if(!root) return;
     var last=pts[pts.length-1].split(',');
     return '<svg class="tt-spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="'+last[0]+'" cy="'+last[1]+'" r="1.9" fill="'+color+'"/></svg>';
   }
-  var sparkColor={terra:'#9D5636',sky:'#5B6F82',gold:'#B58A4E',olive:'#5F7A37'};
+  var sparkColor={terra:'#2563C9',sky:'#0EA5A5',gold:'#D9961F',olive:'#1EA86A'};
 
   function buildPrimes(){
     $('primes').innerHTML = D.primes.map(function(m){
@@ -246,12 +246,12 @@ var root = document.getElementById('dash-root'); if(!root) return;
     var ymax=Math.max(5, Math.ceil(Math.max.apply(null,d.travel.concat(d.car))/5)*5), iw=W-L-R, ih=H-T-B, band=iw/n, bw=Math.min(24,band*0.5), gap=3;
     function y(v){ return T+ih-(v/ymax)*ih; }
     var g='';
-    for(var t=0;t<=ymax;t+=ymax/4){ var yy=y(t); g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'" stroke="#E2D9C7"/>'+'<text x="'+(L-8)+'" y="'+(yy+3.5).toFixed(1)+'" text-anchor="end" font-size="10" fill="#A99A84">'+t+'</text>'; }
+    for(var t=0;t<=ymax;t+=ymax/4){ var yy=y(t); g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'" stroke="#E3E9F3"/>'+'<text x="'+(L-8)+'" y="'+(yy+3.5).toFixed(1)+'" text-anchor="end" font-size="10" fill="#9AA3B4">'+t+'</text>'; }
     for(var i=0;i<n;i++){
       var cx=L+band*i+band/2, x1=cx-bw-gap/2, x2=cx+gap/2, tv=d.travel[i], cv=d.car[i];
-      g+='<rect class="tt-bar" data-i="'+i+'" x="'+x1.toFixed(1)+'" y="'+y(tv).toFixed(1)+'" width="'+bw+'" height="'+(ih-(y(tv)-T)).toFixed(1)+'" rx="3" fill="#9D5636"/>';
-      g+='<rect class="tt-bar" data-i="'+i+'" x="'+x2.toFixed(1)+'" y="'+y(cv).toFixed(1)+'" width="'+bw+'" height="'+(ih-(y(cv)-T)).toFixed(1)+'" rx="3" fill="#5F7A37"/>';
-      g+='<text x="'+cx.toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle" font-size="10" fill="#8C7C66">'+d.labels[i]+'</text>';
+      g+='<rect class="tt-bar" data-i="'+i+'" x="'+x1.toFixed(1)+'" y="'+y(tv).toFixed(1)+'" width="'+bw+'" height="'+(ih-(y(tv)-T)).toFixed(1)+'" rx="3" fill="#2563C9"/>';
+      g+='<rect class="tt-bar" data-i="'+i+'" x="'+x2.toFixed(1)+'" y="'+y(cv).toFixed(1)+'" width="'+bw+'" height="'+(ih-(y(cv)-T)).toFixed(1)+'" rx="3" fill="#0EA5A5"/>';
+      g+='<text x="'+cx.toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle" font-size="10" fill="#6B7689">'+d.labels[i]+'</text>';
       g+='<rect class="tt-hz" data-i="'+i+'" x="'+(L+band*i).toFixed(1)+'" y="'+T+'" width="'+band.toFixed(1)+'" height="'+ih+'" fill="transparent"/>';
     }
     el.innerHTML=g;
@@ -264,11 +264,11 @@ var root = document.getElementById('dash-root'); if(!root) return;
     var ymax=Math.max(1, Math.ceil(Math.max.apply(null,d.gross))), iw=W-L-R, ih=H-T-B, band=iw/n, bw=Math.min(30,band*0.56);
     function y(v){ return T+ih-(v/ymax)*ih; }
     var g='';
-    for(var t=0;t<=ymax;t+=ymax/3){ var yy=y(t); g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'" stroke="#E2D9C7"/>'+'<text x="'+(L-7)+'" y="'+(yy+3.5).toFixed(1)+'" text-anchor="end" font-size="9.5" fill="#A99A84">'+(Math.round(t*100)/100)+'L</text>'; }
+    for(var t=0;t<=ymax;t+=ymax/3){ var yy=y(t); g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'" stroke="#E3E9F3"/>'+'<text x="'+(L-7)+'" y="'+(yy+3.5).toFixed(1)+'" text-anchor="end" font-size="9.5" fill="#9AA3B4">'+(Math.round(t*100)/100)+'L</text>'; }
     for(var i=0;i<n;i++){
       var cx=L+band*i+band/2, x=cx-bw/2, last=(i===n-1);
-      g+='<rect class="tt-bar" data-i="'+i+'" x="'+x.toFixed(1)+'" y="'+y(d.gross[i]).toFixed(1)+'" width="'+bw+'" height="'+(ih-(y(d.gross[i])-T)).toFixed(1)+'" rx="3" fill="'+(last?'#9D5636':'#D9C9AE')+'"/>';
-      g+='<text x="'+cx.toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="9.5" fill="#8C7C66">'+d.labels[i]+'</text>';
+      g+='<rect class="tt-bar" data-i="'+i+'" x="'+x.toFixed(1)+'" y="'+y(d.gross[i]).toFixed(1)+'" width="'+bw+'" height="'+(ih-(y(d.gross[i])-T)).toFixed(1)+'" rx="3" fill="'+(last?'#2563C9':'#CBD8EE')+'"/>';
+      g+='<text x="'+cx.toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="9.5" fill="#6B7689">'+d.labels[i]+'</text>';
       g+='<rect class="tt-hz" data-i="'+i+'" x="'+(L+band*i).toFixed(1)+'" y="'+T+'" width="'+band.toFixed(1)+'" height="'+ih+'" fill="transparent"/>';
     }
     el.innerHTML=g;

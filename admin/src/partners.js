@@ -6,6 +6,16 @@ import { I, svg } from './icons.js';
 
 const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const today = () => new Date().toISOString().slice(0, 10);
+// shared field validators (phone = 10 digits; email = a basic shape) — DB keeps both as TEXT,
+// these are UI rules. Live-stripping [data-phone] inputs keeps them digits-only as typed.
+const DIGITS10 = /^\d{10}$/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function wirePhoneInputs(main){
+  main.querySelectorAll('[data-phone]').forEach(el => el.addEventListener('input', () => {
+    const d = el.value.replace(/\D/g, '').slice(0, 15);
+    if (el.value !== d) el.value = d;
+  }));
+}
 
 export function renderPartners(main){
   const state = { rows: null, splits: null, err: null, form: null, splitForm: null };
@@ -26,12 +36,12 @@ export function renderPartners(main){
   }
 
   // ---------- partner add/edit ----------
-  function field(label, name, val, type){
-    return '<label class="tt-field"><span>' + label + '</span><input type="' + type + '" data-f="' + name + '" value="' + esc(val || '') + '"></label>';
+  function field(label, name, val, type, attrs){
+    return '<label class="tt-field"><span>' + label + '</span><input type="' + type + '" data-f="' + name + '" value="' + esc(val || '') + '"' + (attrs ? ' ' + attrs : '') + '></label>';
   }
   function partnerForm(f){
     return '<div class="tt-card" style="margin:4px 0 14px;"><div class="tt-cardhd"><h2>' + (f.id ? 'Edit partner' : 'New partner') + '</h2></div>' +
-      '<div class="tt-fgrid">' + field('Name','name',f.name,'text') + field('Email','email',f.email,'email') + field('Phone','phone',f.phone,'text') + '</div>' +
+      '<div class="tt-fgrid">' + field('Name','name',f.name,'text') + field('Email','email',f.email,'email') + field('Phone','phone',f.phone,'text','inputmode="numeric" data-phone placeholder="10-digit mobile"') + '</div>' +
       '<div class="tt-ferr" id="p-ferr"></div>' +
       '<div class="tt-factions"><button class="tt-btn ghost" id="p-cancel">Cancel</button>' +
       '<button class="tt-btn prim" id="p-save">' + (f.id ? 'Save changes' : 'Add partner') + '</button></div></div>';
@@ -121,6 +131,7 @@ export function renderPartners(main){
     const add = q('#p-add'); if (add) add.addEventListener('click', () => { state.form = { name:'', email:'', phone:'' }; render(); });
     const cancel = q('#p-cancel'); if (cancel) cancel.addEventListener('click', () => { state.form = null; render(); });
     const save = q('#p-save'); if (save) save.addEventListener('click', doSave);
+    wirePhoneInputs(main);
     main.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => {
       const u = state.rows.find(x => String(x.id) === b.getAttribute('data-edit'));
       state.form = { id: u.id, name: u.name, email: u.email, phone: u.phone || '' }; render();
@@ -138,6 +149,8 @@ export function renderPartners(main){
     const ferr = main.querySelector('#p-ferr');
     if (!o.name)  { ferr.textContent = 'Name is required.'; return; }
     if (!o.email) { ferr.textContent = 'Email is required.'; return; }
+    if (!EMAIL_RE.test(o.email)) { ferr.textContent = 'Enter a valid email address.'; return; }
+    if (o.phone && !DIGITS10.test(o.phone)) { ferr.textContent = 'Phone must be a 10-digit number.'; return; }
     const id = state.form.id, btn = main.querySelector('#p-save');
     if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
     (id ? patch('users/' + id, o) : post('users', o))

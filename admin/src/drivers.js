@@ -7,6 +7,14 @@ import { I, svg } from './icons.js';
 
 const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const daysUntil = (d) => { if (!d) return null; const t = new Date(); t.setHours(0,0,0,0); return Math.ceil((new Date(d) - t) / 864e5); };
+// contact = 10 digits (DB keeps it TEXT; this is a UI rule). [data-phone] inputs strip non-digits live.
+const DIGITS10 = /^\d{10}$/;
+function wirePhoneInputs(main){
+  main.querySelectorAll('[data-phone]').forEach(el => el.addEventListener('input', () => {
+    const d = el.value.replace(/\D/g, '').slice(0, 15);
+    if (el.value !== d) el.value = d;
+  }));
+}
 const IC = {
   upload: '<path d="M12 15V4M8 8l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 15v2.5A1.5 1.5 0 0 0 6.5 19h11a1.5 1.5 0 0 0 1.5-1.5V15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
   eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.7"/>',
@@ -35,8 +43,8 @@ export function renderDrivers(main){
   }
 
   // ---------- add/edit form (fields + two document rows) ----------
-  function field(label, name, val, type, ph){
-    return '<label class="tt-field"><span>' + label + '</span><input type="' + type + '" data-f="' + name + '" value="' + esc(val || '') + '"' + (ph ? ' placeholder="' + esc(ph) + '"' : '') + '></label>';
+  function field(label, name, val, type, ph, attrs){
+    return '<label class="tt-field"><span>' + label + '</span><input type="' + type + '" data-f="' + name + '" value="' + esc(val || '') + '"' + (ph ? ' placeholder="' + esc(ph) + '"' : '') + (attrs ? ' ' + attrs : '') + '></label>';
   }
   function statusChip(token, hasDoc){
     const pend = state.pf[token];
@@ -67,7 +75,7 @@ export function renderDrivers(main){
     return '<div class="tt-card" style="margin:4px 0 14px;"><div class="tt-cardhd"><h2>' + (f.id ? 'Edit driver' : 'Add driver') + '</h2></div>' +
       '<div class="tt-fgrid">' +
         field('Name','name',f.name,'text','Full name') +
-        field('Contact','contact',f.contact,'text','Phone') +
+        field('Contact','contact',f.contact,'text','10-digit mobile','inputmode="numeric" data-phone') +
         field('Licence no.','licence_no',f.licence_no,'text','DL number') +
       '</div>' +
       '<div class="tt-group"><h3>Documents</h3><span class="rule"></span></div>' +
@@ -159,6 +167,7 @@ export function renderDrivers(main){
     const add = q('#d-add'); if (add) add.addEventListener('click', () => { state.form = { name:'', contact:'', licence_no:'' }; state.pf = {}; state.clear = {}; render(); });
     const cancel = q('#d-cancel'); if (cancel) cancel.addEventListener('click', () => { state.form = null; render(); });
     const save = q('#d-save'); if (save) save.addEventListener('click', doSave);
+    wirePhoneInputs(main);
     main.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => {
       const d = state.rows.find(x => String(x.id) === b.getAttribute('data-edit'));
       state.form = { id: d.id, name: d.name || '', contact: d.contact || '', licence_no: d.licence_no || '',
@@ -240,6 +249,8 @@ export function renderDrivers(main){
     const f = state.form, err = main.querySelector('#d-ferr'); err.textContent = '';
     const name = (f.name || '').trim();
     if (!name) { err.textContent = 'Name is required.'; return; }
+    const contact = (f.contact || '').trim();
+    if (contact && !DIGITS10.test(contact)) { err.textContent = 'Contact must be a 10-digit number.'; return; }
     const btn = main.querySelector('#d-save'); if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
     const base = {
       name, contact: (f.contact || '').trim() || null, licence_no: (f.licence_no || '').trim() || null,

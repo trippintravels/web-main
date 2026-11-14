@@ -24,7 +24,7 @@ const carAmount = (c) => {
   return c.flat_fare || 0;
 };
 const sevForDays = (n) => (n == null ? 'low' : n < 0 ? 'high' : n <= 7 ? 'high' : n <= 21 ? 'med' : 'low');
-const expTag = (n) => (n < 0 ? 'Expired ' + Math.abs(n) + 'd' : n + ' day' + (n === 1 ? '' : 's'));
+const expTag = (n) => (n < 0 ? 'Expired ' + Math.abs(n) + 'd' : 'Due in ' + n + ' day' + (n === 1 ? '' : 's'));
 
 export function computeD(d) {
   const travel = d.travel || [], car = d.car || [], cars = d.cars || [],

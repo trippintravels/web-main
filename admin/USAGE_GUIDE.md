@@ -93,10 +93,15 @@ The input fields in plain words:
 - **Booking amount** — total charged to the customer.
 - **Cost except car** — everything the trip pays out *other than* the car (hotels,
   entries, guides…).
-- **Car cost** — what the trip pays for the car. If you tick **"uses a fleet car"**,
-  this is money that moves to our **Car pot** (our own car earns it). If you **don't**
-  tick it, this is a car hired from **outside** — the money leaves the business and the
-  Car pot gets nothing (correct — it isn't our car).
+- **Car** — choose one of three (above the Money section):
+  - **Our own car** — a fleet car. Pick the car, driver, dates, route etc. The **Car
+    cost** you enter moves to our **Car pot** (our own car earns it).
+  - **External car** — a car hired from **outside**. Fill the **driver**, **car number**
+    and **contact**. The **Car cost** is paid to them — it leaves the business and the
+    Car pot gets nothing (correct — it isn't our car).
+  - **No car** — the trip has no car at all; the **Car cost** field disappears (saved as 0).
+- **Car cost** — what the trip pays for the car. Shown for *Our own car* and *External
+  car*, hidden for *No car*. (On *Our own car* it also fills the fleet car's "Flat fare".)
 - **Commission** — a cut paid to whoever referred the booking.
 - **Hotels** — you can add any number of hotel contacts for the trip.
 - **Total advance** (only when creating) — money taken up front; it's saved as a payment.
@@ -230,14 +235,14 @@ This is where each month's profit is divided. Pick a month with the dropdown / a
 1. **Travel bookings → New booking.**
 2. Fill customer details, dates, people, itinerary.
 3. Add any **Hotels** (name, location, contact) with **Add hotel**.
-4. **Money:** enter **Booking amount** (what the customer pays), **Cost except car**
-   (hotels/entries/etc.), **Car cost**, and **Commission**.
-5. **Using a car?**
-   - **Our own car:** tick **"uses a fleet car"**, then pick the car, driver, route and
-     enter **Toll** and **Driver cost**. The car's fare is automatically set to the
-     **Car cost** you typed.
-   - **An outside/hired car:** just leave **Car cost** filled and **don't** tick the
-     box — that money is treated as paid to an outside vendor.
+4. **Car — pick one** (above Money):
+   - **Our own car:** pick the car, driver, route and enter **Toll** and **Driver
+     cost**. The car's fare is automatically set to the **Car cost** you type below.
+   - **External car:** fill the **driver**, **car number** and **contact**. The **Car
+     cost** is treated as paid to that outside vendor.
+   - **No car:** nothing to fill; the Car cost field disappears.
+5. **Money:** enter **Booking amount** (what the customer pays), **Cost except car**
+   (hotels/entries/etc.), **Car cost** (unless *No car*), and **Commission**.
 6. Optionally enter a **Total advance** (saved as a payment).
 7. Check the five figures (Gross / Travel gross / Travel net / Car gross / Car net),
    then **Create booking**.

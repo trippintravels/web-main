@@ -8,6 +8,7 @@ import { renderDrivers } from './drivers.js';
 import { renderCarBookings } from './carbookings.js';
 import { renderTravelBookings } from './travelbookings.js';
 import { renderPayments } from './payments.js';
+import { renderEnquiries } from './enquiries.js';
 import { renderExpenses } from './expenses.js';
 import { renderSettlements } from './settlements.js';
 
@@ -28,12 +29,12 @@ export const SHELL_HTML = `<div class="tt">
 
 const NAV = [
   { sec:'Overview',       items:[{k:'dashboard', ic:'dash', label:'Dashboard'}] },
-  { sec:'Operations',     items:[{k:'travel', ic:'travel', label:'Travel bookings'},{k:'carb', ic:'car', label:'Car bookings'},{k:'payments', ic:'pay', label:'Payments'}] },
+  { sec:'Operations',     items:[{k:'enquiries', ic:'enquiry', label:'Enquiries'},{k:'travel', ic:'travel', label:'Travel bookings'},{k:'carb', ic:'car', label:'Car bookings'},{k:'payments', ic:'pay', label:'Payments'}] },
   { sec:'Fleet & people', items:[{k:'cars', ic:'fleet', label:'Cars'},{k:'drivers', ic:'driver', label:'Drivers'},{k:'partners', ic:'partners', label:'Partners'}] },
   { sec:'Finance',        items:[{k:'expenses', ic:'expense', label:'Expenses'},{k:'settlements', ic:'settle', label:'Settlements'}] },
 ];
 
-const SCREENS = { dashboard: renderDashboard, partners: renderPartners, cars: renderCars, drivers: renderDrivers, carb: renderCarBookings, travel: renderTravelBookings, payments: renderPayments, expenses: renderExpenses, settlements: renderSettlements };
+const SCREENS = { dashboard: renderDashboard, partners: renderPartners, cars: renderCars, drivers: renderDrivers, carb: renderCarBookings, travel: renderTravelBookings, payments: renderPayments, enquiries: renderEnquiries, expenses: renderExpenses, settlements: renderSettlements };
 let current = 'dashboard';
 
 const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

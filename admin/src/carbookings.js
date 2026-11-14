@@ -10,6 +10,17 @@ const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g
 const money = (n) => '₹' + Math.round(n || 0).toLocaleString('en-IN');
 const DUTY = ['Local','Dooars','Hills','Airport','NJP','Others'];
 const num = (v) => { if (v == null || v === '') return null; const n = Number(v); return Number.isFinite(n) ? n : null; };
+// money/count columns are INTEGER rupees/units (no floats, no negatives). notWhole flags a
+// provided value that isn't a non-negative integer so doSave can reject it (empty is fine here).
+const notWhole = (v) => { const n = num(v); return n != null && (!Number.isInteger(n) || n < 0); };
+// vendor contact = 10 digits (DB TEXT, UI rule). [data-phone] inputs strip non-digits live.
+const DIGITS10 = /^\d{10}$/;
+function wirePhoneInputs(main){
+  main.querySelectorAll('[data-phone]').forEach(el => el.addEventListener('input', () => {
+    const d = el.value.replace(/\D/g, '').slice(0, 15);
+    if (el.value !== d) el.value = d;
+  }));
+}
 
 // amount (null = pending), net (null when amount pending) — mirrors dashlib.js
 function carAmount(c){
@@ -52,10 +63,10 @@ export function renderCarBookings(main){
     return '<option value="">No driver</option>' +
       list.map(d => '<option value="' + d.id + '"' + (String(d.id) === String(sel) ? ' selected' : '') + '>' + esc(d.name) + '</option>').join('');
   }
-  function fin(label, name, val, { type='text', ph='', lock=false, hint='' } = {}){
+  function fin(label, name, val, { type='text', ph='', lock=false, hint='', extra='' } = {}){
     return '<label class="tt-field"><span>' + label + (hint ? ' <span class="tt-hint">' + hint + '</span>' : '') + '</span>' +
       '<input type="' + type + '" data-f="' + name + '" value="' + esc(val == null ? '' : val) + '"' +
-      (type === 'number' ? ' min="0" step="1"' : '') + (ph ? ' placeholder="' + esc(ph) + '"' : '') + (lock ? ' disabled' : '') + '></label>';
+      (type === 'number' ? ' min="0" step="1" inputmode="numeric"' : '') + (ph ? ' placeholder="' + esc(ph) + '"' : '') + (extra ? ' ' + extra : '') + (lock ? ' disabled' : '') + '></label>';
   }
   function fsel(label, name, optsHtml, lock=false){
     return '<label class="tt-field"><span>' + label + '</span><select data-f="' + name + '"' + (lock ? ' disabled' : '') + '>' + optsHtml + '</select></label>';
@@ -93,7 +104,7 @@ export function renderCarBookings(main){
         fsel('Duty type', 'duty_type', dutyOptions(f.duty_type), travel) +
         fin('Route', 'route', f.route, { ph:'e.g. NJP → Gangtok', lock:travel }) +
         fin('Vendor', 'vendor_name', f.vendor_name, { ph:'Referral source', lock:travel }) +
-        fin('Vendor contact', 'vendor_contact', f.vendor_contact, { lock:travel }) +
+        fin('Vendor contact', 'vendor_contact', f.vendor_contact, { lock:travel, ph:'10-digit mobile', extra:'inputmode="numeric" data-phone' }) +
         fin('Commission', 'commission', f.commission, { type:'number', ph:'₹', lock:travel }) +
       '</div>' +
       '<div class="tt-group"><h3>Pricing</h3><span class="rule"></span></div>' +
@@ -245,6 +256,34 @@ export function renderCarBookings(main){
     if (n) n.textContent = net == null ? 'Pending' : money(net);
   }
 
+  // keep an end date from falling before its start: the native min/max bound the
+  // picker, and a start pushed past the end drags the end along. JS doSave still
+  // enforces it (a typed value can dodge the picker).
+  function wireDatePair(startName, endName){
+    const sd = main.querySelector('.tt-card [data-f="' + startName + '"]');
+    const ed = main.querySelector('.tt-card [data-f="' + endName + '"]');
+    if (!sd || !ed) return;
+    const sync = () => { ed.min = sd.value || ''; sd.max = ed.value || ''; };
+    sync();
+    sd.addEventListener('change', () => { if (sd.value && ed.value && ed.value < sd.value) ed.value = sd.value; sync(); updatePreview(); });
+    ed.addEventListener('change', sync);
+  }
+  // clicking anywhere on a date field opens the picker (nicer than hunting the tiny glyph)
+  function wirePickers(){
+    main.querySelectorAll('.tt-card input[type="date"]:not(:disabled)').forEach(el =>
+      el.addEventListener('click', () => { try { el.showPicker && el.showPicker(); } catch (_) {} }));
+  }
+  // filter From/To is a range too: bound the pickers so it can't be reversed. It's only a
+  // filter (a reversed range just matches nothing), so this nudges — it never blocks.
+  function wireFilterRange(){
+    const from = main.querySelector('[data-flt="from"]'), to = main.querySelector('[data-flt="to"]');
+    if (!from || !to) return;
+    const sync = () => { to.min = from.value || ''; from.max = to.value || ''; };
+    sync();
+    from.addEventListener('change', sync);
+    to.addEventListener('change', sync);
+  }
+
   // chrome = header + form + filter bar (rebuilt only on a full render, so the
   // filter controls keep focus/caret while the list re-renders beneath them)
   function wireChrome(){
@@ -254,6 +293,9 @@ export function renderCarBookings(main){
     const save = q('#cb-save'); if (save) save.addEventListener('click', doSave);
     const pt = q('[data-f="pricing_type"]'); if (pt) pt.addEventListener('change', () => { syncForm(); state.form.pricing_type = pt.value; render(); });
     main.querySelectorAll('.tt-card [data-f]').forEach(i => i.addEventListener('input', updatePreview));
+    wireDatePair('start_date', 'end_date');
+    wirePickers();
+    wirePhoneInputs(main);
     // filters: text filters live-update (keeps focus), selects/dates on change
     main.querySelectorAll('[data-flt]').forEach(el => {
       const ev = (el.tagName === 'SELECT' || el.type === 'date') ? 'change' : 'input';
@@ -263,6 +305,7 @@ export function renderCarBookings(main){
         renderList();
       });
     });
+    wireFilterRange();
     const clr = q('#cb-clear'); if (clr) clr.addEventListener('click', () => { state.filters = emptyFilters(); render(); });
     const exp = q('#cb-expand'); if (exp) exp.addEventListener('click', () => { state.expanded = !state.expanded; render(); });
   }
@@ -299,10 +342,20 @@ export function renderCarBookings(main){
     const f = state.form, err = main.querySelector('#cb-ferr'); err.textContent = '';
     const travel = f.origin === 'travel';
     if (!travel && !f.car_id) { err.textContent = 'Pick a car.'; return; }
+    if (!travel && f.start_date && f.end_date && f.end_date < f.start_date) { err.textContent = 'End date can’t be before the start date.'; return; }
+    if (!travel) { const vc = (f.vendor_contact || '').trim(); if (vc && !DIGITS10.test(vc)) { err.textContent = 'Vendor contact must be a 10-digit number.'; return; } }
     const flat = (f.pricing_type || 'flat') !== 'distance';
     if (!travel) {
       if (flat && num(f.flat_fare) == null) { err.textContent = 'Enter the flat fare.'; return; }
       if (!flat && num(f.per_km_rate) == null) { err.textContent = 'Enter the per-km rate.'; return; }
+    }
+    // every money/count field must be a whole, non-negative number (DB stores INTEGER rupees/km)
+    const moneyFields = travel
+      ? [['distance_km','distance (km)'], ['toll','toll'], ['driver_cost','driver cost']]
+      : [['flat_fare','flat fare'], ['base_fare','base fare'], ['per_km_rate','per-km rate'], ['distance_km','distance (km)'],
+         ['toll','toll'], ['driver_cost','driver cost'], ['commission','commission'], ['advance','advance']];
+    for (const [k, label] of moneyFields) {
+      if (notWhole(f[k])) { err.textContent = 'Enter a whole number for ' + label + ' — no decimals or minus.'; return; }
     }
     // build payload: full for standalone, trip-end only for travel-origin rows
     let payload;

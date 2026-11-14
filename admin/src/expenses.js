@@ -37,7 +37,7 @@ export function renderExpenses(main){
     return '<div class="tt-card" style="margin:4px 0 14px;"><div class="tt-cardhd"><h2>' + (f.id ? 'Edit expense' : 'Add expense') + '</h2></div>' +
       '<div class="tt-fgrid">' +
         '<label class="tt-field"><span>Date</span><input type="date" data-f="date" value="' + esc(f.date || today()) + '"></label>' +
-        '<label class="tt-field"><span>Amount</span><input type="number" min="0" step="1" data-f="amount" value="' + esc(f.amount == null ? '' : f.amount) + '" placeholder="₹"></label>' +
+        '<label class="tt-field"><span>Amount</span><input type="number" min="0" step="1" inputmode="numeric" data-f="amount" value="' + esc(f.amount == null ? '' : f.amount) + '" placeholder="₹"></label>' +
         '<label class="tt-field"><span>Category</span><select data-f="category"><option value="car"' + (f.category !== 'agency' ? ' selected' : '') + '>Car (car pot)</option><option value="agency"' + (f.category === 'agency' ? ' selected' : '') + '>Travel (travel pot)</option></select></label>' +
         '<label class="tt-field"><span>Reason</span><select data-f="reason"><option value="">— none —</option>' + REASONS.map(r => opt(r, r, f.reason)).join('') + '</select></label>' +
         '<label class="tt-field"><span>Paid by</span><select data-f="paid_by_user_id">' + payerOptions(f.paid_by_user_id) + '</select></label>' +
@@ -140,6 +140,7 @@ export function renderExpenses(main){
     const o = readForm(), err = main.querySelector('#ex-ferr'); err.textContent = '';
     if (!o.date) { err.textContent = 'Pick a date.'; return; }
     if (num(o.amount) == null || num(o.amount) <= 0) { err.textContent = 'Enter an amount greater than zero.'; return; }
+    if (!Number.isInteger(num(o.amount))) { err.textContent = 'Enter a whole rupee amount — no decimals.'; return; }
     if (!o.paid_by_user_id) { err.textContent = 'Pick the partner who paid.'; return; }
     const payload = { date: o.date, amount: num(o.amount), category: o.category === 'agency' ? 'agency' : 'car',
       reason: o.reason || null, paid_by_user_id: Number(o.paid_by_user_id), remarks: (o.remarks || '').trim() || null };

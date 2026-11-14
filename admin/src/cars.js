@@ -14,7 +14,7 @@ const IC = {
   eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.7"/>',
 };
 // filled car silhouette used as the thumbnail placeholder
-const CAR_GLYPH = '<path d="M5.2 15.3l1.1-3.8A2.6 2.6 0 0 1 8.8 9.6h6.4a2.6 2.6 0 0 1 2.5 1.9l1.1 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 15.2h16.8a1 1 0 0 1 1 1v2.1a.9.9 0 0 1-.9.9h-1.2a.9.9 0 0 1-.9-.9v-.6H5.6v.6a.9.9 0 0 1-.9.9H3.5a.9.9 0 0 1-.9-.9v-2.1a1 1 0 0 1 1-1z" fill="currentColor" opacity=".9"/><circle cx="7.4" cy="16.2" r="1" fill="#FBF9F3"/><circle cx="16.6" cy="16.2" r="1" fill="#FBF9F3"/>';
+const CAR_GLYPH = '<path d="M5.2 15.3l1.1-3.8A2.6 2.6 0 0 1 8.8 9.6h6.4a2.6 2.6 0 0 1 2.5 1.9l1.1 3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.6 15.2h16.8a1 1 0 0 1 1 1v2.1a.9.9 0 0 1-.9.9h-1.2a.9.9 0 0 1-.9-.9v-.6H5.6v.6a.9.9 0 0 1-.9.9H3.5a.9.9 0 0 1-.9-.9v-2.1a1 1 0 0 1 1-1z" fill="currentColor" opacity=".9"/><circle cx="7.4" cy="16.2" r="1" fill="#FFFFFF"/><circle cx="16.6" cy="16.2" r="1" fill="#FFFFFF"/>';
 
 const DOCS = [
   { key:'rc',        label:'RC',         docField:'rc_doc_key',        expiryField:null },
@@ -198,7 +198,9 @@ export function renderCars(main){
     const o = {}; main.querySelectorAll('[data-f]').forEach(i => o[i.getAttribute('data-f')] = i.value.trim());
     const ferr = main.querySelector('#c-ferr');
     if (!o.registration_no) { ferr.textContent = 'Registration number is required.'; return; }
-    const body = { registration_no: o.registration_no };
+    // normalise to uppercase — registrations are alphanumeric, and the UNIQUE index is
+    // case-sensitive in SQLite, so 'wb73u8875' and 'WB73U8875' would otherwise be two cars.
+    const body = { registration_no: o.registration_no.toUpperCase() };
     if (o.model_id) body.model_id = Number(o.model_id);
     const id = state.form.id, btn = main.querySelector('#c-save');
     if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
