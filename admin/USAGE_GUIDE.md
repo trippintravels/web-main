@@ -72,6 +72,21 @@ amber = soon, muted = low). The kinds you'll see:
   - **Cancelled** — this booking was cancelled.
 - **Upcoming departures** — the next few trips, and whether a driver is assigned.
 
+## Enquiries
+
+Every message that comes through the website's enquiry form lands here automatically
+(newest first). You **can't edit** the enquiry itself — it's exactly what the visitor
+sent — but you **triage** each one:
+
+- Each row shows the person's **name** and a code (**E1**, **E2**…), a **status pill**,
+  their **phone / email**, what they're after (**intent · destination**), their message,
+  and when it came in (plus the country and the page they were on).
+- On the right, set a **Status** — *New → Contacted → Converted → Closed*, or *Spam* —
+  and add a free-text **Note**, then press **Save**.
+- An **email failed** badge means the alert email didn't go out for that one (the
+  enquiry is still safely saved) — worth a follow-up.
+- Use the **Status** filter and **Search** at the top to find enquiries.
+
 ## Travel bookings
 
 Each row shows: the customer's name, the booking's code (like **T6**), a **Car …**

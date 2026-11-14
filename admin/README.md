@@ -13,7 +13,7 @@ web-main/                 (monorepo)
 ├── src/                  public marketing site (React/Vite, GitHub Pages, trippintravels.in)
 ├── worker/               the API (Cloudflare Worker)
 │   ├── src/
-│   │   ├── index.js      existing: public enquiry → WhatsApp/email notifier
+│   │   ├── index.js      public enquiry notifier (email + stores to D1) + admin API
 │   │   ├── admin.js      admin router: auth guard + generic CRUD + sub-routers
 │   │   ├── bookings.js   travel/car bookings, hotels, payments, nextId
 │   │   ├── finance.js    expenses, split-config, settlements
@@ -310,6 +310,8 @@ npx wrangler r2 object put trippin-docs/car-models/innova.webp --file ../admin/p
 - Private email / auto-managed DNS records (MX/SRV/autodiscover) don't show in some registrar UIs — verify via DoH if migrating DNS again.
 - Dashboard chart math must floor the y-max (`Math.max(1, …)` / `Math.max(5, …)`) or an all-zero month makes the gridline loop spin forever.
 - When adding a DB column, also add it to the entity's **`writable`** allowlist and (if it must come back) the **`listSql`** SELECT, then redeploy — otherwise writes are silently dropped / reads omit it.
+- **Keep `workers_dev = true` in `wrangler.toml`.** The Worker answers two routes: the custom `admin.trippintravels.in/admin/*` (used by the hosted admin) **and** its `enquiry-notifier.hey-fdf.workers.dev` subdomain (what **local admin dev proxies to** via `VITE_API_BASE` in `admin/.env.local`). A `wrangler deploy` **disables workers.dev by default** unless that flag is set — which silently kills local dev (the hosted site keeps working, so it's easy to miss) and a `wrangler rollback` does **not** restore it. If local admin suddenly 404s on every call, check the subdomain is still enabled. (Note: the Worker's source of truth is `worker/src/index.js` — a single esbuild-style bundle; edit it directly, there's no separate un-bundled source.)
+- **A new `wrangler deploy` is required for Worker route/resource changes** (e.g. adding an entity to `RESOURCES`). Confirm `Current Version ID` actually changes and verify the live endpoint before assuming it shipped — a missed redeploy shows up as a `not_found` fallback on the new route.
 
 ---
 
