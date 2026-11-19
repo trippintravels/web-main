@@ -225,6 +225,21 @@ body{margin:0;background:#DCE4F0;-webkit-font-smoothing:antialiased;}
 #dash-root .tt-fbar .tt-field input, #dash-root .tt-fbar .tt-field select{width:158px; max-width:100%;}
 #dash-root .tt-fbar .tt-fltwide input{width:230px;}
 #dash-root .tt-fmorebtn{align-self:flex-end;}
+/* enquiries: status pills replace the filter bar — click to filter, colored per status */
+#dash-root .enq-pills{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+#dash-root .enq-pill{font-family:inherit; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+  font-size:13px; font-weight:650; line-height:1; padding:8px 13px; border-radius:999px;
+  border:1.5px solid transparent; background:var(--tt-cream); color:var(--tt-ink-2); transition:filter .12s, box-shadow .12s;}
+#dash-root .enq-pill .c{font-size:11px; font-weight:700; min-width:17px; text-align:center; padding:2px 6px;
+  border-radius:999px; background:rgba(20,28,46,.09); color:inherit;}
+#dash-root .enq-pill:hover{filter:brightness(.97);}
+#dash-root .enq-pill:focus-visible{outline:2px solid var(--tt-ink); outline-offset:2px;}
+#dash-root .enq-pill.on{border-color:currentColor; box-shadow:var(--tt-sh-sm);}
+#dash-root .enq-pill.s-new{background:var(--tt-amber-tint); color:var(--tt-amber);}
+#dash-root .enq-pill.s-contacted{background:var(--tt-sky-tint); color:var(--tt-sky);}
+#dash-root .enq-pill.s-converted{background:var(--tt-olive-tint); color:#0E6B45;}
+#dash-root .enq-pill.s-closed{background:#E4EAF3; color:var(--tt-ink-2);}
+#dash-root .enq-pill.s-spam{background:var(--tt-bad-tint); color:var(--tt-bad);}
 #dash-root .tt-pmhint{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:12px 0 2px; min-height:24px;}
 #dash-root .tt-exsum{font-size:13.5px; color:var(--tt-ink-2); margin:0 2px 12px;}
 #dash-root .tt-exsum b{font-family:var(--tt-serif); color:var(--tt-ink);}

@@ -29,7 +29,7 @@ function fmtWhen(s){
 }
 
 export function renderEnquiries(main){
-  const state = { rows: null, err: null, filters: { q:'', status:'' } };
+  const state = { rows: null, err: null, filters: { status:'' } };
 
   function load(){
     state.rows = null; state.err = null; render();
@@ -40,25 +40,24 @@ export function renderEnquiries(main){
 
   const opt = (v, label, sel) => '<option value="' + esc(v) + '"' + (String(sel) === String(v) ? ' selected' : '') + '>' + esc(label) + '</option>';
 
-  // ---------- filters ----------
-  function filterBar(){
-    const f = state.filters;
-    const statusOpts = '<option value="">All status</option>' + STATUSES.map(s => opt(s, STATUS_LABEL[s], f.status)).join('');
-    const anyActive = Boolean(f.q || f.status);
-    const items =
-      '<label class="tt-field"><span>Status</span><select data-flt="status">' + statusOpts + '</select></label>' +
-      '<label class="tt-field tt-fltwide"><span>Search</span><input type="text" data-flt="q" value="' + esc(f.q) + '" placeholder="E#, name, phone, email, intent, destination, message…"></label>' +
-      '<button class="tt-abtn soft tt-fmorebtn" id="enq-clear"' + (anyActive ? '' : ' disabled') + '>Reset filters</button>';
-    return '<div class="tt-cbfilters"><div class="tt-fhdr">Filters <span class="tt-asub" id="enq-count"></span></div><div class="tt-fbar">' + items + '</div></div>';
+  // ---------- status pills (the filter) ----------
+  const pillCount = (st) => (state.rows || []).reduce((n, e) => n + (normStatus(e.status) === st ? 1 : 0), 0);
+  function pillsBar(){
+    const cur = state.filters.status;
+    const total = (state.rows || []).length;
+    const pill = (val, label, cls) => {
+      const n = val === '' ? total : pillCount(val);
+      return '<button class="enq-pill ' + cls + (cur === val ? ' on' : '') + '" data-pill="' + esc(val) + '">' +
+        esc(label) + '<span class="c">' + n + '</span></button>';
+    };
+    return '<div class="enq-pills">' +
+      pill('', 'All', 's-all') +
+      STATUSES.map(s => pill(s, STATUS_LABEL[s], 's-' + s)).join('') +
+      '</div>';
   }
   function matches(e){
     const f = state.filters;
     if (f.status && normStatus(e.status) !== f.status) return false;
-    if (f.q){
-      const hay = [e.display_id, e.name, e.phone, e.email, e.intent, e.destination, e.message, e.country, e.note]
-        .filter(Boolean).join(' ').toLowerCase();
-      if (!hay.includes(f.q.toLowerCase())) return false;
-    }
     return true;
   }
 
@@ -96,9 +95,7 @@ export function renderEnquiries(main){
   function renderList(){
     const list = main.querySelector('#enq-list'); if (!list) return;
     const rows = (state.rows || []).filter(matches);
-    const cnt = main.querySelector('#enq-count');
-    if (cnt) cnt.textContent = '(' + rows.length + ' of ' + state.rows.length + (state.rows.length === 1 ? ' enquiry' : ' enquiries') + ')';
-    list.innerHTML = rows.length ? rows.map(rowHtml).join('') : '<div class="tt-empty">No enquiries match these filters.</div>';
+    list.innerHTML = rows.length ? rows.map(rowHtml).join('') : '<div class="tt-empty">No enquiries with this status.</div>';
     wireRows();
   }
 
@@ -109,7 +106,7 @@ export function renderEnquiries(main){
     if (state.err) h += '<div class="tt-card"><div class="tt-empty" style="color:var(--tt-bad)">' + esc(state.err) + '</div></div>';
     else if (!state.rows) h += '<div class="tt-card"><div class="tt-empty">Loading…</div></div>';
     else if (!state.rows.length) h += '<div class="tt-card"><div class="tt-empty">No enquiries yet.</div></div>';
-    else h += filterBar() + '<div class="tt-card"><div class="tt-plist" id="enq-list"></div></div>';
+    else h += pillsBar() + '<div class="tt-card"><div class="tt-plist" id="enq-list"></div></div>';
     main.innerHTML = h;
     wireChrome();
     if (state.rows && state.rows.length && !state.err) renderList();
@@ -117,16 +114,11 @@ export function renderEnquiries(main){
 
   // ---------- wiring ----------
   function wireChrome(){
-    const q = (s) => main.querySelector(s);
-    main.querySelectorAll('[data-flt]').forEach(el => {
-      const ev = el.tagName === 'SELECT' ? 'change' : 'input';
-      el.addEventListener(ev, () => {
-        state.filters[el.getAttribute('data-flt')] = el.value;
-        const clr = q('#enq-clear'); if (clr) clr.disabled = !(state.filters.q || state.filters.status);
-        renderList();
-      });
-    });
-    const clr = q('#enq-clear'); if (clr) clr.addEventListener('click', () => { state.filters = { q:'', status:'' }; render(); });
+    main.querySelectorAll('[data-pill]').forEach(btn => btn.addEventListener('click', () => {
+      const v = btn.getAttribute('data-pill');
+      state.filters.status = (state.filters.status === v) ? '' : v;  // click the active pill to clear
+      render();
+    }));
   }
   function wireRows(){
     main.querySelectorAll('#enq-list [data-save]').forEach(btn => btn.addEventListener('click', () => {
