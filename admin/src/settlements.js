@@ -2,9 +2,18 @@
 // (cash basis, collection-month, two pots, reimbursements, cancellation reversals,
 // rotating residual). This screen picks a month, shows the pot totals + per-partner
 // breakdown + blockers + staleness, and settles/un-settles the whole month atomically.
+//
+// Before a month can be settled the operator must DOWNLOAD the detailed breakdown
+// PDF (settlepdf.js) — the Settle/Re-settle buttons stay disabled until a breakdown
+// matching the current figures has been downloaded. The gate re-arms whenever the
+// month changes or any figure moves (see sigOf). The signed-in partner is recorded
+// as settled_by. Downloading the breakdown is always available, incl. past/settled
+// months.
 import { get, post, del } from './api.js';
 import { I, svg } from './icons.js';
 import { computeSettlement } from './settlelib.js';
+import { downloadSettlementPdf } from './settlepdf.js';
+import { currentUserLabel } from './session.js';
 
 const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const money = (n) => (n < 0 ? '−₹' : '₹') + Math.abs(Math.round(n || 0)).toLocaleString('en-IN');
@@ -14,9 +23,11 @@ const monthLabel = (ym) => { const [y, m] = ym.split('-'); return MONTHS[Number(
 const shiftMonth = (ym, delta) => { let [y, m] = ym.split('-').map(Number); m += delta; while (m < 1) { m += 12; y--; } while (m > 12) { m -= 12; y++; } return y + '-' + String(m).padStart(2, '0'); };
 const CHEV_L = '<path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
 const CHEV_R = '<path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+const DL_ICON = '<path d="M12 3v10m0 0l-4-4m4 4l4-4M5 16v3a2 2 0 002 2h10a2 2 0 002-2v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
 
 export function renderSettlements(main){
-  const state = { data: null, err: null, month: thisMonth(), busy: false, confirm: null };
+  const state = { data: null, err: null, month: thisMonth(), busy: false, confirm: null,
+                  downloadedSig: null, pdfBusy: false, pdfErr: null };
 
   function load(){
     state.data = null; state.err = null; render();
@@ -29,6 +40,14 @@ export function renderSettlements(main){
   }
 
   const monthSettlements = () => (state.data.settlements || []).filter(s => s.period_month === state.month);
+
+  // A fingerprint of exactly what would be settled right now. The breakdown-download
+  // gate is keyed on this: switch months or move any figure and the operator must
+  // re-download before Settle/Re-settle re-enables.
+  function sigOf(r){
+    return state.month + '|' + r.partners.map(p => p.user_id + ':' + p.travel + ':' + p.car + ':' + p.reimburse + ':' + p.total).join(',')
+      + '|t' + r.pools.travelNet + '-' + r.pools.travelExp + '|c' + r.pools.carNet + '-' + r.pools.carExp + '|r' + r.pools.reimburse;
+  }
 
   // months that have any activity, filled from the earliest up to the current month (newest first)
   function monthsList(){
@@ -50,7 +69,7 @@ export function renderSettlements(main){
     const travelPot = r.pools.travelNet - r.pools.travelExp, carPot = r.pools.carNet - r.pools.carExp;
     const total = travelPot + carPot + r.pools.reimburse;
     const item = (k, v, sub) => '<div><span class="tt-cbsum-k">' + k + '</span><span class="tt-cbsum-v">' + v + '</span>' + (sub ? '<span class="tt-asub" style="display:block;">' + sub + '</span>' : '') + '</div>';
-    return '<div class="tt-cbsum" style="flex-wrap:wrap;margin:4px 0 18px;">' +
+    return '<div class="tt-cbsum" style="flex-wrap:wrap;">' +
       item('Travel pot', money(travelPot), 'net ' + money(r.pools.travelNet) + ' − exp ' + money(r.pools.travelExp)) +
       item('Car pot', money(carPot), 'net ' + money(r.pools.carNet) + ' − exp ' + money(r.pools.carExp)) +
       item('Reimbursements', money(r.pools.reimburse)) +
@@ -84,7 +103,10 @@ export function renderSettlements(main){
     const settledRows = monthSettlements();
     const anySettled = settledRows.length > 0;
     const anyStale = r.partners.some(p => p.stale);
-    const hasWork = r.partners.length > 0;
+    // all partners always list now (even ₹0), so gauge "settle-able" by real activity
+    const hasWork = r.detail.length > 0 || r.partners.some(p => p.total !== 0);
+    const canDownload = r.partners.length || r.blockers.length || r.detail.length;
+    const armed = state.downloadedSig === sigOf(r);   // breakdown downloaded for the current figures
     if (state.confirm) {
       const label = state.confirm === 'settle' ? 'Settle ' + state.month + ' for all partners?'
                   : state.confirm === 'resettle' ? 'Re-settle ' + state.month + '? Replaces the existing snapshot.'
@@ -94,11 +116,19 @@ export function renderSettlements(main){
         '<button class="tt-abtn ' + (state.confirm === 'unsettle' ? 'danger' : '') + '" id="sb-cxok">' + (state.busy ? 'Working…' : 'Confirm') + '</button></div></div>';
     }
     let btns = '';
-    if (!anySettled && hasWork) btns += '<button class="tt-btn prim" id="sb-settle">' + svg(I.check) + 'Settle month</button>';
-    if (anySettled && anyStale) btns += '<button class="tt-btn prim" id="sb-resettle">' + svg(I.check) + 'Re-settle month</button>';
+    if (canDownload) btns += '<button class="tt-btn ghost" id="sb-download"' + (state.pdfBusy ? ' disabled' : '') + '>' + svg(DL_ICON) + (state.pdfBusy ? 'Preparing…' : 'Download detailed breakdown') + '</button>';
+    const gate = armed ? '' : ' disabled';
+    const gateTip = armed ? '' : ' title="Download the detailed breakdown first to enable settling"';
+    if (!anySettled && hasWork) btns += '<button class="tt-btn prim" id="sb-settle"' + gate + gateTip + '>' + svg(I.check) + 'Settle month</button>';
+    if (anySettled && anyStale) btns += '<button class="tt-btn prim" id="sb-resettle"' + gate + gateTip + '>' + svg(I.check) + 'Re-settle month</button>';
     if (anySettled) btns += '<button class="tt-btn ghost" id="sb-unsettle">Un-settle month</button>';
-    const when = anySettled && settledRows[0].settled_at ? '<span class="tt-asub">Settled ' + esc(String(settledRows[0].settled_at).slice(0, 10)) + '</span>' : '';
-    return btns ? '<div class="tt-factions" style="justify-content:flex-start;align-items:center;gap:12px;">' + btns + when + '</div>' : '';
+    const by = anySettled ? (settledRows.find(s => s.settled_by) || {}).settled_by : null;
+    const when = anySettled && settledRows[0].settled_at
+      ? '<span class="tt-asub">Settled ' + esc(String(settledRows[0].settled_at).slice(0, 10)) + (by ? ' by ' + esc(by) : '') + '</span>' : '';
+    const hint = (!armed && (hasWork && !anySettled || anySettled && anyStale))
+      ? '<span class="tt-asub">Download the breakdown to enable settling.</span>' : '';
+    const perr = state.pdfErr ? '<span class="tt-asub" style="color:var(--tt-bad)">' + esc(state.pdfErr) + '</span>' : '';
+    return (btns || hint || perr) ? '<div class="tt-factions" style="justify-content:flex-start;align-items:center;gap:12px;flex-wrap:wrap;">' + btns + when + hint + perr + '</div>' : '';
   }
 
   function render(){
@@ -116,7 +146,8 @@ export function renderSettlements(main){
     else if (!state.data) h += '<div class="tt-card"><div class="tt-empty">Loading…</div></div>';
     else {
       const r = computeSettlement(state.data, state.month);
-      h += potsCard(r) + blockersCard(r) + partnerTable(r) + actions(r);
+      // even vertical rhythm between the stacked bars (scoped flex gap, not per-block margins)
+      h += '<div class="sb-stack">' + potsCard(r) + blockersCard(r) + partnerTable(r) + actions(r) + '</div>';
     }
     main.innerHTML = h;
     wire();
@@ -124,14 +155,28 @@ export function renderSettlements(main){
 
   function wire(){
     const q = (s) => main.querySelector(s);
-    const m = q('#sb-month'); if (m) m.addEventListener('change', () => { state.month = m.value || thisMonth(); state.confirm = null; render(); });
-    const pv = q('#sb-prev'); if (pv) pv.addEventListener('click', () => { state.month = shiftMonth(state.month, -1); state.confirm = null; render(); });
-    const nx = q('#sb-next'); if (nx) nx.addEventListener('click', () => { if (state.month < lastMonth()) { state.month = shiftMonth(state.month, 1); state.confirm = null; render(); } });
+    const m = q('#sb-month'); if (m) m.addEventListener('change', () => { state.month = m.value || thisMonth(); state.confirm = null; state.pdfErr = null; render(); });
+    const pv = q('#sb-prev'); if (pv) pv.addEventListener('click', () => { state.month = shiftMonth(state.month, -1); state.confirm = null; state.pdfErr = null; render(); });
+    const nx = q('#sb-next'); if (nx) nx.addEventListener('click', () => { if (state.month < lastMonth()) { state.month = shiftMonth(state.month, 1); state.confirm = null; state.pdfErr = null; render(); } });
+    const dl = q('#sb-download'); if (dl) dl.addEventListener('click', doDownload);
     const s = q('#sb-settle'); if (s) s.addEventListener('click', () => { state.confirm = 'settle'; render(); });
     const rs = q('#sb-resettle'); if (rs) rs.addEventListener('click', () => { state.confirm = 'resettle'; render(); });
     const us = q('#sb-unsettle'); if (us) us.addEventListener('click', () => { state.confirm = 'unsettle'; render(); });
     const cc = q('#sb-cxcancel'); if (cc) cc.addEventListener('click', () => { state.confirm = null; render(); });
     const ok = q('#sb-cxok'); if (ok) ok.addEventListener('click', doConfirm);
+  }
+
+  async function doDownload(){
+    if (state.pdfBusy || !state.data) return;
+    state.pdfBusy = true; state.pdfErr = null; render();
+    try {
+      const r = computeSettlement(state.data, state.month);
+      await downloadSettlementPdf(state.data, state.month, { settledRows: monthSettlements() });
+      state.downloadedSig = sigOf(r);   // arms Settle/Re-settle for exactly these figures
+    } catch (e) {
+      state.pdfErr = (e && e.message) || 'Could not generate the breakdown PDF';
+    }
+    state.pdfBusy = false; render();
   }
 
   async function doConfirm(){
@@ -146,9 +191,11 @@ export function renderSettlements(main){
       if (action === 'settle' || action === 'resettle') {
         const r = computeSettlement(state.data, month);
         const todo = action === 'settle' ? r.partners.filter(p => !p.settled) : r.partners;
+        const by = currentUserLabel('Administrator');
         for (const p of todo) await post('settlements', {
           user_id: p.user_id, period_month: month, amount_snapshot: p.total,
           breakdown_json: { travel: p.travel, car: p.car, reimbursements: p.reimburse },
+          settled_by: by,
         });
       }
     } catch (e) {

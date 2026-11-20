@@ -4,6 +4,10 @@
 // Split is equal among the effective version's members (resolved by BOOKING date);
 // recognition MONTH is the month the booking became fully paid. Cancellation emits a
 // reversal (−net) in ym(cancelled_at). Residuals rotate. See MONEY_FLOW.md.
+//
+// detail[] and blockers[] carry rich per-booking fields (customer, dates, cost
+// components, per-partner shares, payments-to-date) so a PDF can render a full
+// breakdown without re-deriving any money. The money totals are unchanged.
 
 const num = (v) => { if (v == null || v === '') return null; const n = Number(v); return Number.isFinite(n) ? n : null; };
 const ym = (s) => (s ? String(s).slice(0, 10).slice(0, 7) : null);
@@ -47,6 +51,9 @@ function resolveMembers(versions, stream, date){
   return (vs[0].members || []).map(m => m.user_id);
 }
 
+// {uid: share} → {uid: sign*share}; null/undefined → {}
+const applySign = (d, sign) => { const o = {}; if (d) for (const k in d) o[k] = sign * d[k]; return o; };
+
 // data = { travel, car, payments, expenses, versions, users, settlements }
 export function computeSettlement(data, month){
   const travel = data.travel || [], car = data.car || [], payments = data.payments || [],
@@ -63,11 +70,12 @@ export function computeSettlement(data, month){
   // split `net` among `members` (seeded), then add sign*share per partner. Reverse
   // (sign −1) is the EXACT element-wise negation of recognize (sign +1): same net,
   // members and seed → a same-month recognize+reverse nets to exactly 0 per partner.
+  // Returns the (unsigned) distribution so detail[] can show per-partner shares.
   function addPool(agg, net, members, seed, sign){
-    if (!members) return false;
+    if (!members) return null;
     const d = distribute(net, members, seed);
     for (const uid in d) ensure(uid)[agg] += sign * d[uid];
-    return true;
+    return d;
   }
 
   // ---- travel bookings (+ their linked car) ----
@@ -83,11 +91,26 @@ export function computeSettlement(data, month){
     if (!signs.length) return;
     const tm = resolveMembers(versions, 'travel', date);
     if (!tm) blockers.push({ kind: 'no-version', ref: b.display_id, reason: 'no travel split version at ' + date });
-    else for (const sign of signs) { addPool('travel', net, tm, b.id, sign); pools.travelNet += sign * net; detail.push({ ref: b.display_id, pool: 'travel', net: sign * net, kind: sign > 0 ? 'recognize' : 'reverse' }); }
+    else for (const sign of signs) {
+      const sh = addPool('travel', net, tm, b.id, sign); pools.travelNet += sign * net;
+      detail.push({ pool: 'travel', kind: sign > 0 ? 'recognize' : 'reverse', ref: b.display_id, id: b.id, btype: 'travel',
+        customer: b.customer_name, phone: b.customer_phone, start: b.start_date, end: b.end_date, pax: b.pax,
+        gross: travelGross(b),
+        comp: { costExceptCar: num(b.cost_except_car)||0, carCost: num(b.car_cost)||0, commission: num(b.commission)||0 },
+        net: sign * net, shares: applySign(sh, sign) });
+    }
     if (lc && cNet != null) {
       const cm = resolveMembers(versions, 'car', date);
       if (!cm) blockers.push({ kind: 'no-version', ref: b.display_id + ' (car)', reason: 'no car split version at ' + date });
-      else for (const sign of signs) { addPool('car', cNet, cm, lc.id, sign); pools.carNet += sign * cNet; detail.push({ ref: b.display_id + ' (car)', pool: 'car', net: sign * cNet, kind: sign > 0 ? 'recognize' : 'reverse' }); }
+      else for (const sign of signs) {
+        const sh = addPool('car', cNet, cm, lc.id, sign); pools.carNet += sign * cNet;
+        detail.push({ pool: 'car', kind: sign > 0 ? 'recognize' : 'reverse', ref: b.display_id + ' (car)', id: lc.id, btype: 'car-linked',
+          customer: b.customer_name, route: lc.route, start: lc.start_date, end: lc.end_date,
+          fare: carAmount(lc),
+          comp: { commission: num(lc.commission)||0, toll: num(lc.toll)||0, driverCost: num(lc.driver_cost)||0,
+                  pricing: lc.pricing_type, flatFare: lc.flat_fare, baseFare: lc.base_fare, perKm: lc.per_km_rate, distanceKm: lc.distance_km },
+          net: sign * cNet, shares: applySign(sh, sign) });
+      }
     }
   });
 
@@ -102,7 +125,15 @@ export function computeSettlement(data, month){
     if (!signs.length) return;
     const cm = resolveMembers(versions, 'car', date);
     if (!cm) blockers.push({ kind: 'no-version', ref: c.display_id, reason: 'no car split version at ' + date });
-    else for (const sign of signs) { addPool('car', net, cm, c.id, sign); pools.carNet += sign * net; detail.push({ ref: c.display_id, pool: 'car', net: sign * net, kind: sign > 0 ? 'recognize' : 'reverse' }); }
+    else for (const sign of signs) {
+      const sh = addPool('car', net, cm, c.id, sign); pools.carNet += sign * net;
+      detail.push({ pool: 'car', kind: sign > 0 ? 'recognize' : 'reverse', ref: c.display_id, id: c.id, btype: 'car',
+        customer: c.vendor_name || null, route: c.route, duty: c.duty_type, start: c.start_date, end: c.end_date,
+        fare: carAmount(c),
+        comp: { commission: num(c.commission)||0, toll: num(c.toll)||0, driverCost: num(c.driver_cost)||0,
+                pricing: c.pricing_type, flatFare: c.flat_fare, baseFare: c.base_fare, perKm: c.per_km_rate, distanceKm: c.distance_km },
+        net: sign * net, shares: applySign(sh, sign) });
+    }
   });
 
   // ---- expenses dated in the month ----
@@ -110,10 +141,13 @@ export function computeSettlement(data, month){
     if (ym(e.date) !== month) return;
     const stream = e.category === 'agency' ? 'travel' : 'car', amt = num(e.amount) || 0;
     const members = resolveMembers(versions, stream, e.date);
+    let sh = null;
     if (!members) blockers.push({ kind: 'no-version', ref: 'expense #' + e.id, reason: 'no ' + stream + ' split version at ' + e.date });
-    else { addPool(stream, amt, members, e.id, -1); if (stream === 'travel') pools.travelExp += amt; else pools.carExp += amt; }
+    else { sh = addPool(stream, amt, members, e.id, -1); if (stream === 'travel') pools.travelExp += amt; else pools.carExp += amt; }
     if (e.paid_by_user_id != null) { ensure(e.paid_by_user_id).reimburse += amt; pools.reimburse += amt; }
-    detail.push({ ref: 'expense #' + e.id, pool: stream, net: -amt, kind: 'expense', reimburse: amt });
+    detail.push({ pool: stream, kind: 'expense', ref: 'expense #' + e.id, id: e.id, btype: 'expense',
+      reason: e.reason, category: e.category, date: e.date, amount: amt, paidBy: e.paid_by_user_id,
+      net: -amt, shares: applySign(sh, -1), reimburse: amt });
   });
 
   // ---- blockers: trips that have ended but aren't recognizable yet ----
@@ -122,16 +156,29 @@ export function computeSettlement(data, month){
     if (b.cancelled) return;
     const isTravel = b.booking_amount !== undefined;
     const g = isTravel ? travelGross(b) : carAmount(b);
-    const fp = fullPaidMonth(g, bookDate(b), (isTravel ? payT[b.id] : payC[b.id]) || []);
+    const pays = ((isTravel ? payT[b.id] : payC[b.id]) || []).slice().sort((a, b2) => String(a.received_on).localeCompare(String(b2.received_on)));
+    const paid = pays.reduce((s, p) => s + (num(p.amount) || 0), 0);
+    const fp = fullPaidMonth(g, bookDate(b), pays);
     const when = b.end_date || b.start_date || '';
     if (fp == null && when && when <= todayStr)
-      blockers.push({ kind: 'unrecognized', ref: b.display_id, reason: g == null ? 'amount pending (enter distance)' : 'not fully paid' });
+      blockers.push({ kind: 'unrecognized', ref: b.display_id, reason: g == null ? 'amount pending (enter distance)' : 'not fully paid',
+        btype: isTravel ? 'travel' : 'car', customer: isTravel ? b.customer_name : (b.vendor_name || null),
+        route: isTravel ? null : b.route, start: b.start_date, end: b.end_date,
+        gross: g, paid, outstanding: g == null ? null : (g - paid),
+        payments: pays.map(p => ({ amount: num(p.amount) || 0, on: p.received_on, note: p.note })) });
   });
 
   // ---- partners + staleness vs existing settlement snapshots ----
   const nameOf = (uid) => { const u = users.find(x => x.id === uid); return u ? u.name : ('#' + uid); };
   const settledMap = {}; settlements.forEach(s => { if (s.period_month === month) settledMap[s.user_id] = s; });
+  // the month's partner universe: everyone in either split version effective that
+  // month, PLUS anyone with activity or an existing settlement — so every partner
+  // always shows (with ₹0) even when they had no bookings/expenses that month.
+  const [yy, mm] = month.split('-').map(Number);
+  const monthEnd = month + '-' + String(new Date(yy, mm, 0).getDate()).padStart(2, '0');
   const uids = new Set(Object.keys(per).map(Number)); Object.keys(settledMap).forEach(u => uids.add(Number(u)));
+  (resolveMembers(versions, 'travel', monthEnd) || []).forEach(u => uids.add(Number(u)));
+  (resolveMembers(versions, 'car', monthEnd) || []).forEach(u => uids.add(Number(u)));
   const partners = [...uids].map(uid => {
     const p = per[uid] || { travel: 0, car: 0, reimburse: 0 };
     const total = p.travel + p.car + p.reimburse;

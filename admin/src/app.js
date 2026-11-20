@@ -11,6 +11,7 @@ import { renderPayments } from './payments.js';
 import { renderEnquiries } from './enquiries.js';
 import { renderExpenses } from './expenses.js';
 import { renderSettlements } from './settlements.js';
+import { setCurrentUser } from './session.js';
 
 export const SHELL_HTML = `<div class="tt">
   <div class="tt-top">
@@ -54,6 +55,7 @@ async function resolveAccount(){
     if (!email) return;
     const users = (await get('users')).data || [];
     const u = users.find(x => (x.email || '').trim().toLowerCase() === email);
+    setCurrentUser(u ? { id: u.id, name: u.name, email: u.email } : null);   // who's signed in (for audit fields)
     const first = u && u.name ? u.name.trim().split(/\s+/)[0] : '';
     if (first) { acct.name = first; acct.initial = first.charAt(0).toUpperCase(); buildSidebar(); }
   } catch (_) { /* keep the default */ }
